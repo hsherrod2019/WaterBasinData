@@ -3,7 +3,7 @@ library(dplyr)
 library(janitor)
 
 # Read CSV
-data <- read_csv("Bacon_Rind_1A|doi.org:10.1016:j.watres.2018.10.013.csv")
+data <- read_csv("doi.org:10.1021:acs.est.1c03019 | cc_1025.csv")
 
 # Subset data
 basin_characteristics <- data %>%
@@ -35,3 +35,4 @@ basin_stats <- characteristics_merged %>%
 # Wide Format
 basin_stats_wide <-basin_stats %>%
   pivot_wider(names_from =parameter, values_from = value)
+
