@@ -2,9 +2,9 @@ library(dplyr)
 library(janitor)
 library(tidyr)
 
-modify_csv <- function(filename, start_row, end_row) {
+modify_csv <- function(pathname, start_row, end_row) {
   # Read CSV
-  data <- read_csv(filename)
+  data <- read_csv(pathname)
   
   # Subset data based on row range
   basin_characteristics <- data %>%
@@ -37,5 +37,11 @@ modify_csv <- function(filename, start_row, end_row) {
   basin_stats_wide <- basin_stats %>%
     pivot_wider(names_from = parameter, values_from = value)
   
-  return(basin_stats_wide)
+  # Add data name
+  basin_stats_final <- basin_stats_wide %>%
+    mutate(sample = c(pathname))
+  
+  return(basin_stats_final)
 }
+
+# data2 <- merge(data1, data2, by = intersect(names(data1), names(data2)), all = TRUE)
