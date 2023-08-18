@@ -1,0 +1,719 @@
+StreamStats Output Report,,,,,
+,,,,,
+State/Region ID,MT,,,,
+Workspace ID,MT20230816190622862000,,,,
+Latitude,45.06688,,,,
+Longitude,-111.29228,,,,
+Time,8/16/2023,12:06:47 PM,,,
+,,,,,
+Basin Characteristics,,,,,
+Parameter Code,Parameter Description,Value,Unit,,
+BSLDEM30M,Mean basin slope computed from 30 m DEM,30.7,percent,,
+CHANWD_RS,"Channel width determined from remotely sensed data sources, including aerial imagery",0,feet,,
+CONTDA,Area that contributes flow to a point on a stream,53.2,square miles,,
+DRNAREA,Area that drains to a point on a stream,53.2,square miles,,
+EL5000,Percent of area above 5000 ft,100,percent,,
+EL6000,Percent of area above 6000 ft,100,percent,,
+ELEV,Mean Basin Elevation,8559.6,feet,,
+ELEVMAX,Maximum basin elevation,11268,feet,,
+ET0306MOD,"Spring (March-June) mean monthly evapotranspiration (2001-2011), MODIS",1.69,inches,,
+ET0710MOD,"Summer (July-October) mean monthly evapotranspiration (2001-2011), MODIS",1.4,inches,,
+FOREST,Percentage of area covered by forest,55.8,percent,,
+IRRIGAT_MT,Percent of basin that is irrigated based on Montana Final Land Unit (FLU) classification,0,percent,,
+LAKESNHDH,"Percent of basin in lakes, ponds, and reservoirs fom high resolution National Hydrography Dataset",0,percent,,
+LC01CRPHAY,"Percentage of cultivated crops and hay, classes 81 and 82, from NLCD 2001",0,percent,,
+LC01DEV,Percentage of land-use from NLCD 2001 classes 21-24,0,percent,,
+LC01WETLND,"Percentage of wetlands, classes 90 and 95,  from NLCD 2001",2,percent,,
+MINBELEV,Minimum basin elevation,6925,feet,,
+NFSL30_30M,Percent area with north-facing slopes greater than 30 percent from 30-meter DEM.,12.2,percent,,
+PRECIP,Mean Annual Precipitation,35.05,inches,,
+RELIEF,Maximum - minimum elevation,4343,feet,,
+SLOP30_30M,Percent area with slopes greater than 30 percent from 30-meter DEM.,38.6,percent,,
+SLOP50_30M,Percent area with slopes greater than 50 percent from 30-meter DEM.,17.1,percent,,
+TEMP,Mean Annual Temperature,32.32,degrees F,,
+WACTCH,Width of active channel,0,feet,,
+WBANKFULL,Width of channel at bankfull,0,feet,,
+,,,,,
+,,,,,
+Peak-Flow Statistics Parameters,36.2 Percent SW Region BasinC 2015 5019F,,,,
+Parameter Code,Parameter Name,Value,Units,Min Limit,Max Limit
+CONTDA,Contributing Drainage Area,53.2,square miles,0.42,2480
+EL6000,Percent above 6000 ft,100,percent,0,100
+Peak-Flow Statistics Parameters,63.8 Percent UpYellow CentMount Region BasinC 2015 5019F,,,,
+Parameter Code,Parameter Name,Value,Units,Min Limit,Max Limit
+CONTDA,Contributing Drainage Area,53.2,square miles,0.39,2040
+EL6000,Percent above 6000 ft,100,percent,0,100
+Peak-Flow Statistics Parameters,36.2 Percent SW Region Active Channel SIR 2020 5142,,,,
+Parameter Code,Parameter Name,Value,Units,Min Limit,Max Limit
+WACTCH,Width Of Active Channel,0,feet,1.8,223
+Peak-Flow Statistics Parameters,36.2 Percent SW Region Bankfull SIR 2020 5142,,,,
+Parameter Code,Parameter Name,Value,Units,Min Limit,Max Limit
+WBANKFULL,Width Of Bankfull Channel,0,feet,3.5,260
+Peak-Flow Statistics Parameters,36.2 Percent SW Region Aerial Photo SIR 2020 5142,,,,
+Parameter Code,Parameter Name,Value,Units,Min Limit,Max Limit
+CHANWD_RS,Channel_Width_remotely_sensed,0,feet,2.6,219.2
+Peak-Flow Statistics Parameters,63.8 Percent UpYllw CentMount Region Act Channel SIR 2020 5142,,,,
+Parameter Code,Parameter Name,Value,Units,Min Limit,Max Limit
+WACTCH,Width Of Active Channel,0,feet,1,150
+Peak-Flow Statistics Parameters,63.8 Percent UpYllw CentMount Region Bankfull SIR 2020 5142,,,,
+Parameter Code,Parameter Name,Value,Units,Min Limit,Max Limit
+WBANKFULL,Width Of Bankfull Channel,0,feet,2.5,170
+Peak-Flow Statistics Parameters,63.8 Percent UpYllw CentMount Region Aerial Photo SIR 2020 5142,,,,
+Parameter Code,Parameter Name,Value,Units,Min Limit,Max Limit
+CHANWD_RS,Channel_Width_remotely_sensed,0,feet,2.3,191.9
+,,,,,
+Peak-Flow Statistics Flow Report,36.2 Percent SW Region BasinC 2015 5019F,,,,
+"PIl: Prediction Interval- Lower, PIu: Prediction Interval- Upper, ASEp: Average Standard Error of Prediction, SE: Standard Error (other-- see report)",,,,,
+Statistic,Value,Unit,PIl,PIu,ASEp
+66.7-percent AEP flood,121,ft^3/s,26,563,118
+50-percent AEP flood,155,ft^3/s,41.1,584,96
+42.9-percent AEP flood,172,ft^3/s,48.4,611,90.1
+20-percent AEP flood,253,ft^3/s,83.1,771,76.9
+10-percent AEP flood,333,ft^3/s,116,960,72.1
+4-percent AEP flood,444,ft^3/s,156,1260,71.3
+2-percent AEP flood,529,ft^3/s,186,1510,72
+1-percent AEP flood,622,ft^3/s,213,1810,73.8
+0.5-percent AEP flood,717,ft^3/s,239,2150,76.5
+0.2-percent AEP flood,855,ft^3/s,273,2680,80.3
+Peak-Flow Statistics Flow Report,63.8 Percent UpYellow CentMount Region BasinC 2015 5019F,,,,
+"PIl: Prediction Interval- Lower, PIu: Prediction Interval- Upper, ASEp: Average Standard Error of Prediction, SE: Standard Error (other-- see report)",,,,,
+Statistic,Value,Unit,PIl,PIu,ASEp
+66.7-percent AEP flood,224,ft^3/s,47.5,1060,119
+50-percent AEP flood,280,ft^3/s,64,1220,111
+42.9-percent AEP flood,309,ft^3/s,76,1260,103
+20-percent AEP flood,462,ft^3/s,142,1510,82.4
+10-percent AEP flood,614,ft^3/s,211,1790,73
+4-percent AEP flood,836,ft^3/s,303,2300,68.4
+2-percent AEP flood,1020,ft^3/s,375,2780,67.7
+1-percent AEP flood,1190,ft^3/s,430,3290,69
+0.5-percent AEP flood,1390,ft^3/s,487,3970,71.6
+0.2-percent AEP flood,1660,ft^3/s,549,5020,77
+Peak-Flow Statistics Flow Report,36.2 Percent SW Region Active Channel SIR 2020 5142,,,,
+Statistic,Value,Unit,,,
+Active chan width 66.7 percent AEP flood,0,ft^3/s,,,
+Active Channel Width 50-percent AEP flood,0,ft^3/s,,,
+Active chan width 42.9 percent AEP flood,0,ft^3/s,,,
+Active Channel Width 20-percent AEP flood,0,ft^3/s,,,
+Active Channel Width 10-percent AEP flood,0,ft^3/s,,,
+Active Channel Width 4-percent AEP flood,0,ft^3/s,,,
+Active Channel Width 2-percent AEP flood,0,ft^3/s,,,
+Active Channel Width 1-percent AEP flood,0,ft^3/s,,,
+Active Channel Width 0.5-percent AEP flood,0,ft^3/s,,,
+Active Channel Width 0.2-percent AEP flood,0,ft^3/s,,,
+Peak-Flow Statistics Flow Report,36.2 Percent SW Region Bankfull SIR 2020 5142,,,,
+Statistic,Value,Unit,,,
+Bankfull width 66.7 percent AEP flood,0,ft^3/s,,,
+Bankfull Width 50-percent AEP flood,0,ft^3/s,,,
+Bankfull width 42.9 percent AEP flood,0,ft^3/s,,,
+Bankfull Width 20-percent AEP flood,0,ft^3/s,,,
+Bankfull Width 10-percent AEP flood,0,ft^3/s,,,
+Bankfull Width 4-percent AEP flood,0,ft^3/s,,,
+Bankfull Width 2-percent AEP flood,0,ft^3/s,,,
+Bankfull Width 1-percent AEP flood,0,ft^3/s,,,
+Bankfull Width 0.5-percent AEP flood,0,ft^3/s,,,
+Bankfull Width 0.2-percent AEP flood,0,ft^3/s,,,
+Peak-Flow Statistics Flow Report,36.2 Percent SW Region Aerial Photo SIR 2020 5142,,,,
+Statistic,Value,Unit,,,
+Rem sens chan width 66.7 percent AEP fld,0,ft^3/s,,,
+Rem_sens_chan_width_50_percent_AEP_flood,0,ft^3/s,,,
+Rem sens chan width 42.9 percent AEP fld,0,ft^3/s,,,
+Rem_sens_chan_width_20_percent_AEP_flood,0,ft^3/s,,,
+Rem_sens_chan_width_10_percent_AEP_flood,0,ft^3/s,,,
+Rem_sens_chan_width_4_percent_AEP_flood,0,ft^3/s,,,
+Rem_sens_chan_width_2_percent_AEP_flood,0,ft^3/s,,,
+Rem_sens_chan_width_1_percent_AEP_flood,0,ft^3/s,,,
+Rem_sens_chan_width_0_5_pct_AEP_flood,0,ft^3/s,,,
+Rem_sens_chan_width_0_2_pct_AEP_flood,0,ft^3/s,,,
+Peak-Flow Statistics Flow Report,63.8 Percent UpYllw CentMount Region Act Channel SIR 2020 5142,,,,
+Statistic,Value,Unit,,,
+Active chan width 66.7 percent AEP flood,0,ft^3/s,,,
+Active Channel Width 50-percent AEP flood,0,ft^3/s,,,
+Active chan width 42.9 percent AEP flood,0,ft^3/s,,,
+Active Channel Width 20-percent AEP flood,0,ft^3/s,,,
+Active Channel Width 10-percent AEP flood,0,ft^3/s,,,
+Active Channel Width 4-percent AEP flood,0,ft^3/s,,,
+Active Channel Width 2-percent AEP flood,0,ft^3/s,,,
+Active Channel Width 1-percent AEP flood,0,ft^3/s,,,
+Active Channel Width 0.5-percent AEP flood,0,ft^3/s,,,
+Active Channel Width 0.2-percent AEP flood,0,ft^3/s,,,
+Peak-Flow Statistics Flow Report,63.8 Percent UpYllw CentMount Region Bankfull SIR 2020 5142,,,,
+Statistic,Value,Unit,,,
+Bankfull width 66.7 percent AEP flood,0,ft^3/s,,,
+Bankfull Width 50-percent AEP flood,0,ft^3/s,,,
+Bankfull width 42.9 percent AEP flood,0,ft^3/s,,,
+Bankfull Width 20-percent AEP flood,0,ft^3/s,,,
+Bankfull Width 10-percent AEP flood,0,ft^3/s,,,
+Bankfull Width 4-percent AEP flood,0,ft^3/s,,,
+Bankfull Width 2-percent AEP flood,0,ft^3/s,,,
+Bankfull Width 1-percent AEP flood,0,ft^3/s,,,
+Bankfull Width 0.5-percent AEP flood,0,ft^3/s,,,
+Bankfull Width 0.2-percent AEP flood,0,ft^3/s,,,
+Peak-Flow Statistics Flow Report,63.8 Percent UpYllw CentMount Region Aerial Photo SIR 2020 5142,,,,
+Statistic,Value,Unit,,,
+Rem sens chan width 66.7 percent AEP fld,0,ft^3/s,,,
+Rem_sens_chan_width_50_percent_AEP_flood,0,ft^3/s,,,
+Rem sens chan width 42.9 percent AEP fld,0,ft^3/s,,,
+Rem_sens_chan_width_20_percent_AEP_flood,0,ft^3/s,,,
+Rem_sens_chan_width_10_percent_AEP_flood,0,ft^3/s,,,
+Rem_sens_chan_width_4_percent_AEP_flood,0,ft^3/s,,,
+Rem_sens_chan_width_2_percent_AEP_flood,0,ft^3/s,,,
+Rem_sens_chan_width_1_percent_AEP_flood,0,ft^3/s,,,
+Rem_sens_chan_width_0_5_pct_AEP_flood,0,ft^3/s,,,
+Rem_sens_chan_width_0_2_pct_AEP_flood,0,ft^3/s,,,
+Peak-Flow Statistics Flow Report,Area-Averaged,,,,
+Statistic,Value,Unit,,,
+66.7-percent AEP flood,187,ft^3/s,,,
+50-percent AEP flood,235,ft^3/s,,,
+42.9-percent AEP flood,259,ft^3/s,,,
+20-percent AEP flood,386,ft^3/s,,,
+10-percent AEP flood,512,ft^3/s,,,
+4-percent AEP flood,694,ft^3/s,,,
+2-percent AEP flood,842,ft^3/s,,,
+1-percent AEP flood,984,ft^3/s,,,
+0.5-percent AEP flood,1150,ft^3/s,,,
+0.2-percent AEP flood,1370,ft^3/s,,,
+Active chan width 66.7 percent AEP flood,0,ft^3/s,,,
+Active Channel Width 50-percent AEP flood,0,ft^3/s,,,
+Active chan width 42.9 percent AEP flood,0,ft^3/s,,,
+Active Channel Width 20-percent AEP flood,0,ft^3/s,,,
+Active Channel Width 10-percent AEP flood,0,ft^3/s,,,
+Active Channel Width 4-percent AEP flood,0,ft^3/s,,,
+Active Channel Width 2-percent AEP flood,0,ft^3/s,,,
+Active Channel Width 1-percent AEP flood,0,ft^3/s,,,
+Active Channel Width 0.5-percent AEP flood,0,ft^3/s,,,
+Active Channel Width 0.2-percent AEP flood,0,ft^3/s,,,
+Bankfull width 66.7 percent AEP flood,0,ft^3/s,,,
+Bankfull Width 50-percent AEP flood,0,ft^3/s,,,
+Bankfull width 42.9 percent AEP flood,0,ft^3/s,,,
+Bankfull Width 20-percent AEP flood,0,ft^3/s,,,
+Bankfull Width 10-percent AEP flood,0,ft^3/s,,,
+Bankfull Width 4-percent AEP flood,0,ft^3/s,,,
+Bankfull Width 2-percent AEP flood,0,ft^3/s,,,
+Bankfull Width 1-percent AEP flood,0,ft^3/s,,,
+Bankfull Width 0.5-percent AEP flood,0,ft^3/s,,,
+Bankfull Width 0.2-percent AEP flood,0,ft^3/s,,,
+Rem sens chan width 66.7 percent AEP fld,0,ft^3/s,,,
+Rem_sens_chan_width_50_percent_AEP_flood,0,ft^3/s,,,
+Rem sens chan width 42.9 percent AEP fld,0,ft^3/s,,,
+Rem_sens_chan_width_20_percent_AEP_flood,0,ft^3/s,,,
+Rem_sens_chan_width_10_percent_AEP_flood,0,ft^3/s,,,
+Rem_sens_chan_width_4_percent_AEP_flood,0,ft^3/s,,,
+Rem_sens_chan_width_2_percent_AEP_flood,0,ft^3/s,,,
+Rem_sens_chan_width_1_percent_AEP_flood,0,ft^3/s,,,
+Rem_sens_chan_width_0_5_pct_AEP_flood,0,ft^3/s,,,
+Rem_sens_chan_width_0_2_pct_AEP_flood,0,ft^3/s,,,
+,,,,,
+,,,,,
+Low-Flow Statistics Parameters,63.8 Percent UpYellow CentMt Region LowFlow GLS 2015 5019G,,,,
+Parameter Code,Parameter Name,Value,Units,Min Limit,Max Limit
+CONTDA,Contributing Drainage Area,53.2,square miles,28.1,2620
+PRECIP,Mean Annual Precipitation,35.05,inches,16.4,38.9
+Low-Flow Statistics Parameters,36.2 Percent SW Region LowFlow GLS 2015 5019G,,,,
+Parameter Code,Parameter Name,Value,Units,Min Limit,Max Limit
+CONTDA,Contributing Drainage Area,53.2,square miles,24.4,2480
+SLOP50_30M,Slopes_gt_50pct_from_30m_DEM,17.1,percent,0.96,22.6
+,,,,,
+Low-Flow Statistics Flow Report,63.8 Percent UpYellow CentMt Region LowFlow GLS 2015 5019G,,,,
+"PIl: Prediction Interval- Lower, PIu: Prediction Interval- Upper, ASEp: Average Standard Error of Prediction, SE: Standard Error (other-- see report)",,,,,
+Statistic,Value,Unit,PIl,PIu,ASEp
+7 Day 10 Year Low Flow,10,ft^3/s,1.25,80.2,185
+Low-Flow Statistics Flow Report,36.2 Percent SW Region LowFlow GLS 2015 5019G,,,,
+"PIl: Prediction Interval- Lower, PIu: Prediction Interval- Upper, ASEp: Average Standard Error of Prediction, SE: Standard Error (other-- see report)",,,,,
+Statistic,Value,Unit,PIl,PIu,ASEp
+7 Day 10 Year Low Flow,2.37,ft^3/s,0.286,19.7,175
+Low-Flow Statistics Flow Report,Area-Averaged,,,,
+Statistic,Value,Unit,PIl,PIu,
+7 Day 10 Year Low Flow,7.24,ft^3/s,0.901,58.3,
+,,,,,
+,,,,,
+Flow-Duration Statistics Parameters,36.2 Percent SW Region Annual MeanDur 2015 5019G,,,,
+Parameter Code,Parameter Name,Value,Units,Min Limit,Max Limit
+CONTDA,Contributing Drainage Area,53.2,square miles,24.4,2480
+PRECIP,Mean Annual Precipitation,35.05,inches,16.7,37.1
+,,,,,
+Flow-Duration Statistics Flow Report,36.2 Percent SW Region Annual MeanDur 2015 5019G,,,,
+Statistic,Value,Unit,,,
+20 Percent Duration,116,ft^3/s,,,
+80 Percent Duration,19.1,ft^3/s,,,
+,,,,,
+,,,,,
+Annual Flow Statistics Parameters,36.2 Percent SW Region Annual MeanDur 2015 5019G,,,,
+Parameter Code,Parameter Name,Value,Units,Min Limit,Max Limit
+CONTDA,Contributing Drainage Area,53.2,square miles,24.4,2480
+PRECIP,Mean Annual Precipitation,35.05,inches,16.7,37.1
+,,,,,
+Annual Flow Statistics Flow Report,36.2 Percent SW Region Annual MeanDur 2015 5019G,,,,
+Statistic,Value,Unit,,,
+Median Annual Flow,40.2,ft^3/s,,,
+Mean Annual Flow,75.2,ft^3/s,,,
+,,,,,
+,,,,,
+Monthly Flow Statistics Parameters,36.2 Percent SW Region Season3 MeanDur 2015 5019G,,,,
+Parameter Code,Parameter Name,Value,Units,Min Limit,Max Limit
+CONTDA,Contributing Drainage Area,53.2,square miles,24.4,2480
+SLOP50_30M,Slopes_gt_50pct_from_30m_DEM,17.1,percent,0.96,22.6
+PRECIP,Mean Annual Precipitation,35.05,inches,16.7,37.1
+Monthly Flow Statistics Parameters,36.2 Percent SW Region Season1 MeanDur 2015 5019G,,,,
+Parameter Code,Parameter Name,Value,Units,Min Limit,Max Limit
+CONTDA,Contributing Drainage Area,53.2,square miles,24.4,2480
+SLOP50_30M,Slopes_gt_50pct_from_30m_DEM,17.1,percent,0.96,22.6
+PRECIP,Mean Annual Precipitation,35.05,inches,16.7,37.1
+Monthly Flow Statistics Parameters,36.2 Percent SW Region Season2 MeanDur 2015 5019G,,,,
+Parameter Code,Parameter Name,Value,Units,Min Limit,Max Limit
+CONTDA,Contributing Drainage Area,53.2,square miles,24.4,2480
+PRECIP,Mean Annual Precipitation,35.05,inches,16.7,37.1
+Monthly Flow Statistics Parameters,63.8 Percent UpYellow CentMt Region Season3 MeanDur 2015 5019G,,,,
+Parameter Code,Parameter Name,Value,Units,Min Limit,Max Limit
+CONTDA,Contributing Drainage Area,53.2,square miles,28.1,2620
+PRECIP,Mean Annual Precipitation,35.05,inches,16.4,38.9
+Monthly Flow Statistics Parameters,63.8 Percent UpYellow CentMt Region Season1 MeanDur 2015 5019G,,,,
+Parameter Code,Parameter Name,Value,Units,Min Limit,Max Limit
+CONTDA,Contributing Drainage Area,53.2,square miles,28.1,2620
+PRECIP,Mean Annual Precipitation,35.05,inches,16.4,38.9
+Monthly Flow Statistics Parameters,63.8 Percent UpYellow CentMt Region Season2 MeanDur 2015 5019G,,,,
+Parameter Code,Parameter Name,Value,Units,Min Limit,Max Limit
+CONTDA,Contributing Drainage Area,53.2,square miles,28.1,2620
+PRECIP,Mean Annual Precipitation,35.05,inches,16.4,38.9
+,,,,,
+Monthly Flow Statistics Flow Report,36.2 Percent SW Region Season3 MeanDur 2015 5019G,,,,
+Statistic,Value,Unit,,,
+January Mean Flow,9.81,ft^3/s,,,
+February Mean Flow,9.22,ft^3/s,,,
+November Mean Flow,16.2,ft^3/s,,,
+December Mean Flow,11.2,ft^3/s,,,
+Monthly Flow Statistics Flow Report,36.2 Percent SW Region Season1 MeanDur 2015 5019G,,,,
+Statistic,Value,Unit,,,
+March Mean Flow,11.1,ft^3/s,,,
+April Mean Flow,46.4,ft^3/s,,,
+May Mean Flow,176,ft^3/s,,,
+June Mean Flow,214,ft^3/s,,,
+Monthly Flow Statistics Flow Report,36.2 Percent SW Region Season2 MeanDur 2015 5019G,,,,
+Statistic,Value,Unit,,,
+July Mean Flow,74.2,ft^3/s,,,
+August Mean Flow,26.7,ft^3/s,,,
+September Mean Flow,21.9,ft^3/s,,,
+October Mean Flow,21.3,ft^3/s,,,
+Monthly Flow Statistics Flow Report,63.8 Percent UpYellow CentMt Region Season3 MeanDur 2015 5019G,,,,
+Statistic,Value,Unit,,,
+November Mean Flow,27.4,ft^3/s,,,
+December Mean Flow,21,ft^3/s,,,
+January Mean Flow,18.5,ft^3/s,,,
+February Mean Flow,16.2,ft^3/s,,,
+Monthly Flow Statistics Flow Report,63.8 Percent UpYellow CentMt Region Season1 MeanDur 2015 5019G,,,,
+Statistic,Value,Unit,,,
+March Mean Flow,14,ft^3/s,,,
+April Mean Flow,38.7,ft^3/s,,,
+May Mean Flow,184,ft^3/s,,,
+June Mean Flow,319,ft^3/s,,,
+Monthly Flow Statistics Flow Report,63.8 Percent UpYellow CentMt Region Season2 MeanDur 2015 5019G,,,,
+Statistic,Value,Unit,,,
+July Mean Flow,172,ft^3/s,,,
+August Mean Flow,72.4,ft^3/s,,,
+September Mean Flow,48,ft^3/s,,,
+October Mean Flow,37.3,ft^3/s,,,
+Monthly Flow Statistics Flow Report,Area-Averaged,,,,
+Statistic,Value,Unit,,,
+January Mean Flow,15.4,ft^3/s,,,
+February Mean Flow,13.7,ft^3/s,,,
+November Mean Flow,23.3,ft^3/s,,,
+December Mean Flow,17.5,ft^3/s,,,
+March Mean Flow,13,ft^3/s,,,
+April Mean Flow,41.5,ft^3/s,,,
+May Mean Flow,181,ft^3/s,,,
+June Mean Flow,281,ft^3/s,,,
+July Mean Flow,137,ft^3/s,,,
+August Mean Flow,55.9,ft^3/s,,,
+September Mean Flow,38.6,ft^3/s,,,
+October Mean Flow,31.5,ft^3/s,,,
+,,,,,
+,,,,,
+Seasonal Flow Statistics Parameters,63.8 Percent UpYellow CentMt Region LowFlow GLS 2015 5019G,,,,
+Parameter Code,Parameter Name,Value,Units,Min Limit,Max Limit
+CONTDA,Contributing Drainage Area,53.2,square miles,28.1,2620
+PRECIP,Mean Annual Precipitation,35.05,inches,16.4,38.9
+Seasonal Flow Statistics Parameters,36.2 Percent SW Region LowFlow GLS 2015 5019G,,,,
+Parameter Code,Parameter Name,Value,Units,Min Limit,Max Limit
+CONTDA,Contributing Drainage Area,53.2,square miles,24.4,2480
+PRECIP,Mean Annual Precipitation,35.05,inches,16.7,37.1
+,,,,,
+Seasonal Flow Statistics Flow Report,63.8 Percent UpYellow CentMt Region LowFlow GLS 2015 5019G,,,,
+"PIl: Prediction Interval- Lower, PIu: Prediction Interval- Upper, ASEp: Average Standard Error of Prediction, SE: Standard Error (other-- see report)",,,,,
+Statistic,Value,Unit,PIl,PIu,ASEp
+Jul_to_Oct_14_Day_5_Yr_Low_Flow,26.9,ft^3/s,4.8,151,135
+Seasonal Flow Statistics Flow Report,36.2 Percent SW Region LowFlow GLS 2015 5019G,,,,
+"PIl: Prediction Interval- Lower, PIu: Prediction Interval- Upper, ASEp: Average Standard Error of Prediction, SE: Standard Error (other-- see report)",,,,,
+Statistic,Value,Unit,PIl,PIu,ASEp
+Jul_to_Oct_14_Day_5_Yr_Low_Flow,10.9,ft^3/s,1.02,117,220
+Seasonal Flow Statistics Flow Report,Area-Averaged,,,,
+Statistic,Value,Unit,PIl,PIu,
+Jul_to_Oct_14_Day_5_Yr_Low_Flow,21.1,ft^3/s,3.43,139,
+,,,,,
+,,,,,
+January Flow-Duration Statistics Parameters,36.2 Percent SW Region Season3 MeanDur 2015 5019G,,,,
+Parameter Code,Parameter Name,Value,Units,Min Limit,Max Limit
+CONTDA,Contributing Drainage Area,53.2,square miles,24.4,2480
+SLOP50_30M,Slopes_gt_50pct_from_30m_DEM,17.1,percent,0.96,22.6
+January Flow-Duration Statistics Parameters,63.8 Percent UpYellow CentMt Region Season3 MeanDur 2015 5019G,,,,
+Parameter Code,Parameter Name,Value,Units,Min Limit,Max Limit
+CONTDA,Contributing Drainage Area,53.2,square miles,28.1,2620
+PRECIP,Mean Annual Precipitation,35.05,inches,16.4,38.9
+,,,,,
+January Flow-Duration Statistics Flow Report,36.2 Percent SW Region Season3 MeanDur 2015 5019G,,,,
+Statistic,Value,Unit,,,
+January 20 Percent Duration,12.1,ft^3/s,,,
+January 50 Percent Duration,9.17,ft^3/s,,,
+January 80 Percent Duration,6.69,ft^3/s,,,
+January Flow-Duration Statistics Flow Report,63.8 Percent UpYellow CentMt Region Season3 MeanDur 2015 5019G,,,,
+Statistic,Value,Unit,,,
+January 20 Percent Duration,22.3,ft^3/s,,,
+January 50 Percent Duration,18.5,ft^3/s,,,
+January 80 Percent Duration,15.2,ft^3/s,,,
+January Flow-Duration Statistics Flow Report,Area-Averaged,,,,
+Statistic,Value,Unit,,,
+January 20 Percent Duration,18.6,ft^3/s,,,
+January 50 Percent Duration,15.1,ft^3/s,,,
+January 80 Percent Duration,12.1,ft^3/s,,,
+,,,,,
+,,,,,
+February Flow-Duration Statistics Parameters,36.2 Percent SW Region Season3 MeanDur 2015 5019G,,,,
+Parameter Code,Parameter Name,Value,Units,Min Limit,Max Limit
+CONTDA,Contributing Drainage Area,53.2,square miles,24.4,2480
+SLOP50_30M,Slopes_gt_50pct_from_30m_DEM,17.1,percent,0.96,22.6
+February Flow-Duration Statistics Parameters,63.8 Percent UpYellow CentMt Region Season3 MeanDur 2015 5019G,,,,
+Parameter Code,Parameter Name,Value,Units,Min Limit,Max Limit
+CONTDA,Contributing Drainage Area,53.2,square miles,28.1,2620
+PRECIP,Mean Annual Precipitation,35.05,inches,16.4,38.9
+,,,,,
+February Flow-Duration Statistics Flow Report,36.2 Percent SW Region Season3 MeanDur 2015 5019G,,,,
+Statistic,Value,Unit,,,
+February 20 Percent Duration,10.8,ft^3/s,,,
+February 50 Percent Duration,8.72,ft^3/s,,,
+February 80 Percent Duration,6.41,ft^3/s,,,
+February Flow-Duration Statistics Flow Report,63.8 Percent UpYellow CentMt Region Season3 MeanDur 2015 5019G,,,,
+Statistic,Value,Unit,,,
+February 20 Percent Duration,18.7,ft^3/s,,,
+February 50 Percent Duration,16.5,ft^3/s,,,
+February 80 Percent Duration,14.1,ft^3/s,,,
+February Flow-Duration Statistics Flow Report,Area-Averaged,,,,
+Statistic,Value,Unit,,,
+February 20 Percent Duration,15.8,ft^3/s,,,
+February 50 Percent Duration,13.7,ft^3/s,,,
+February 80 Percent Duration,11.3,ft^3/s,,,
+,,,,,
+,,,,,
+March Flow-Duration Statistics Parameters,36.2 Percent SW Region Season1 MeanDur 2015 5019G,,,,
+Parameter Code,Parameter Name,Value,Units,Min Limit,Max Limit
+CONTDA,Contributing Drainage Area,53.2,square miles,24.4,2480
+SLOP50_30M,Slopes_gt_50pct_from_30m_DEM,17.1,percent,0.96,22.6
+March Flow-Duration Statistics Parameters,63.8 Percent UpYellow CentMt Region Season1 MeanDur 2015 5019G,,,,
+Parameter Code,Parameter Name,Value,Units,Min Limit,Max Limit
+CONTDA,Contributing Drainage Area,53.2,square miles,28.1,2620
+PRECIP,Mean Annual Precipitation,35.05,inches,16.4,38.9
+,,,,,
+March Flow-Duration Statistics Flow Report,36.2 Percent SW Region Season1 MeanDur 2015 5019G,,,,
+Statistic,Value,Unit,,,
+March 20 Percent Duration,13.2,ft^3/s,,,
+March 50 Percent Duration,9.71,ft^3/s,,,
+March 80 Percent Duration,7.22,ft^3/s,,,
+March Flow-Duration Statistics Flow Report,63.8 Percent UpYellow CentMt Region Season1 MeanDur 2015 5019G,,,,
+Statistic,Value,Unit,,,
+March 20 Percent Duration,16.1,ft^3/s,,,
+March 50 Percent Duration,13.6,ft^3/s,,,
+March 80 Percent Duration,11,ft^3/s,,,
+March Flow-Duration Statistics Flow Report,Area-Averaged,,,,
+Statistic,Value,Unit,,,
+March 20 Percent Duration,15.1,ft^3/s,,,
+March 50 Percent Duration,12.2,ft^3/s,,,
+March 80 Percent Duration,9.63,ft^3/s,,,
+,,,,,
+,,,,,
+April Flow-Duration Statistics Parameters,36.2 Percent SW Region Season1 MeanDur 2015 5019G,,,,
+Parameter Code,Parameter Name,Value,Units,Min Limit,Max Limit
+CONTDA,Contributing Drainage Area,53.2,square miles,24.4,2480
+PRECIP,Mean Annual Precipitation,35.05,inches,16.7,37.1
+April Flow-Duration Statistics Parameters,63.8 Percent UpYellow CentMt Region Season1 MeanDur 2015 5019G,,,,
+Parameter Code,Parameter Name,Value,Units,Min Limit,Max Limit
+CONTDA,Contributing Drainage Area,53.2,square miles,28.1,2620
+PRECIP,Mean Annual Precipitation,35.05,inches,16.4,38.9
+,,,,,
+April Flow-Duration Statistics Flow Report,36.2 Percent SW Region Season1 MeanDur 2015 5019G,,,,
+Statistic,Value,Unit,,,
+April 20 Percent Duration,69,ft^3/s,,,
+April 50 Percent Duration,32.4,ft^3/s,,,
+April 80 Percent Duration,16.1,ft^3/s,,,
+April Flow-Duration Statistics Flow Report,63.8 Percent UpYellow CentMt Region Season1 MeanDur 2015 5019G,,,,
+Statistic,Value,Unit,,,
+April 20 Percent Duration,50.7,ft^3/s,,,
+April 50 Percent Duration,29.4,ft^3/s,,,
+April 80 Percent Duration,17.8,ft^3/s,,,
+April Flow-Duration Statistics Flow Report,Area-Averaged,,,,
+Statistic,Value,Unit,,,
+April 20 Percent Duration,57.3,ft^3/s,,,
+April 50 Percent Duration,30.5,ft^3/s,,,
+April 80 Percent Duration,17.2,ft^3/s,,,
+,,,,,
+,,,,,
+May Flow-Duration Statistics Parameters,36.2 Percent SW Region Season1 MeanDur 2015 5019G,,,,
+Parameter Code,Parameter Name,Value,Units,Min Limit,Max Limit
+CONTDA,Contributing Drainage Area,53.2,square miles,24.4,2480
+PRECIP,Mean Annual Precipitation,35.05,inches,16.7,37.1
+May Flow-Duration Statistics Parameters,63.8 Percent UpYellow CentMt Region Season1 MeanDur 2015 5019G,,,,
+Parameter Code,Parameter Name,Value,Units,Min Limit,Max Limit
+CONTDA,Contributing Drainage Area,53.2,square miles,28.1,2620
+PRECIP,Mean Annual Precipitation,35.05,inches,16.4,38.9
+,,,,,
+May Flow-Duration Statistics Flow Report,36.2 Percent SW Region Season1 MeanDur 2015 5019G,,,,
+Statistic,Value,Unit,,,
+May 20 Percent Duration,265,ft^3/s,,,
+May 50 Percent Duration,150,ft^3/s,,,
+May 80 Percent Duration,73.4,ft^3/s,,,
+May Flow-Duration Statistics Flow Report,63.8 Percent UpYellow CentMt Region Season1 MeanDur 2015 5019G,,,,
+Statistic,Value,Unit,,,
+May 20 Percent Duration,269,ft^3/s,,,
+May 50 Percent Duration,147,ft^3/s,,,
+May 80 Percent Duration,72.2,ft^3/s,,,
+May Flow-Duration Statistics Flow Report,Area-Averaged,,,,
+Statistic,Value,Unit,,,
+May 20 Percent Duration,268,ft^3/s,,,
+May 50 Percent Duration,148,ft^3/s,,,
+May 80 Percent Duration,72.6,ft^3/s,,,
+,,,,,
+,,,,,
+June Flow-Duration Statistics Parameters,36.2 Percent SW Region Season1 MeanDur 2015 5019G,,,,
+Parameter Code,Parameter Name,Value,Units,Min Limit,Max Limit
+CONTDA,Contributing Drainage Area,53.2,square miles,24.4,2480
+PRECIP,Mean Annual Precipitation,35.05,inches,16.7,37.1
+June Flow-Duration Statistics Parameters,63.8 Percent UpYellow CentMt Region Season1 MeanDur 2015 5019G,,,,
+Parameter Code,Parameter Name,Value,Units,Min Limit,Max Limit
+CONTDA,Contributing Drainage Area,53.2,square miles,28.1,2620
+PRECIP,Mean Annual Precipitation,35.05,inches,16.4,38.9
+,,,,,
+June Flow-Duration Statistics Flow Report,36.2 Percent SW Region Season1 MeanDur 2015 5019G,,,,
+Statistic,Value,Unit,,,
+June 20 Percent Duration,307,ft^3/s,,,
+June 50 Percent Duration,188,ft^3/s,,,
+June 80 Percent Duration,102,ft^3/s,,,
+June Flow-Duration Statistics Flow Report,63.8 Percent UpYellow CentMt Region Season1 MeanDur 2015 5019G,,,,
+Statistic,Value,Unit,,,
+June 20 Percent Duration,427,ft^3/s,,,
+June 50 Percent Duration,289,ft^3/s,,,
+June 80 Percent Duration,189,ft^3/s,,,
+June Flow-Duration Statistics Flow Report,Area-Averaged,,,,
+Statistic,Value,Unit,,,
+June 20 Percent Duration,384,ft^3/s,,,
+June 50 Percent Duration,252,ft^3/s,,,
+June 80 Percent Duration,158,ft^3/s,,,
+,,,,,
+,,,,,
+July Flow-Duration Statistics Parameters,36.2 Percent SW Region Season2 MeanDur 2015 5019G,,,,
+Parameter Code,Parameter Name,Value,Units,Min Limit,Max Limit
+CONTDA,Contributing Drainage Area,53.2,square miles,24.4,2480
+PRECIP,Mean Annual Precipitation,35.05,inches,16.7,37.1
+July Flow-Duration Statistics Parameters,63.8 Percent UpYellow CentMt Region Season2 MeanDur 2015 5019G,,,,
+Parameter Code,Parameter Name,Value,Units,Min Limit,Max Limit
+CONTDA,Contributing Drainage Area,53.2,square miles,28.1,2620
+PRECIP,Mean Annual Precipitation,35.05,inches,16.4,38.9
+,,,,,
+July Flow-Duration Statistics Flow Report,36.2 Percent SW Region Season2 MeanDur 2015 5019G,,,,
+Statistic,Value,Unit,,,
+July 20 Percent Duration,105,ft^3/s,,,
+July 50 Percent Duration,58.2,ft^3/s,,,
+July 80 Percent Duration,32.3,ft^3/s,,,
+July Flow-Duration Statistics Flow Report,63.8 Percent UpYellow CentMt Region Season2 MeanDur 2015 5019G,,,,
+Statistic,Value,Unit,,,
+July 20 Percent Duration,234,ft^3/s,,,
+July 50 Percent Duration,153,ft^3/s,,,
+July 80 Percent Duration,106,ft^3/s,,,
+July Flow-Duration Statistics Flow Report,Area-Averaged,,,,
+Statistic,Value,Unit,,,
+July 20 Percent Duration,187,ft^3/s,,,
+July 50 Percent Duration,119,ft^3/s,,,
+July 80 Percent Duration,79.3,ft^3/s,,,
+,,,,,
+,,,,,
+August Flow-Duration Statistics Parameters,36.2 Percent SW Region Season2 MeanDur 2015 5019G,,,,
+Parameter Code,Parameter Name,Value,Units,Min Limit,Max Limit
+CONTDA,Contributing Drainage Area,53.2,square miles,24.4,2480
+PRECIP,Mean Annual Precipitation,35.05,inches,16.7,37.1
+August Flow-Duration Statistics Parameters,63.8 Percent UpYellow CentMt Region Season2 MeanDur 2015 5019G,,,,
+Parameter Code,Parameter Name,Value,Units,Min Limit,Max Limit
+CONTDA,Contributing Drainage Area,53.2,square miles,28.1,2620
+PRECIP,Mean Annual Precipitation,35.05,inches,16.4,38.9
+,,,,,
+August Flow-Duration Statistics Flow Report,36.2 Percent SW Region Season2 MeanDur 2015 5019G,,,,
+Statistic,Value,Unit,,,
+August 20 Percent Duration,35.8,ft^3/s,,,
+August 50 Percent Duration,22.8,ft^3/s,,,
+August 80 Percent Duration,15.2,ft^3/s,,,
+August Flow-Duration Statistics Flow Report,63.8 Percent UpYellow CentMt Region Season2 MeanDur 2015 5019G,,,,
+Statistic,Value,Unit,,,
+August 20 Percent Duration,89.7,ft^3/s,,,
+August 50 Percent Duration,67.1,ft^3/s,,,
+August 80 Percent Duration,59.5,ft^3/s,,,
+August Flow-Duration Statistics Flow Report,Area-Averaged,,,,
+Statistic,Value,Unit,,,
+August 20 Percent Duration,70.2,ft^3/s,,,
+August 50 Percent Duration,51.1,ft^3/s,,,
+August 80 Percent Duration,43.5,ft^3/s,,,
+,,,,,
+,,,,,
+September Flow-Duration Statistics Parameters,36.2 Percent SW Region Season2 MeanDur 2015 5019G,,,,
+Parameter Code,Parameter Name,Value,Units,Min Limit,Max Limit
+CONTDA,Contributing Drainage Area,53.2,square miles,24.4,2480
+PRECIP,Mean Annual Precipitation,35.05,inches,16.7,37.1
+September Flow-Duration Statistics Parameters,63.8 Percent UpYellow CentMt Region Season2 MeanDur 2015 5019G,,,,
+Parameter Code,Parameter Name,Value,Units,Min Limit,Max Limit
+CONTDA,Contributing Drainage Area,53.2,square miles,28.1,2620
+PRECIP,Mean Annual Precipitation,35.05,inches,16.4,38.9
+,,,,,
+September Flow-Duration Statistics Flow Report,36.2 Percent SW Region Season2 MeanDur 2015 5019G,,,,
+Statistic,Value,Unit,,,
+September 20 Percent Duration,29.1,ft^3/s,,,
+September 50 Percent Duration,19.4,ft^3/s,,,
+September 80 Percent Duration,13.3,ft^3/s,,,
+September Flow-Duration Statistics Flow Report,63.8 Percent UpYellow CentMt Region Season2 MeanDur 2015 5019G,,,,
+Statistic,Value,Unit,,,
+September 20 Percent Duration,57.8,ft^3/s,,,
+September 50 Percent Duration,47.8,ft^3/s,,,
+September 80 Percent Duration,39.5,ft^3/s,,,
+September Flow-Duration Statistics Flow Report,Area-Averaged,,,,
+Statistic,Value,Unit,,,
+September 20 Percent Duration,47.4,ft^3/s,,,
+September 50 Percent Duration,37.5,ft^3/s,,,
+September 80 Percent Duration,30,ft^3/s,,,
+,,,,,
+,,,,,
+October Flow-Duration Statistics Parameters,36.2 Percent SW Region Season2 MeanDur 2015 5019G,,,,
+Parameter Code,Parameter Name,Value,Units,Min Limit,Max Limit
+CONTDA,Contributing Drainage Area,53.2,square miles,24.4,2480
+PRECIP,Mean Annual Precipitation,35.05,inches,16.7,37.1
+October Flow-Duration Statistics Parameters,63.8 Percent UpYellow CentMt Region Season2 MeanDur 2015 5019G,,,,
+Parameter Code,Parameter Name,Value,Units,Min Limit,Max Limit
+CONTDA,Contributing Drainage Area,53.2,square miles,28.1,2620
+PRECIP,Mean Annual Precipitation,35.05,inches,16.4,38.9
+,,,,,
+October Flow-Duration Statistics Flow Report,36.2 Percent SW Region Season2 MeanDur 2015 5019G,,,,
+Statistic,Value,Unit,,,
+October 20 Percent Duration,27.6,ft^3/s,,,
+October 50 Percent Duration,19.5,ft^3/s,,,
+October 80 Percent Duration,13.1,ft^3/s,,,
+October Flow-Duration Statistics Flow Report,63.8 Percent UpYellow CentMt Region Season2 MeanDur 2015 5019G,,,,
+Statistic,Value,Unit,,,
+October 20 Percent Duration,44.3,ft^3/s,,,
+October 50 Percent Duration,35.3,ft^3/s,,,
+October 80 Percent Duration,29.7,ft^3/s,,,
+October Flow-Duration Statistics Flow Report,Area-Averaged,,,,
+Statistic,Value,Unit,,,
+October 20 Percent Duration,38.3,ft^3/s,,,
+October 50 Percent Duration,29.6,ft^3/s,,,
+October 80 Percent Duration,23.7,ft^3/s,,,
+,,,,,
+,,,,,
+November Flow-Duration Statistics Parameters,63.8 Percent UpYellow CentMt Region Season3 MeanDur 2015 5019G,,,,
+Parameter Code,Parameter Name,Value,Units,Min Limit,Max Limit
+CONTDA,Contributing Drainage Area,53.2,square miles,28.1,2620
+PRECIP,Mean Annual Precipitation,35.05,inches,16.4,38.9
+November Flow-Duration Statistics Parameters,36.2 Percent SW Region Season3 MeanDur 2015 5019G,,,,
+Parameter Code,Parameter Name,Value,Units,Min Limit,Max Limit
+CONTDA,Contributing Drainage Area,53.2,square miles,24.4,2480
+PRECIP,Mean Annual Precipitation,35.05,inches,16.7,37.1
+,,,,,
+November Flow-Duration Statistics Flow Report,63.8 Percent UpYellow CentMt Region Season3 MeanDur 2015 5019G,,,,
+Statistic,Value,Unit,,,
+November 20 Percent Duration,33.1,ft^3/s,,,
+November 50 Percent Duration,27,ft^3/s,,,
+November 80 Percent Duration,21.9,ft^3/s,,,
+November Flow-Duration Statistics Flow Report,36.2 Percent SW Region Season3 MeanDur 2015 5019G,,,,
+Statistic,Value,Unit,,,
+November 20 Percent Duration,21.3,ft^3/s,,,
+November 50 Percent Duration,14.8,ft^3/s,,,
+November 80 Percent Duration,9.99,ft^3/s,,,
+November Flow-Duration Statistics Flow Report,Area-Averaged,,,,
+Statistic,Value,Unit,,,
+November 20 Percent Duration,28.8,ft^3/s,,,
+November 50 Percent Duration,22.6,ft^3/s,,,
+November 80 Percent Duration,17.6,ft^3/s,,,
+,,,,,
+,,,,,
+December Flow-Duration Statistics Parameters,63.8 Percent UpYellow CentMt Region Season3 MeanDur 2015 5019G,,,,
+Parameter Code,Parameter Name,Value,Units,Min Limit,Max Limit
+CONTDA,Contributing Drainage Area,53.2,square miles,28.1,2620
+PRECIP,Mean Annual Precipitation,35.05,inches,16.4,38.9
+December Flow-Duration Statistics Parameters,36.2 Percent SW Region Season3 MeanDur 2015 5019G,,,,
+Parameter Code,Parameter Name,Value,Units,Min Limit,Max Limit
+CONTDA,Contributing Drainage Area,53.2,square miles,24.4,2480
+SLOP50_30M,Slopes_gt_50pct_from_30m_DEM,17.1,percent,0.96,22.6
+,,,,,
+December Flow-Duration Statistics Flow Report,63.8 Percent UpYellow CentMt Region Season3 MeanDur 2015 5019G,,,,
+Statistic,Value,Unit,,,
+December 20 Percent Duration,25.7,ft^3/s,,,
+December 50 Percent Duration,20.5,ft^3/s,,,
+December 80 Percent Duration,16.4,ft^3/s,,,
+December Flow-Duration Statistics Flow Report,36.2 Percent SW Region Season3 MeanDur 2015 5019G,,,,
+Statistic,Value,Unit,,,
+December 20 Percent Duration,14,ft^3/s,,,
+December 50 Percent Duration,10.4,ft^3/s,,,
+December 80 Percent Duration,7.28,ft^3/s,,,
+December Flow-Duration Statistics Flow Report,Area-Averaged,,,,
+Statistic,Value,Unit,,,
+December 20 Percent Duration,21.5,ft^3/s,,,
+December 50 Percent Duration,16.8,ft^3/s,,,
+December 80 Percent Duration,13.1,ft^3/s,,,
+,,,,,
+,,,,,
+Bankfull Statistics Parameters,100.0 Percent Rocky Mountain System D Bieger 2015,,,,
+Parameter Code,Parameter Name,Value,Units,Min Limit,Max Limit
+DRNAREA,Drainage Area,53.2,square miles,0.15444,9730.1061
+Bankfull Statistics Parameters,100.0 Percent Northern Rocky Mountains P Bieger 2015,,,,
+Parameter Code,Parameter Name,Value,Units,Min Limit,Max Limit
+DRNAREA,Drainage Area,53.2,square miles,0.138996,7259.957991
+Bankfull Statistics Parameters,100.0 Percent USA Bieger 2015,,,,
+Parameter Code,Parameter Name,Value,Units,Min Limit,Max Limit
+DRNAREA,Drainage Area,53.2,square miles,0.07722,59927.7393
+,,,,,
+Bankfull Statistics Flow Report,100.0 Percent Rocky Mountain System D Bieger 2015,,,,
+Statistic,Value,Unit,,,
+Bieger_D_channel_width,34.7,ft,,,
+Bieger_D_channel_depth,2.29,ft,,,
+Bieger_D_channel_cross_sectional_area,63.8,ft^2,,,
+Bankfull Statistics Flow Report,100.0 Percent Northern Rocky Mountains P Bieger 2015,,,,
+Statistic,Value,Unit,,,
+Bieger_P_channel_width,34.4,ft,,,
+Bieger_P_channel_depth,2.46,ft,,,
+Bieger_P_channel_cross_sectional_area,70,ft^2,,,
+Bankfull Statistics Flow Report,100.0 Percent USA Bieger 2015,,,,
+Statistic,Value,Unit,,,
+Bieger_USA_channel_width,50.2,ft,,,
+Bieger_USA_channel_depth,2.81,ft,,,
+Bieger_USA_channel_cross_sectional_area,146,ft^2,,,
+Bankfull Statistics Flow Report,Area-Averaged,,,,
+Statistic,Value,Unit,,,
+Bieger_D_channel_width,34.7,ft,,,
+Bieger_D_channel_depth,2.29,ft,,,
+Bieger_D_channel_cross_sectional_area,63.8,ft^2,,,
+Bieger_P_channel_width,34.4,ft,,,
+Bieger_P_channel_depth,2.46,ft,,,
+Bieger_P_channel_cross_sectional_area,70,ft^2,,,
+Bieger_USA_channel_width,50.2,ft,,,
+Bieger_USA_channel_depth,2.81,ft,,,
+Bieger_USA_channel_cross_sectional_area,146,ft^2,,,
+,,,,,
+,,,,,
+Maximum Probable Flood Statistics Parameters,100.0 Percent Crippen Bue Region 13,,,,
+Parameter Code,Parameter Name,Value,Units,Min Limit,Max Limit
+DRNAREA,Drainage Area,53.2,square miles,0.1,10000
+,,,,,
+Maximum Probable Flood Statistics Flow Report,100.0 Percent Crippen Bue Region 13,,,,
+Statistic,Value,Unit,,,
+Maximum Flood Crippen Bue Regional,72200,ft^3/s,,,
+,,,,,
+Channel-width Methods Weighting,,,,,
+No method weighting results returned.,,,,,
+,,,,,
+"USGS Data Disclaimer: Unless otherwise stated, all data, metadata and related materials are considered to satisfy the quality standards relative to the purpose for which the data were collected. Although these data and associated metadata have been reviewed for accuracy and completeness and approved for release by the U.S. Geological Survey (USGS), no warranty expressed or implied is made regarding the display or utility of the data for other purposes, nor on all computer systems, nor shall the act of distribution constitute any such warranty.",,,,,
+"USGS Software Disclaimer: This software has been approved for release by the U.S. Geological Survey (USGS). Although the software has been subjected to rigorous review, the USGS reserves the right to update the software as needed pursuant to further analysis and review. No warranty, expressed or implied, is made by the USGS or the U.S. Government as to the functionality of the software and related material nor shall the fact of release constitute any such warranty. Furthermore, the software is released on condition that neither the USGS nor the U.S. Government shall be held liable for any damages resulting from its authorized or unauthorized use.",,,,,
+"USGS Product Names Disclaimer: Any use of trade, firm, or product names is for descriptive purposes only and does not imply endorsement by the U.S. Government.",,,,,
+,,,,,
+Application Version: 4.16.1,,,,,
+StreamStats Services Version: 1.2.22,,,,,
+NSS Services Version: 2.2.1,,,,,

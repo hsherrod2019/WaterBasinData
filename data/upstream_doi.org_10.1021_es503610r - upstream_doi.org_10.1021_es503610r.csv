@@ -1,0 +1,103 @@
+StreamStats Output Report,,,,,
+,,,,,
+State/Region ID,IL,,,,
+Workspace ID,IL20230816180410399000,,,,
+Latitude,42.02328,,,,
+Longitude,-87.70997,,,,
+Time,8/16/2023,11:04:34 AM,,,
+,,,,,
+Basin Characteristics,,,,,
+Parameter Code,Parameter Description,Value,Unit,,
+BASINPERIM,Perimeter of the drainage basin as defined in SIR 2004-5262,25.12,miles,,
+BASLENAH,Basin length from outlet to basin divide determined using the method in the ArcHydro Toolset,5.8,miles,,
+CSL1085RAW,Unadjusted 10-85 stream slope method in feet per mile.,5.568,feet per mi,,
+CSL10_85,Change in elevation divided by length between points 10 and 85 percent of distance along main channel to basin divide - main channel method not known,5.488,feet per mi,,
+DRNAREA,Area that drains to a point on a stream,15.02,square miles,,
+ELEVMAX,Maximum basin elevation,669,feet,,
+FLC11DVLMH,Fraction of drainage area that is in low to high developed land-use classes 22-24 from NLCD 2011,0.934,decimal fraction,,
+FSSURGDC78,Fraction of land area that is in very poorly drained and unknown likely water drainage classes 7 and 8  from SSURGO,0.008,decimal fraction,,
+ILREG1,"Indicator variable for IL region 1, enter 1 if site is in region 1 else 0",1,dimensionless,,
+ILREG3,"Indicator variable for IL region 3, enter 1 if site is in region 3 else 0",1,dimensionless,,
+ILREG5,"Indicator variable for IL region 5, enter 1 if site is in region 5 else 0",1,dimensionless,,
+ILREG6,"Indicator variable for IL region 6, enter 1 if site is in region 6 else 0",1,dimensionless,,
+ILREG7,"Indicator variable for IL region 7, enter 1 if site is in region 7 else 0",1,dimensionless,,
+MINBELEV,Minimum basin elevation,579,feet,,
+RELIEF,Maximum - minimum elevation,90.4,feet,,
+RELRELF,Basin relief divided by basin perimeter,3.6,feet per mi,,
+SOILPERM,Average Soil Permeability,3.999,inches per hour,,
+URBTHE2010,Fraction of drainage area that is in urban classes 7 to 10 from Theobald 2010,0.941,dimensionless,,
+WATWET,Percent open water and herbaceous wetland from NLCD,0.518,percent,,
+,,,,,
+,,,,,
+Peak-Flow Statistics Parameters,100.0 Percent Region 2 Peak SIR 2016 5050 V3,,,,
+Parameter Code,Parameter Name,Value,Units,Min Limit,Max Limit
+DRNAREA,Drainage Area,15.02,square miles,0.0878,1351
+FLC11DVLMH,Frac_Lo_Med_Hi_Developed_from_NLCD2011,0.934,decimal fraction,0.0022,0.979
+FSSURGDC78,Fraction_SSURGO_Drainage_Classes_7_and_8,0.008,decimal fraction,0,0.256
+RELRELF,Relative Relief,3.6,feet per mi,0.821,37.2
+,,,,,
+Peak-Flow Statistics Flow Report,100.0 Percent Region 2 Peak SIR 2016 5050 V3,,,,
+"PIl: Prediction Interval- Lower, PIu: Prediction Interval- Upper, ASEp: Average Standard Error of Prediction, SE: Standard Error (other-- see report)",,,,,
+Statistic,Value,Unit,PIl,PIu,ASEp
+Urban 20-Percent AEP flood,867,ft^3/s,410,1830,47.5
+Urban 50-percent AEP flood,596,ft^3/s,288,1230,46
+Urban 10-percent AEP flood,1070,ft^3/s,490,2330,49.6
+Urban 4-percent AEP flood,1350,ft^3/s,586,3110,53.4
+Urban 1-percent AEP flood,1810,ft^3/s,722,4540,59.5
+Urban 2-percent AEP flood,1580,ft^3/s,656,3800,56.6
+Urban 0.2-percent AEP flood,2400,ft^3/s,879,6550,66
+,,,,,
+,,,,,
+Bankfull Statistics Parameters,100.0 Percent Interior Plains D Bieger 2015,,,,
+Parameter Code,Parameter Name,Value,Units,Min Limit,Max Limit
+DRNAREA,Drainage Area,15.02,square miles,0.19305,59927.7393
+Bankfull Statistics Parameters,100.0 Percent Central Lowland P Bieger 2015,,,,
+Parameter Code,Parameter Name,Value,Units,Min Limit,Max Limit
+DRNAREA,Drainage Area,15.02,square miles,0.200772,59927.66594
+Bankfull Statistics Parameters,100.0 Percent USA Bieger 2015,,,,
+Parameter Code,Parameter Name,Value,Units,Min Limit,Max Limit
+DRNAREA,Drainage Area,15.02,square miles,0.07722,59927.7393
+,,,,,
+Bankfull Statistics Flow Report,100.0 Percent Interior Plains D Bieger 2015,,,,
+Statistic,Value,Unit,,,
+Bieger_D_channel_width,30.4,ft,,,
+Bieger_D_channel_depth,2.51,ft,,,
+Bieger_D_channel_cross_sectional_area,77.5,ft^2,,,
+Bankfull Statistics Flow Report,100.0 Percent Central Lowland P Bieger 2015,,,,
+Statistic,Value,Unit,,,
+Bieger_P_channel_width,33.9,ft,,,
+Bieger_P_channel_depth,2.93,ft,,,
+Bieger_P_channel_cross_sectional_area,72.5,ft^2,,,
+Bankfull Statistics Flow Report,100.0 Percent USA Bieger 2015,,,,
+Statistic,Value,Unit,,,
+Bieger_USA_channel_width,32.1,ft,,,
+Bieger_USA_channel_depth,2.15,ft,,,
+Bieger_USA_channel_cross_sectional_area,73.8,ft^2,,,
+Bankfull Statistics Flow Report,Area-Averaged,,,,
+Statistic,Value,Unit,,,
+Bieger_D_channel_width,30.4,ft,,,
+Bieger_D_channel_depth,2.51,ft,,,
+Bieger_D_channel_cross_sectional_area,77.5,ft^2,,,
+Bieger_P_channel_width,33.9,ft,,,
+Bieger_P_channel_depth,2.93,ft,,,
+Bieger_P_channel_cross_sectional_area,72.5,ft^2,,,
+Bieger_USA_channel_width,32.1,ft,,,
+Bieger_USA_channel_depth,2.15,ft,,,
+Bieger_USA_channel_cross_sectional_area,73.8,ft^2,,,
+,,,,,
+,,,,,
+Maximum Probable Flood Statistics Parameters,100.0 Percent Crippen Bue Region 6,,,,
+Parameter Code,Parameter Name,Value,Units,Min Limit,Max Limit
+DRNAREA,Drainage Area,15.02,square miles,0.1,10000
+,,,,,
+Maximum Probable Flood Statistics Flow Report,100.0 Percent Crippen Bue Region 6,,,,
+Statistic,Value,Unit,,,
+Maximum Flood Crippen Bue Regional,52600,ft^3/s,,,
+,,,,,
+"USGS Data Disclaimer: Unless otherwise stated, all data, metadata and related materials are considered to satisfy the quality standards relative to the purpose for which the data were collected. Although these data and associated metadata have been reviewed for accuracy and completeness and approved for release by the U.S. Geological Survey (USGS), no warranty expressed or implied is made regarding the display or utility of the data for other purposes, nor on all computer systems, nor shall the act of distribution constitute any such warranty.",,,,,
+"USGS Software Disclaimer: This software has been approved for release by the U.S. Geological Survey (USGS). Although the software has been subjected to rigorous review, the USGS reserves the right to update the software as needed pursuant to further analysis and review. No warranty, expressed or implied, is made by the USGS or the U.S. Government as to the functionality of the software and related material nor shall the fact of release constitute any such warranty. Furthermore, the software is released on condition that neither the USGS nor the U.S. Government shall be held liable for any damages resulting from its authorized or unauthorized use.",,,,,
+"USGS Product Names Disclaimer: Any use of trade, firm, or product names is for descriptive purposes only and does not imply endorsement by the U.S. Government.",,,,,
+,,,,,
+Application Version: 4.16.1,,,,,
+StreamStats Services Version: 1.2.22,,,,,
+NSS Services Version: 2.2.1,,,,,
