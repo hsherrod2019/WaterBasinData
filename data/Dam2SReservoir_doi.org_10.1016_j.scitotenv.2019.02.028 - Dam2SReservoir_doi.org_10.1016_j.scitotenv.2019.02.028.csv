@@ -1,0 +1,164 @@
+StreamStats Output Report,,,,,
+,,,,,
+State/Region ID,NY,,,,
+Workspace ID,NY20230816220402008000,,,,
+Latitude,42.40912,,,,
+Longitude,-76.45377,,,,
+Time,8/16/2023,3:04:22 PM,,,
+,,,,,
+Basin Characteristics,,,,,
+Parameter Code,Parameter Description,Value,Unit,,
+BSLOPCM,Mean basin slope determined by summing lengths of all contours in basin mulitplying by contour interval and dividing product by drainage area,658,feet per mi,,
+CENTROIDX,Basin centroid horizontal (x) location in state plane coordinates,387225.6,meters,,
+CENTROIDY,Basin centroid vertical (y) location in state plane units,4695051.2,meters,,
+CONTOUR,Total length of all elevation contours in drainage area in miles,274.38,miles,,
+CSL1085LO,10-85 slope of lower half of main channel in feet per mile.,52.7,feet per mi,,
+CSL1085UP,10-85 slope of upper half of main channel in feet per mile.,80.2,feet per mi,,
+CSL10_85,Change in elevation divided by length between points 10 and 85 percent of distance along main channel to basin divide - main channel method not known,63.2,feet per mi,,
+DRNAREA,Area that drains to a point on a stream,41.7,square miles,,
+EL1200,Percentage of basin at or above 1200 ft elevation,70.8,percent,,
+FOREST,Percentage of area covered by forest,75.7,percent,,
+JULAVPRE,Mean July Precipitation,3.84,inches,,
+JUNAVPRE,Mean June Precipitation,4.38,inches,,
+JUNMAXTMP,"Maximum June Temperature, in degrees F",74,degrees F,,
+LAGFACTOR,Lag Factor as defined in SIR 2006-5112,0.23,dimensionless,,
+LC11DEV,Percentage of developed (urban) land from NLCD 2011 classes 21-24,2.83,percent,,
+LC11IMP,Average percentage of impervious area determined from NLCD 2011 impervious dataset,0.32,percent,,
+LENGTH,Length along the main channel from the measuring location extended to the basin divide,14.9,miles,,
+MAR,Mean annual runoff for the period of record in inches,17,inches,,
+MAYAVPRE,Mean May Precipitation,3.45,inches,,
+MXSNO,"50th percentile of seasonal maximum snow depth from Northeast Regional Climate Center atlas by Cember and Wilks, 1993",12.9,inches,,
+OUTLETX,Basin outlet horizontal (x) location in state plane coordinates,380375,feet,,
+OUTLETY,Basin outlet vertical (y) location in state plane coordinates,4696225,feet,,
+PRECIP,Mean Annual Precipitation,35.6,inches,,
+PRJUNAUG00,Basin average mean precip for June to August from PRISM 1971-2000,11.8,inches,,
+SLOPERATIO,Ratio of main channel slope to basin slope as defined in SIR 2006-5112,0.096,dimensionless,,
+SSURGOA,Percentage of area of Hydrologic Soil Type A from SSURGO,8,percent,,
+SSURGOB,Percentage of area of Hydrologic Soil Type B from SSURGO,6.27,percent,,
+STORAGE,Percentage of area of storage (lakes ponds reservoirs wetlands),0.41,percent,,
+,,,,,
+,,,,,
+Peak-Flow Statistics Parameters,100.0 Percent 2006 Full Region 5,,,,
+Parameter Code,Parameter Name,Value,Units,Min Limit,Max Limit
+DRNAREA,Drainage Area,41.7,square miles,1.7,4773
+CSL10_85,Stream Slope 10 and 85 Method,63.2,feet per mi,2.76,222.55
+PRECIP,Mean Annual Precipitation,35.6,inches,31.64,49.79
+,,,,,
+Peak-Flow Statistics Flow Report,100.0 Percent 2006 Full Region 5,,,,
+Statistic,Value,Unit,SE,ASEp,Equiv. Yrs.
+80-percent AEP flood,1190,ft^3/s,38.5,38.5,2.2
+66.7-percent AEP flood,1490,ft^3/s,38,38,1.9
+50-percent AEP flood,1920,ft^3/s,37.4,37.4,2
+20-percent AEP flood,3250,ft^3/s,36.3,36.3,3.4
+10-percent AEP flood,4310,ft^3/s,36.1,36.1,4.9
+4-percent AEP flood,5830,ft^3/s,36.7,36.7,7
+2-percent AEP flood,7150,ft^3/s,37.5,37.5,8.5
+1-percent AEP flood,8500,ft^3/s,38.7,38.7,9.7
+0.5-percent AEP flood,9960,ft^3/s,40.2,40.2,10.8
+0.2-percent AEP flood,12100,ft^3/s,42.6,42.6,11.8
+,,,,,
+,,,,,
+Flow-Duration Statistics Parameters,100.0 Percent Statewide duration flows excl LongIsl 2014 5220,,,,
+Parameter Code,Parameter Name,Value,Units,Min Limit,Max Limit
+DRNAREA,Drainage Area,41.7,square miles,3.14,4780
+JUNAVPRE,Mean June Precipitation,4.38,inches,3.59,5.33
+CENTROIDX,CENTROIDX,387225.6,meters,166000,658000
+CENTROIDY,CENTROIDY,4695051.2,meters,4560000,4920000
+CSL1085LO,10-85 slope of lower half of main channel,52.7,feet per mi,1.56,152
+LENGTH,Main Channel Length,14.9,miles,0.88,305
+MAR,Mean Annual Runoff in inches,17,inches,11.6,37.4
+SSURGOB,SSURGO Percent Hydrologic Soil Type B,6.27,percent,1.14,65.7
+JULAVPRE,Mean July Precipitation,3.84,inches,3.2,5.26
+MAYAVPRE,Mean May Precipitation,3.45,inches,3.15,5.68
+PRJUNAUG00,Basin average mean precip for June to August,11.8,inches,10.5,15.5
+JUNMAXTMP,Maximum June Temperature,74,degrees F,68.8,78.8
+SSURGOA,SSURGO Percent Hydrologic Soil Type A,8,percent,0.62,51.2
+EL1200,Percentage of Basin Above 1200 ft,70.8,percent,0,100
+,,,,,
+Flow-Duration Statistics Flow Report,100.0 Percent Statewide duration flows excl LongIsl 2014 5220,,,,
+Statistic,Value,Unit,ASEp,,
+0.01 Percent Duration,2690,ft^3/s,23,,
+1 Percent Duration,412,ft^3/s,14,,
+5 Percent Duration,183,ft^3/s,8.8,,
+10 Percent Duration,120,ft^3/s,7.3,,
+15 Percent Duration,86.9,ft^3/s,6.6,,
+20 Percent Duration,68.5,ft^3/s,7,,
+25 Percent Duration,54.9,ft^3/s,7.2,,
+35 Percent Duration,38,ft^3/s,8.7,,
+50 Percent Duration,24.4,ft^3/s,11,,
+65 Percent Duration,14.9,ft^3/s,14,,
+75 Percent Duration,11.4,ft^3/s,22,,
+80 Percent Duration,9.03,ft^3/s,26,,
+85 Percent Duration,7.08,ft^3/s,31,,
+90 Percent Duration,5.48,ft^3/s,38,,
+95 Percent Duration,3.93,ft^3/s,49,,
+99 Percent Duration,2.38,ft^3/s,92,,
+99.99 Percent Duration,1.02,ft^3/s,93,,
+,,,,,
+,,,,,
+Bankfull Statistics Parameters,100.0 Percent Bankfull Region 6 SIR2009 5144,,,,
+Parameter Code,Parameter Name,Value,Units,Min Limit,Max Limit
+DRNAREA,Drainage Area,41.7,square miles,1.02,290
+Bankfull Statistics Parameters,100.0 Percent Appalachian Highlands D Bieger 2015,,,,
+Parameter Code,Parameter Name,Value,Units,Min Limit,Max Limit
+DRNAREA,Drainage Area,41.7,square miles,0.07722,940.1535
+Bankfull Statistics Parameters,100.0 Percent Appalachian Plateaus P Bieger 2015,,,,
+Parameter Code,Parameter Name,Value,Units,Min Limit,Max Limit
+DRNAREA,Drainage Area,41.7,square miles,0.081081,536.995602
+Bankfull Statistics Parameters,100.0 Percent USA Bieger 2015,,,,
+Parameter Code,Parameter Name,Value,Units,Min Limit,Max Limit
+DRNAREA,Drainage Area,41.7,square miles,0.07722,59927.7393
+,,,,,
+Bankfull Statistics Flow Report,100.0 Percent Bankfull Region 6 SIR2009 5144,,,,
+Statistic,Value,Unit,PIl,PIu,
+Bankfull Area,208,ft^2,88.6,489,
+Bankfull Depth,2.58,ft,1.2,5.54,
+Bankfull Streamflow,1110,ft^3/s,256,4810,
+Bankfull Width,80.7,ft,35.1,185,
+Bankfull Statistics Flow Report,100.0 Percent Appalachian Highlands D Bieger 2015,,,,
+Statistic,Value,Unit,,,
+Bieger_D_channel_width,71.5,ft,,,
+Bieger_D_channel_depth,3.27,ft,,,
+Bieger_D_channel_cross_sectional_area,238,ft^2,,,
+Bankfull Statistics Flow Report,100.0 Percent Appalachian Plateaus P Bieger 2015,,,,
+Statistic,Value,Unit,,,
+Bieger_P_channel_width,78.1,ft,,,
+Bieger_P_channel_depth,3.32,ft,,,
+Bieger_P_channel_cross_sectional_area,257,ft^2,,,
+Bankfull Statistics Flow Report,100.0 Percent USA Bieger 2015,,,,
+Statistic,Value,Unit,,,
+Bieger_USA_channel_width,46,ft,,,
+Bieger_USA_channel_depth,2.67,ft,,,
+Bieger_USA_channel_cross_sectional_area,128,ft^2,,,
+Bankfull Statistics Flow Report,Area-Averaged,,,,
+Statistic,Value,Unit,PIl,PIu,
+Bankfull Area,208,ft^2,88.6,489,
+Bankfull Depth,2.58,ft,1.2,5.54,
+Bankfull Streamflow,1110,ft^3/s,256,4810,
+Bankfull Width,80.7,ft,35.1,185,
+Bieger_D_channel_width,71.5,ft,,,
+Bieger_D_channel_depth,3.27,ft,,,
+Bieger_D_channel_cross_sectional_area,238,ft^2,,,
+Bieger_P_channel_width,78.1,ft,,,
+Bieger_P_channel_depth,3.32,ft,,,
+Bieger_P_channel_cross_sectional_area,257,ft^2,,,
+Bieger_USA_channel_width,46,ft,,,
+Bieger_USA_channel_depth,2.67,ft,,,
+Bieger_USA_channel_cross_sectional_area,128,ft^2,,,
+,,,,,
+,,,,,
+Maximum Probable Flood Statistics Parameters,100.0 Percent Crippen Bue Region 4,,,,
+Parameter Code,Parameter Name,Value,Units,Min Limit,Max Limit
+DRNAREA,Drainage Area,41.7,square miles,0.1,10000
+,,,,,
+Maximum Probable Flood Statistics Flow Report,100.0 Percent Crippen Bue Region 4,,,,
+Statistic,Value,Unit,,,
+Maximum Flood Crippen Bue Regional,55400,ft^3/s,,,
+,,,,,
+"USGS Data Disclaimer: Unless otherwise stated, all data, metadata and related materials are considered to satisfy the quality standards relative to the purpose for which the data were collected. Although these data and associated metadata have been reviewed for accuracy and completeness and approved for release by the U.S. Geological Survey (USGS), no warranty expressed or implied is made regarding the display or utility of the data for other purposes, nor on all computer systems, nor shall the act of distribution constitute any such warranty.",,,,,
+"USGS Software Disclaimer: This software has been approved for release by the U.S. Geological Survey (USGS). Although the software has been subjected to rigorous review, the USGS reserves the right to update the software as needed pursuant to further analysis and review. No warranty, expressed or implied, is made by the USGS or the U.S. Government as to the functionality of the software and related material nor shall the fact of release constitute any such warranty. Furthermore, the software is released on condition that neither the USGS nor the U.S. Government shall be held liable for any damages resulting from its authorized or unauthorized use.",,,,,
+"USGS Product Names Disclaimer: Any use of trade, firm, or product names is for descriptive purposes only and does not imply endorsement by the U.S. Government.",,,,,
+,,,,,
+Application Version: 4.16.1,,,,,
+StreamStats Services Version: 1.2.22,,,,,
+NSS Services Version: 2.2.1,,,,,
