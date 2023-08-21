@@ -1,7 +1,7 @@
 # Install and load necessary packages
-install.packages(c("tidyverse", "randomForest"))
 library(tidyverse)
 library(randomForest)
+library(janitor)
 
 # Load your dataset (replace "your_dataset.csv" with your actual file)
 water_basin <- read.csv("Water Basin firstlast10merge data - Sheet1.csv")
@@ -24,6 +24,21 @@ features <- c("drnarea_square_miles", "forest_percent", "precip_inches", "csl10_
 # Create training and testing subsets with consistent columns
 train_subset <- train_data[, c(target_variable, features)]
 test_subset <- test_data[, c(target_variable, features)]
+
+# Print to see if column names are the same to figure out issue
+train_subset_cols <- colnames(train_subset)
+test_subset_cols <- colnames(test_subset)
+
+if(all(train_subset_cols == test_subset_cols)) {
+  cat("Column names and order are the same in train_subset and test_subset.\n")
+} else {
+  cat("Column names and/or order are different in train_subset and test_subset:\n")
+  print(setdiff(train_subset_cols, test_subset_cols))
+  print(setdiff(test_subset_cols, train_subset_cols))
+}
+
+str(train_subset)
+str(test_subset)
 
 # Create the random forest model
 rf_model <- randomForest(
