@@ -49,5 +49,6 @@ cat("Actual values:", test_subset$mp_conc_ppm3, "\n")
 # Evaluate the model (you can use various evaluation metrics)
 accuracy <- mean(predictions == test_subset$mp_conc_ppm3)
 
-# Print the evaluation result
-cat("Accuracy:", accuracy, "\n")
+# Calculate RMSE- regression task predicts continuous target variable, remove accuracy calculation
+rmse <- sqrt(mean((predictions - test_subset$mp_conc_ppm3)^2))
+cat("RMSE:", rmse, "\n")
