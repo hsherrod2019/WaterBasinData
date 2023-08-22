@@ -23,13 +23,14 @@ target_variable <- "standardized_data_in_ppm3"
 features <- c("bsldem30m", "precip", "drnarea", "lc01dev_lc11dev", "x50_percent_aep_flood")  
 
 # Create training and testing subsets with consistent columns
-train_subset <- cleaned_data[, c(target_variable, features)]
-test_subset <- cleaned_data[, c(target_variable, features)]
+train_subset <- cleaned_data[train_indices, c(target_variable, features)]
+test_subset <- cleaned_data[-train_indices, c(target_variable, features)]
 
+full_data <- cleaned_data[, c(target_variable, features)]
 # Create the random forest model
 rf_model <- randomForest(
   formula = as.formula(paste(target_variable, " ~ .", sep = "")),
-  data = train_subset,
+  data = full_data,
   ntree = 100
 )
 
@@ -38,31 +39,32 @@ importance_scores <- rf_model$importance
 print(importance_scores)
 
 # Make predictions on the test set
-predictions <- predict(rf_model, newdata = test_subset)
+predictions <- predict(rf_model, newdata = full_data)
 
 cat("Predicted values:", predictions, "\n")
-cat("Actual values:", test_subset$mp_conc_ppm3, "\n")
+cat("Actual values:", full_data$standardized_data_in_ppm3, "\n")
 
 ###
 
 # Evaluate the model (you can use various evaluation metrics)
-accuracy <- mean(predictions == test_subset$standardized_data_in_ppm3)
+accuracy <- mean(predictions == full_data$standardized_data_in_ppm3)
 
 # Calculate RMSE- regression task predicts continuous target variable, remove accuracy calculation
-rmse <- sqrt(mean((predictions - test_subset$standardized_data_in_ppm3)^2))
+rmse <- sqrt(mean((predictions - full_data$standardized_data_in_ppm3)^2))
 cat("RMSE:", rmse, "\n")
 
 # Calculate baseline prediction (mean or median)
-baseline_prediction <- mean(train_data$standardized_data_in_ppm3)  # You can also use median if appropriate
+baseline_prediction <- mean(full_data$standardized_data_in_ppm3)  # You can also use median if appropriate
 
 # Create a vector of baseline predictions for the test set
-baseline_predictions <- rep(baseline_prediction, nrow(test_data))
+baseline_predictions <- rep(baseline_prediction, nrow(full_data))
 
 # Calculate baseline RMSE
-baseline_rmse <- sqrt(mean((baseline_predictions - test_data$standardized_data_in_ppm3)^2))
+baseline_rmse <- sqrt(mean((baseline_predictions - full_data$standardized_data_in_ppm3)^2))
+
 
 # Calculate your model's RMSE (you've already calculated this)
-model_rmse <- 1535.988  # Replace with your actual model's RMSE
+model_rmse <- rmse  # Replace with your actual model's RMSE
 
 # Compare the two RMSE values
 cat("Baseline RMSE:", baseline_rmse, "\n")
