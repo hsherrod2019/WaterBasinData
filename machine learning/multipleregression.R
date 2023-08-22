@@ -6,34 +6,26 @@ library(dplyr)
 library(ggplot2)
 
 # Load your dataset (replace "your_dataset.csv" with your actual file)
-water_basin <- read.csv("Water Basin firstlast10merge data - Sheet1.csv")
+water_basin <- read.csv("Copy of River_Plastics_Sample_Data - DATA.csv")
 water_basin <- clean_names(water_basin)
 
-# Explore the dataset (optional)
-head(water_basin)
-summary(water_basin)
-
-# Identify columns with missing values
-missing_columns <- colnames(water_basin)[apply(is.na(water_basin), 2, any)]
-print(missing_columns)
-
-# Impute missing values with median for numeric columns
-imputed_data <- water_basin %>%
-  mutate(across(where(is.numeric), ~ ifelse(is.na(.), median(., na.rm = TRUE), .)))
+# Remove Unneccesary Data
+water_basin <-select(water_basin, spatial_file_name, standardized_data_in_ppm3, bsldem30m, precip, drnarea, lc01dev_lc11dev, x50_percent_aep_flood)
+cleaned_data <- na.omit(water_basin)
 
 # Split the data into training and testing sets
 set.seed(123)
-train_indices <- createDataPartition(imputed_data$mp_conc_ppm3, p = 0.7, list = FALSE)
-train_data <- imputed_data[train_indices, ]
-test_data <- imputed_data[-train_indices, ]
+train_indices <- createDataPartition(cleaned_data$standardized_data_in_ppm3, p = 0.7, list = FALSE)
+train_data <- cleaned_data[train_indices, ]
+test_data <- cleaned_data[-train_indices, ]
 
-# Define the target variable and predictor variables (features)
-target_variable <- "mp_conc_ppm3"
-features <- c("drnarea_square_miles", "forest_percent", "precip_inches", "csl10_85_feet_per_mi", "lc11dev_percent", "lc11imp_percent")  # Add more features
+# Define the target variable and features
+target_variable <- "standardized_data_in_ppm3"
+features <- c("bsldem30m", "precip", "drnarea", "lc01dev_lc11dev", "x50_percent_aep_flood")  
 
 # Create the multiple linear regression model
-lm_model <- lm(formula(paste(target_variable, "~", paste(features, collapse = "+"))),
-               data = train_data)
+formula_str <- as.formula(paste(target_variable, "~", paste(features, collapse = "+")))
+lm_model <- lm(formula_str, data = train_data)
 
 # Summarize the model
 summary(lm_model)
@@ -42,7 +34,7 @@ summary(lm_model)
 predictions <- predict(lm_model, newdata = test_data)
 
 # Calculate the RMSE
-rmse <- sqrt(mean((predictions - test_data$mp_conc_ppm3)^2, na.rm = TRUE))
+rmse <- sqrt(mean((predictions - test_data$standardized_data_in_ppm3)^2, na.rm = TRUE))
 
 # Print the evaluation result
 cat("Root Mean Squared Error (RMSE):", rmse, "\n")
