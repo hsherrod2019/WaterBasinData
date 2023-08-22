@@ -5,15 +5,11 @@ library(janitor)
 library(caret)
 
 # Load your dataset (replace "your_dataset.csv" with your actual file)
-water_basin <- read.csv("Water Basin firstlast10merge data - Sheet1.csv")
+water_basin <- read.csv("/Users/nick_leong/Downloads/Copy of River_Plastics_Sample_Data - DATA.csv")
 water_basin <- clean_names(water_basin)
 
-# Explore the dataset (optional)
-head(water_basin)
-summary(water_basin)
-
-imputed_data <- water_basin %>%
-  mutate_all(~ ifelse(is.na(.), mean(., na.rm = TRUE), .))
+# Remove Unneccesary Data
+water_basin <-select(water_basin, spatial_file_name, standardized_data_in_ppm3, bsldem30m, precip, drnarea, lc01dev_lc11dev, x50_percent_aep_flood)
 
 # Split the data into training and testing sets
 set.seed(123)
