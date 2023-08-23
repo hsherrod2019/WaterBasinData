@@ -108,7 +108,10 @@ main <- function() {
   full_data <- split_data(imputed_data_missforest)
   rf_model <- random_forest(full_data)
   evaluation <- evaluate_model(rf_model, full_data, target_variable)
+  # Visualize Results
   visualize_results(imputed_data_missforest)
+  # Examine feature importance
+  importance_scores <- rf_model$importance
   
   # Print evaluation results
   cat("Model RMSE:", evaluation$model_rmse, "\n")
@@ -117,3 +120,4 @@ main <- function() {
 
 # Call the main function to run the entire process
 main()
+
