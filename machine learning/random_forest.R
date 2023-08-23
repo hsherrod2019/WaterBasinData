@@ -104,3 +104,13 @@ model_rmse <- rmse  # Replace with your actual model's RMSE
 cat("Baseline RMSE:", baseline_rmse, "\n")
 cat("Model RMSE:", model_rmse, "\n")
 
+### Density Plot to confirm similarity
+
+ggplot(cleaned_data, aes(x = standardized_data_in_ppm3, fill = "Original")) +
+  geom_density(alpha = 0.5) +
+  geom_density(data = cleaned_data, aes(x = imputed_standardized_data, fill = "Imputed"), alpha = 0.5) +
+  labs(title = "Density Plot: Original vs. Imputed",
+       x = "original",
+       y = "imputed") +
+  scale_fill_manual(values = c("Original" = "blue", "Imputed" = "red")) +
+  theme_minimal()
