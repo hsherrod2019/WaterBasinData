@@ -9,15 +9,15 @@ library(NADA)
 # Define parameters
 data_file <- "Copy of River_Plastics_Sample_Data - DATA.csv"
 target_variable <- "imputed_standardized_data"
-features <- c("bsldem30m", "lc01dev_lc11dev", "x50_percent_aep_flood")
+features <- c("bsldem30m", "lc01dev_lc11dev", "x50_percent_aep_flood", "macro_or_micro", "deployment_method")
 
 # Function to load and preprocess data
 load_and_preprocess_data <- function(data_file) {
   water_basin <- read.csv(data_file)
   water_basin <- clean_names(water_basin)
   cleaned_data <- water_basin %>%
-    select(spatial_file_name, standardized_data_in_ppm3, all_of(features))
-  columns_to_check <- c("bsldem30m", "lc01dev_lc11dev", "x50_percent_aep_flood" )
+    select(spatial_file_name, standardized_data_in_ppm3, all_of(features), precip, drnarea)
+  columns_to_check <- c("bsldem30m", "lc01dev_lc11dev", "x50_percent_aep_flood", "precip", "drnarea")
   cleaned_data <- cleaned_data %>%
     filter(!rowSums(is.na(.[, columns_to_check])) == length(columns_to_check))
   cleaned_data <- cleaned_data %>%
@@ -36,14 +36,20 @@ impute_missing_values_nada <- function(data) {
   return(cleaned_data)
 }
 
+
 # Function to impute missing values using missForest
 impute_missing_values_missforest <- function(data) {
+  extracted_column1 <- data$macro_or_micro
+  extracted_column2 <- data$deployment_method
   data <- data %>%
-    select(imputed_standardized_data, bsldem30m, lc01dev_lc11dev, x50_percent_aep_flood, standardized_data_in_ppm3)
+    select(-spatial_file_name, -censored, -macro_or_micro, -deployment_method)
   imputed_data <- missForest(data)
   imputed_matrix <- imputed_data$ximp
   imputed_dataframe <- as.data.frame(imputed_matrix)
   data[is.na(data)] <- imputed_dataframe[is.na(data)]
+  data <- data %>%
+    mutate(macro_or_micro = extracted_column1,
+           deployment_method = extracted_column2)
   
   return(data)
 }
@@ -86,7 +92,7 @@ evaluate_model <- function(model, data, target_variable) {
 }
 
 # Function for visualization
-visualize_results <- function(data) {
+visualize_result_imputed <- function(data) {
   # Add visualization steps using ggplot
   ggplot(data, aes(x = standardized_data_in_ppm3, fill = "Original")) +
     geom_density(alpha = 0.5) +
@@ -99,6 +105,29 @@ visualize_results <- function(data) {
     theme_minimal()
 }
 
+# Density plot of macro/micro vs imputed_standardized_data with logarithmic x-axis
+visualize_result_micro_macro <- function(data) {
+  ggplot(data, aes(x = imputed_standardized_data, fill = macro_or_micro)) +
+  geom_density(alpha = 0.5) +
+  labs(title = "Density Plot of Imputed Standardized Data by Macro/Micro",
+       x = "Imputed Standardized Data (Log Scale)",
+       y = "Density") +
+  scale_x_log10() +  # Add logarithmic scale to the x-axis
+  theme_minimal()
+}
+
+visualize_result_deployment <- function(data) {
+  # Density plot of deployment_method vs imputed_standardized_data with logarithmic x-axis
+  ggplot(data, aes(x = imputed_standardized_data, fill = deployment_method)) +
+    geom_density(alpha = 0.5) +
+    labs(title = "Density Plot of Imputed Standardized Data by Deployment Method",
+         x = "Imputed Standardized Data",
+         y = "Density") +
+    scale_x_log10() +  # Add logarithmic scale to the x-axis
+    theme_minimal()
+}
+
+
 # Main function
 main <- function() {
   cleaned_data <- load_and_preprocess_data(data_file)
@@ -109,7 +138,10 @@ main <- function() {
   rf_model <- random_forest(full_data)
   evaluation <- evaluate_model(rf_model, full_data, target_variable)
   # Visualize Results
-  visualize_results(imputed_data_missforest)
+  visualize_result_imputed(imputed_data_missforest)
+  visualize_result_micro_macro(imputed_data_missforest)
+  visualize_result_deployment(imputed_data_missforest)
+  
   # Examine feature importance
   importance_scores <- rf_model$importance
   
