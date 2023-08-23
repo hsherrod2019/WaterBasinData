@@ -12,6 +12,9 @@ water_basin <- clean_names(water_basin)
 # Remove Unneccesary Data
 cleaned_data <-select(water_basin, spatial_file_name, standardized_data_in_ppm3, bsldem30m, lc01dev_lc11dev, x50_percent_aep_flood)
 
+columns_to_check <- c("bsldem30m", "lc01dev_lc11dev", "x50_percent_aep_flood" )
+cleaned_data <- cleaned_data %>%
+  filter(!rowSums(is.na(.[, columns_to_check])) == length(columns_to_check))
 # Add a new column that checks for zeros
 cleaned_data <- cleaned_data %>%
   mutate(censored = ifelse(standardized_data_in_ppm3 == 0, TRUE, FALSE))

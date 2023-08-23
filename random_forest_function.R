@@ -4,21 +4,22 @@ library(randomForest)
 library(janitor)
 library(caret)
 library(missForest)
-library(NADA)  # For NADA package
+library(NADA)  
 
 # Define parameters
 data_file <- "Copy of River_Plastics_Sample_Data - DATA.csv"
 target_variable <- "imputed_standardized_data"
 features <- c("bsldem30m", "lc01dev_lc11dev", "x50_percent_aep_flood")
-imputation_columns <- c("bsldem30m", "lc01dev_lc11dev", "x50_percent_aep_flood")
 
 # Function to load and preprocess data
 load_and_preprocess_data <- function(data_file) {
   water_basin <- read.csv(data_file)
   water_basin <- clean_names(water_basin)
-  
   cleaned_data <- water_basin %>%
-    select(spatial_file_name, standardized_data_in_ppm3, all_of(imputation_columns))
+    select(spatial_file_name, standardized_data_in_ppm3, all_of(features))
+  columns_to_check <- c("bsldem30m", "lc01dev_lc11dev", "x50_percent_aep_flood" )
+  cleaned_data <- cleaned_data %>%
+    filter(!rowSums(is.na(.[, columns_to_check])) == length(columns_to_check))
   cleaned_data <- cleaned_data %>%
     mutate(censored = ifelse(standardized_data_in_ppm3 == 0, TRUE, FALSE))
   
@@ -66,7 +67,7 @@ random_forest <- function(data, target_variable = target_variable) {
 # Function to evaluate the model
 evaluate_model <- function(model, data, target_variable) {
   predictions <- predict(model, newdata = data)
-
+  
   rmse <- sqrt(mean((predictions - data$imputed_standardized_data)^2))
   
   # Calculate baseline prediction (mean or median)
