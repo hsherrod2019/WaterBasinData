@@ -113,4 +113,5 @@ ggplot(cleaned_data, aes(x = standardized_data_in_ppm3, fill = "Original")) +
        x = "original",
        y = "imputed") +
   scale_fill_manual(values = c("Original" = "blue", "Imputed" = "red")) +
+  scale_x_log10()+
   theme_minimal()
