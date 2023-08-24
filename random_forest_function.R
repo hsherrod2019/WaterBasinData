@@ -4,12 +4,13 @@ library(randomForest)
 library(janitor)
 library(caret)
 library(missForest)
-library(NADA)  
+library(NADA)
+library(ggplot2)
 
 # Define parameters
 data_file <- "Copy of River_Plastics_Sample_Data - DATA.csv"
 target_variable <- "imputed_standardized_data"
-features <- c("bsldem30m", "lc01dev_lc11dev", "x50_percent_aep_flood", "macro_or_micro", "deployment_method")
+features <- c("bsldem30m", "lc01dev_lc11dev", "x50_percent_aep_flood", "macro_or_micro", "deployment_method", "filter_size")
 
 # Function to load and preprocess data
 load_and_preprocess_data <- function(data_file) {
@@ -41,15 +42,17 @@ impute_missing_values_nada <- function(data) {
 impute_missing_values_missforest <- function(data) {
   extracted_column1 <- data$macro_or_micro
   extracted_column2 <- data$deployment_method
+  extracted_column3 <- data$filter_size
   data <- data %>%
-    select(-spatial_file_name, -censored, -macro_or_micro, -deployment_method)
+    select(-spatial_file_name, -censored, -macro_or_micro, -deployment_method, -filter_size)
   imputed_data <- missForest(data)
   imputed_matrix <- imputed_data$ximp
   imputed_dataframe <- as.data.frame(imputed_matrix)
   data[is.na(data)] <- imputed_dataframe[is.na(data)]
   data <- data %>%
     mutate(macro_or_micro = extracted_column1,
-           deployment_method = extracted_column2)
+           deployment_method = extracted_column2,
+           filter_size = extracted_column3)
   
   return(data)
 }
@@ -101,7 +104,7 @@ visualize_result_imputed <- function(data) {
          x = "original",
          y = "imputed") +
     scale_fill_manual(values = c("Original" = "blue", "Imputed" = "red")) +
-    scale_x_log10() +
+    scale_x_log10() + # Add logarithmic scale to the x-axis
     theme_minimal()
 }
 
@@ -116,8 +119,8 @@ visualize_result_micro_macro <- function(data) {
   theme_minimal()
 }
 
+# Density plot of deployment_method vs imputed_standardized_data with logarithmic x-axis
 visualize_result_deployment <- function(data) {
-  # Density plot of deployment_method vs imputed_standardized_data with logarithmic x-axis
   ggplot(data, aes(x = imputed_standardized_data, fill = deployment_method)) +
     geom_density(alpha = 0.5) +
     labs(title = "Density Plot of Imputed Standardized Data by Deployment Method",
@@ -127,6 +130,18 @@ visualize_result_deployment <- function(data) {
     theme_minimal()
 }
 
+# Smoothed scatter plot of imputed_standardized_data vs filter_size
+visualize_result_filter <- function(data) {
+  ggplot(data, aes(x = filter_size, y = imputed_standardized_data)) +
+    geom_point(alpha = 0.5) +
+    geom_smooth(method = "loess", se = FALSE) +  # Add smoothed line without confidence interval
+    labs(title = "Smoothed Scatter Plot: Imputed Standardized Data vs. Filter Size",
+         x = "Filter Size",
+         y = "Imputed Standardized Data") +
+    scale_x_log10() +
+    scale_y_log10() +
+    theme_minimal()
+}
 
 # Main function
 main <- function() {
@@ -141,6 +156,7 @@ main <- function() {
   visualize_result_imputed(imputed_data_missforest)
   visualize_result_micro_macro(imputed_data_missforest)
   visualize_result_deployment(imputed_data_missforest)
+  visualize_result_filter(imputed_data_missforest)
   
   # Examine feature importance
   importance_scores <- rf_model$importance
@@ -152,4 +168,3 @@ main <- function() {
 
 # Call the main function to run the entire process
 main()
-
