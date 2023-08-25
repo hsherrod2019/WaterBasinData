@@ -134,7 +134,7 @@ visualize_result_deployment <- function(data) {
 visualize_result_filter <- function(data) {
   ggplot(data, aes(x = filter_size, y = imputed_standardized_data)) +
     geom_point(alpha = 0.5) +
-    geom_smooth(method = "loess", se = FALSE) +  # Add smoothed line without confidence interval
+    geom_smooth(method = "lm", se = FALSE) +  # Add smoothed line without confidence interval
     labs(title = "Smoothed Scatter Plot: Imputed Standardized Data vs. Filter Size",
          x = "Filter Size",
          y = "Imputed Standardized Data") +
