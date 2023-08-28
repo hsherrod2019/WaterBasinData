@@ -4,117 +4,116 @@ library(randomForest)
 library(janitor)
 library(caret)
 library(missForest)
+library(NADA)
+library(ggplot2)
 
-# Load your dataset (replace "your_dataset.csv" with your actual file)
-water_basin <- read.csv("Copy of River_Plastics_Sample_Data - DATA.csv")
+
+# Parameters
+data_file <- "Copy of River_Plastics_Sample_Data - DATA.csv"
+target_variable <- "imputed_standardized_data"
+features <- c("bsldem30m", "lc01dev_lc11dev", "x50_percent_aep_flood", "deployment_method", "sample_size", "top_particle", "filter_size")
+
+# Load and preprocessd data
+water_basin <- read.csv(data_file)
 water_basin <- clean_names(water_basin)
-
-# Remove Unneccesary Data
-cleaned_data <-select(water_basin, spatial_file_name, standardized_data_in_ppm3, bsldem30m, lc01dev_lc11dev, x50_percent_aep_flood)
-
-columns_to_check <- c("bsldem30m", "lc01dev_lc11dev", "x50_percent_aep_flood" )
+cleaned_data <- water_basin %>%
+  select(spatial_file_name, standardized_data_in_ppm3, all_of(features), precip, drnarea)
+columns_to_check <- c("bsldem30m", "lc01dev_lc11dev", "x50_percent_aep_flood", "precip", "drnarea")
 cleaned_data <- cleaned_data %>%
   filter(!rowSums(is.na(.[, columns_to_check])) == length(columns_to_check))
-# Add a new column that checks for zeros
 cleaned_data <- cleaned_data %>%
   mutate(censored = ifelse(standardized_data_in_ppm3 == 0, TRUE, FALSE))
 
+
+# Function to impute missing mp conc values using NADA packa
 fit <- cenros(cleaned_data$standardized_data_in_ppm3, cleaned_data$censored)
-
-
 set.seed(211)
-
-# Impute zero values using the cenros function from NADA package
-fittedvalues <- sample(fit$modeled[fit$censored], length(fit$modeled[fit$censored]), replace = F)
-
-#Update the data frame with imputed values
-cleaned_data <- cleaned_data %>%
+fittedvalues <- sample(fit$modeled[fit$censored], length(fit$modeled[fit$censored]), replace = FALSE)
+imputed_mp_data <- cleaned_data %>%
   mutate(imputed_standardized_data = ifelse(censored, fittedvalues, standardized_data_in_ppm3))
 
-cleaned_data <-select(cleaned_data, -spatial_file_name, -censored)
-
-# Impute missing values using missForest
-imputed_data <- missForest(cleaned_data)
-
-# The imputed_data object now contains the imputed values
-
-# You can access the imputed data matrix using:
+# Function to impute missing values using missForest
+extracted_column1 <- imputed_mp_data$deployment_method
+imputed_mp_data <- imputed_mp_data %>%
+  select(-spatial_file_name, -censored, -deployment_method)
+imputed_data <- missForest(imputed_mp_data)
 imputed_matrix <- imputed_data$ximp
-
-# Convert the imputed matrix back to a dataframe
 imputed_dataframe <- as.data.frame(imputed_matrix)
+imputed_mp_data[is.na(imputed_mp_data)] <- imputed_dataframe[is.na(imputed_mp_data)]
+imputed_data <- imputed_mp_data %>%
+  mutate(deployment_method = extracted_column1)
 
-# Replace the NA values in the original dataframe with the imputed values
-cleaned_data[is.na(cleaned_data)] <- imputed_dataframe[is.na(cleaned_data)]
+# Function to split data into training and testing sets
+full_data <- imputed_data[, c(target_variable, features)]
 
-# Now 'cleaned_data' contains the imputed values for missing NA values
-
-# Split the data into training and testing sets
-set.seed(211)
-train_indices <- createDataPartition(cleaned_data$imputed_standardized_data, p = 0.7, list = FALSE)
-train_data <- cleaned_data[train_indices, ]
-test_data <- cleaned_data[-train_indices, ]
-
-# Define the target variable and features
-target_variable <- "imputed_standardized_data"
-features <- c("bsldem30m", "lc01dev_lc11dev", "x50_percent_aep_flood")  
-
-# Create training and testing subsets with consistent columns
-train_subset <- cleaned_data[train_indices, c(target_variable, features)]
-test_subset <- cleaned_data[-train_indices, c(target_variable, features)]
-
-full_data <- cleaned_data[, c(target_variable, features)]
-# Create the random forest model
+# Function to create and train random forest model
 rf_model <- randomForest(
-  formula = as.formula(paste(target_variable, " ~ .", sep = "")),
+  formula = imputed_standardized_data ~ .,
   data = full_data,
   ntree = 100
 )
 
 # Examine feature importance
 importance_scores <- rf_model$importance
-print(importance_scores)
 
-# Make predictions on the test set
-predictions <- predict(rf_model, newdata = full_data)
+# Function to evaluate the model
+predictions <- predict(rf_model, full_data)
 
-cat("Predicted values:", predictions, "\n")
-cat("Actual values:", full_data$imputed_standardized_data, "\n")
-
-###
-
-# Evaluate the model (you can use various evaluation metrics)
-accuracy <- mean(predictions == full_data$imputed_standardized_data)
-
-# Calculate RMSE- regression task predicts continuous target variable, remove accuracy calculation
 rmse <- sqrt(mean((predictions - full_data$imputed_standardized_data)^2))
-cat("RMSE:", rmse, "\n")
 
 # Calculate baseline prediction (mean or median)
-baseline_prediction <- mean(full_data$imputed_standardized_data)  # You can also use median if appropriate
+baseline_prediction <- mean(full_data$imputed_standardized_data)
 
-# Create a vector of baseline predictions for the test set
+# Create a vector of baseline predictions for the full dataset
 baseline_predictions <- rep(baseline_prediction, nrow(full_data))
 
 # Calculate baseline RMSE
 baseline_rmse <- sqrt(mean((baseline_predictions - full_data$imputed_standardized_data)^2))
 
+# Calculate your model's RMSE
+model_rmse <- rmse
+list(baseline_rmse = baseline_rmse, model_rmse = rmse)
 
-# Calculate your model's RMSE (you've already calculated this)
-model_rmse <- rmse  # Replace with your actual model's RMSE
 
-# Compare the two RMSE values
-cat("Baseline RMSE:", baseline_rmse, "\n")
-cat("Model RMSE:", model_rmse, "\n")
-
-### Density Plot to confirm similarity
-
-ggplot(cleaned_data, aes(x = standardized_data_in_ppm3, fill = "Original")) +
+################ Plots
+# Density plot of macro/micro vs imputed_standardized_data 
+ggplot(full_data, aes(x = imputed_standardized_data, fill = macro_or_micro)) +
   geom_density(alpha = 0.5) +
-  geom_density(data = cleaned_data, aes(x = imputed_standardized_data, fill = "Imputed"), alpha = 0.5) +
+  labs(title = "Density Plot of Imputed Standardized Data by Macro/Micro",
+       x = "Imputed Standardized Data (Log Scale)",
+       y = "Density") +
+  scale_x_log10() +  # Add logarithmic scale to the x-axis
+  theme_minimal()
+
+# Density plot of deployment_method vs imputed_standardized_data
+ggplot(full_data, aes(x = imputed_standardized_data, fill = deployment_method)) +
+  geom_density(alpha = 0.5) +
+  labs(title = "Density Plot of Imputed Standardized Data by Deployment Method",
+       x = "Imputed Standardized Data",
+       y = "Density") +
+  scale_x_log10() +  # Add logarithmic scale to the x-axis
+  theme_minimal()
+
+
+# Smoothed scatter plot of imputed_standardized_data vs filter_size
+ggplot(full_data, aes(x = filter_size, y = imputed_standardized_data)) +
+  geom_point(alpha = 0.5) +
+  geom_smooth(method = "lm", se = FALSE) +  # Add smoothed line without confidence interval
+  labs(title = "Smoothed Scatter Plot: Imputed Standardized Data vs. Filter Size",
+       x = "Filter Size",
+       y = "Imputed Standardized Data") +
+  scale_x_log10() +
+  scale_y_log10() +
+  theme_minimal()
+
+# Original vs imputed_standardized_data
+ggplot(data, aes(x = standardized_data_in_ppm3, fill = "Original")) +
+geom_density(alpha = 0.5) +
+  geom_density(data = data, aes(x = imputed_standardized_data, fill = "Imputed"), alpha = 0.5) +
   labs(title = "Density Plot: Original vs. Imputed",
        x = "original",
        y = "imputed") +
   scale_fill_manual(values = c("Original" = "blue", "Imputed" = "red")) +
-  scale_x_log10()+
+  scale_x_log10() + # Add logarithmic scale to the x-axis
   theme_minimal()
+
