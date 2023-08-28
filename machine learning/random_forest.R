@@ -24,21 +24,45 @@ cleaned_data <- cleaned_data %>%
 cleaned_data <- cleaned_data %>%
   mutate(censored = ifelse(standardized_data_in_ppm3 == 0, TRUE, FALSE))
 cleaned_data <- cleaned_data %>%
-  mutate(
-    doi_part = gsub('.*(doi\\.org/[^|]+).*', '\\1', spatial_file_name)
-  )
+    mutate(doi_part = str_extract(spatial_file_name, 'doi\\.org/[^|]+'))
 
-# Function to impute missing mp conc values using NADA packa
-fit <- cenros(cleaned_data$standardized_data_in_ppm3, cleaned_data$censored)
-set.seed(211)
-fittedvalues <- sample(fit$modeled[fit$censored], length(fit$modeled[fit$censored]), replace = FALSE)
-imputed_mp_data <- cleaned_data %>%
-  mutate(imputed_standardized_data = ifelse(censored, fittedvalues, standardized_data_in_ppm3))
+# Unique doi_part values
+unique_doi_parts <- unique(cleaned_data$doi_part)
+
+# Initialize an empty list to store the imputed data frames
+imputed_data_list <- list()
+
+# Loop through each unique doi_part
+for (doi_part_value in unique_doi_parts) {
+  # Subset data for the current doi_part
+  subset_data <- cleaned_data %>% filter(doi_part == doi_part_value)
+  
+  tryCatch({
+    # Perform cenros on the subset data
+    fit <- cenros(subset_data$standardized_data_in_ppm3, subset_data$censored)
+    set.seed(211)
+    fittedvalues <- sample(fit$modeled[fit$censored], length(fit$modeled[fit$censored]), replace = FALSE)
+    
+    # Create a new data frame with imputed values
+    imputed_subset_data <- subset_data %>%
+      mutate(imputed_standardized_data = ifelse(censored, fittedvalues, standardized_data_in_ppm3))
+    
+    # Append the imputed data to the list
+    imputed_data_list[[doi_part_value]] <- imputed_subset_data
+  }, error = function(e) {
+    # If an error occurs (e.g., not enough non-missing values for cenros),
+    # simply append the subset_data to the list
+    imputed_data_list[[doi_part_value]] <- subset_data
+  })
+}
+
+# Combine the imputed data frames from the list into a single data frame
+imputed_mp_data <- bind_rows(imputed_data_list)
 
 # Function to impute missing values using missForest
 extracted_column1 <- imputed_mp_data$deployment_method
 imputed_mp_data <- imputed_mp_data %>%
-  select(-spatial_file_name, -censored, -deployment_method)
+  select(-spatial_file_name, -censored, -deployment_method, -doi_part)
 imputed_data <- missForest(imputed_mp_data)
 imputed_matrix <- imputed_data$ximp
 imputed_dataframe <- as.data.frame(imputed_matrix)
@@ -98,17 +122,6 @@ ggplot(full_data, aes(x = imputed_standardized_data, fill = deployment_method)) 
   theme_minimal()
 
 
-# Smoothed scatter plot of imputed_standardized_data vs filter_size
-ggplot(full_data, aes(x = filter_size, y = imputed_standardized_data)) +
-  geom_point(alpha = 0.5) +
-  geom_smooth(method = "lm", se = FALSE) +  # Add smoothed line without confidence interval
-  labs(title = "Smoothed Scatter Plot: Imputed Standardized Data vs. Filter Size",
-       x = "Filter Size",
-       y = "Imputed Standardized Data") +
-  scale_x_log10() +
-  scale_y_log10() +
-  theme_minimal()
-
 # Original vs imputed_standardized_data
 ggplot(data, aes(x = standardized_data_in_ppm3, fill = "Original")) +
 geom_density(alpha = 0.5) +
@@ -120,3 +133,13 @@ geom_density(alpha = 0.5) +
   scale_x_log10() + # Add logarithmic scale to the x-axis
   theme_minimal()
 
+# Smoothed scatter plot of imputed_standardized_data vs filter_size
+ggplot(full_data, aes(x = filter_size, y = imputed_standardized_data)) +
+  geom_point(alpha = 0.5) +
+  geom_smooth(method = "lm", se = FALSE) +  # Add smoothed line without confidence interval
+  labs(title = "Smoothed Scatter Plot: Imputed Standardized Data vs. Filter Size",
+       x = "Filter Size",
+       y = "Imputed Standardized Data") +
+  scale_x_log10() +
+  scale_y_log10() +
+  theme_minimal()
