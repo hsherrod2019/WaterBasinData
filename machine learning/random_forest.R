@@ -23,7 +23,10 @@ cleaned_data <- cleaned_data %>%
   filter(!rowSums(is.na(.[, columns_to_check])) == length(columns_to_check))
 cleaned_data <- cleaned_data %>%
   mutate(censored = ifelse(standardized_data_in_ppm3 == 0, TRUE, FALSE))
-
+cleaned_data <- cleaned_data %>%
+  mutate(
+    doi_part = gsub('.*(doi\\.org/[^|]+).*', '\\1', spatial_file_name)
+  )
 
 # Function to impute missing mp conc values using NADA packa
 fit <- cenros(cleaned_data$standardized_data_in_ppm3, cleaned_data$censored)
