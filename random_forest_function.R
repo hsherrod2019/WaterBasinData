@@ -10,7 +10,7 @@ library(ggplot2)
 # Define parameters
 data_file <- "Copy of River_Plastics_Sample_Data - DATA.csv"
 target_variable <- "imputed_standardized_data"
-features <- c("bsldem30m", "lc01dev_lc11dev", "x50_percent_aep_flood", "macro_or_micro", "deployment_method", "filter_size")
+features <- c("bsldem30m", "lc01dev_lc11dev", "x50_percent_aep_flood", "deployment_method", "sample_size", "top_particle", "filter_size")
 
 # Function to load and preprocess data
 load_and_preprocess_data <- function(data_file) {
@@ -40,19 +40,15 @@ impute_missing_values_nada <- function(data) {
 
 # Function to impute missing values using missForest
 impute_missing_values_missforest <- function(data) {
-  extracted_column1 <- data$macro_or_micro
-  extracted_column2 <- data$deployment_method
-  extracted_column3 <- data$filter_size
+  extracted_column1 <- data$deployment_method
   data <- data %>%
-    select(-spatial_file_name, -censored, -macro_or_micro, -deployment_method, -filter_size)
+    select(-spatial_file_name, -censored, -deployment_method)
   imputed_data <- missForest(data)
   imputed_matrix <- imputed_data$ximp
   imputed_dataframe <- as.data.frame(imputed_matrix)
   data[is.na(data)] <- imputed_dataframe[is.na(data)]
   data <- data %>%
-    mutate(macro_or_micro = extracted_column1,
-           deployment_method = extracted_column2,
-           filter_size = extracted_column3)
+    mutate(deployment_method = extracted_column1)
   
   return(data)
 }
@@ -132,7 +128,7 @@ visualize_result_deployment <- function(data) {
 
 # Smoothed scatter plot of imputed_standardized_data vs filter_size
 visualize_result_filter <- function(data) {
-  ggplot(data, aes(x = filter_size, y = imputed_standardized_data)) +
+  ggplot(data, aes(x = top_particle, y = imputed_standardized_data)) +
     geom_point(alpha = 0.5) +
     geom_smooth(method = "lm", se = FALSE) +  # Add smoothed line without confidence interval
     labs(title = "Smoothed Scatter Plot: Imputed Standardized Data vs. Filter Size",
