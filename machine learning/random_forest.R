@@ -13,7 +13,7 @@ data_file <- "Copy of River_Plastics_Sample_Data - DATA.csv"
 target_variable <- "imputed_standardized_data"
 features <- c("bsldem30m", "lc01dev_lc11dev", "x50_percent_aep_flood", "deployment_method", "sample_size", "top_particle", "filter_size")
 
-# Load and preprocessd data
+# Load and preprocess data
 water_basin <- read.csv(data_file)
 water_basin <- clean_names(water_basin)
 cleaned_data <- water_basin %>%
@@ -79,6 +79,10 @@ rf_model <- randomForest(
   data = full_data,
   ntree = 100
 )
+
+saveRDS(rf_model, file = "rf_model.rds")
+
+saveRDS(full_data, file = "full_data.rds")
 
 # Examine feature importance
 importance_scores <- rf_model$importance
