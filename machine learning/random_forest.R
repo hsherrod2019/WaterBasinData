@@ -73,7 +73,7 @@ imputed_data <- imputed_mp_data %>%
 
 # Function to split data into training and testing sets
 full_data <- imputed_data %>%
-  select(-precip, - drnarea) %>%
+  select(-precip, - drnarea, -standardized_data_in_ppm3) %>%
   mutate(imputed_standardized_data = log10(imputed_standardized_data))
 
 
