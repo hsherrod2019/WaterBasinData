@@ -42,6 +42,7 @@ ui <- dashboardPage(
         fluidRow(
           column(
           width = 12,
+          h3("Other Visuals"),
           selectInput("predictionselection", "Select a plot to observe",
                       choices = c("Actual vs Predicted Values",
                                   "Quantile Histogram of Log-transformed Plastic Concentration",
@@ -50,7 +51,6 @@ ui <- dashboardPage(
         ),
         fluidRow(
           column(width = 12,
-                 h3("Other Visuals"),
                  plotlyOutput("visuals"),
                  HTML("&nbsp;<br>"))
         ),
@@ -119,9 +119,6 @@ ui <- dashboardPage(
     )
   )
 )
-
-
-
 
 server <- function(input, output, session) {
   full_data <- readRDS("full_data.rds")
