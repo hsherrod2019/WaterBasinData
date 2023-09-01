@@ -6,6 +6,7 @@ library(caret)
 library(missForest)
 library(NADA)
 library(ggplot2)
+library(dplyr)
 
 
 # Parameters
@@ -71,7 +72,10 @@ imputed_data <- imputed_mp_data %>%
   mutate(deployment_method = extracted_column1)
 
 # Function to split data into training and testing sets
-full_data <- imputed_data[, c(target_variable, features)]
+full_data <- imputed_data %>%
+  select(-precip, - drnarea) %>%
+  mutate(imputed_standardized_data = log10(imputed_standardized_data))
+
 
 # Function to create and train random forest model
 rf_model <- randomForest(
@@ -105,6 +109,11 @@ baseline_rmse <- sqrt(mean((baseline_predictions - full_data$imputed_standardize
 model_rmse <- rmse
 list(baseline_rmse = baseline_rmse, model_rmse = rmse)
 
+# Accuracy 
+(baseline_rmse - model_rmse) / baseline_rmse * 100
+
+# Reverse log transform
+10^predictions
 
 ################ Plots
 # Density plot of macro/micro vs imputed_standardized_data 
