@@ -90,6 +90,11 @@ ui <- dashboardPage(
                              min = min(full_data$filter_size),
                              max = max(full_data$filter_size),
                              value = median(full_data$filter_size)))
+          ),
+        fluidRow(
+          column(width = 12,
+                 h3("Actual vs Predicted Imputed Values"),
+                 plotOutput("lineplotcomparison"))
           )
         )
       )
@@ -100,6 +105,58 @@ ui <- dashboardPage(
 server <- function(input, output, session) {
   full_data <- readRDS("full_data.rds")
   rf_data <- readRDS("rf_model.rds")
+  
+  # Reactive expression for predicting the target variable
+  output$predictedvalue <- renderText({
+    selected_data <- data.frame(
+      bsldem30m = input$bsldem30m_input,
+      lc01dev_lc11dev = input$lc01dev_lc11dev_input,
+      x50_percent_aep_flood = input$x50_percent_aep_flood_input,
+      deployment_method = input$deployment_method_input,
+      sample_size = input$sample_size_input,
+      top_particle = input$top_particle_input,
+      filter_size = input$filter_size_input
+    )
+    
+    # Predict using the random forest model
+    predicted <- predict(rf_data, selected_data)
+    print(selected_data)
+    print(predicted)
+    
+    # Create the text to display
+    result <- paste("Predicted Value:", predicted, "\n")
+  })
+    
+  # Reactive expression for generating line plots comparing actual and predicted values
+  output$lineplotcomparison <- renderPlot({
+    selected_data <- data.frame(
+      bsldem30m = input$bsldem30m_input,
+      lc01dev_lc11dev = input$lc01dev_lc11dev_input,
+      x50_percent_aep_flood = input$x50_percent_aep_flood_input,
+      deployment_method = input$deployment_method_input,
+      sample_size = input$sample_size_input,
+      top_particle = input$top_particle_input,
+      filter_size = input$filter_size_input
+    )
+    
+    # Predict using the random forest model
+    predicted <- predict(rf_data, newdata = selected_data)
+    
+    comparison_data <- data.frame(
+      x = 1:length(full_data$imputed_standardized_data),
+      Actual = full_data$imputed_standardized_data,
+      Predicted = predicted
+    )
+    
+    ggplot(comparison_data, aes(x = x)) +
+      geom_line(aes(y = Actual, color = "Actual")) +
+      geom_line(aes(y = Predicted, color = "Predicted")) +
+      labs(title = "Actual vs Predicted",
+           x = "Index",
+           y = "Value") +
+      scale_color_manual(values = c("Actual" = "blue", "Predicted" = "red")) +
+      theme_minimal()
+  })
   
   # Reactive expression for generating the scatter plot
   output$scatterplot <- renderPlot({
@@ -123,24 +180,6 @@ server <- function(input, output, session) {
            y = "Density") +
       scale_x_log10() +  # Add logarithmic scale to the x-axis
       theme_minimal()
-  })
-  
-  # Reactive expression for predicting the target variable
-  output$predictedvalue <- renderText({
-    selected_data <- data.frame(
-      bsldem30m = input$bsldem30m_input,
-      lc01dev_lc11dev = input$lc01dev_lc11dev_input,
-      x50_percent_aep_flood = input$x50_percent_aep_flood_input,
-      deployment_method = input$deployment_method_input,
-      sample_size = input$sample_size_input,
-      top_particle = input$top_particle_input,
-      filter_size = input$filter_size_input
-    )
-    
-    # Predict using the random forest model
-    predicted <- predict(rf_data, newdata = selected_data)
-    
-    paste("Predicted Value: ", predicted)
   })
 }
 
