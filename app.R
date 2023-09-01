@@ -40,15 +40,19 @@ ui <- dashboardPage(
       tabItem(
         tabName = "prediction",
         fluidRow(
-          column(width = 12,
-                 h3("Actual vs Predicted Values"),
-                 plotlyOutput("density_plot"),
-                 HTML("&nbsp;<br>"))
+          column(
+          width = 12,
+          selectInput("predictionselection", "Select a plot to observe",
+                      choices = c("Actual vs Predicted Values",
+                                  "Quantile Histogram of Log-transformed Plastic Concentration",
+                                  "Quantile Histogram of Log-transformed Micro vs Macro Concentration"),
+                      selected = "Actual vs Predicted Values"))
         ),
         fluidRow(
           column(width = 12,
-                 h3("Quantile Histogram of Log-transformed Microplastic Concentration"),
-                 plotOutput("histogram"))
+                 h3("Other Visuals"),
+                 plotlyOutput("visuals"),
+                 HTML("&nbsp;<br>"))
         ),
         fluidRow(
           column(width = 8,
@@ -165,41 +169,6 @@ server <- function(input, output, session) {
                   min = min(full_data$filter_size),
                   max = max(full_data$filter_size))
   
-  
-  output$scatterplot <- renderPlot({
-    selected_data <- data.frame(
-      bsldem30m = input$bsldem30m_input,
-      lc01dev_lc11dev = input$lc01dev_lc11dev_input,
-      x50_percent_aep_flood = input$x50_percent_aep_flood_input,
-      deployment_method = input$deployment_method_input,
-      sample_size = input$sample_size_input,
-      top_particle = input$top_particle_input,
-      filter_size = input$filter_size_input
-    )
-    
-    # Predict using the random forest model
-    predicted <- predict(rf_data, newdata = selected_data)
-    
-    # Create a dataframe with all data points and the predicted point
-    all_data <- full_data %>%
-      mutate(predicted_point = ifelse(row_number() == nrow(full_data) + 1, predicted, NA))
-    
-    # Create the scatterplot
-    ggplot(all_data, aes(x = filter_size, y = imputed_standardized_data)) +
-      geom_point(aes(color = "Actual Data"), alpha = 0.5) +
-      geom_point(data = data.frame(filter_size = selected_data$filter_size, imputed_standardized_data = predicted, predicted = TRUE),
-                 aes(x = filter_size, y = imputed_standardized_data), color = "red", size = 3) +
-      labs(title = "Actual Data vs Predicted Value",
-           x = "Filter Size",
-           y = "Imputed Standardized Data",
-           color = "Data Type") +
-      scale_x_log10() +
-      scale_y_log10() +
-      scale_color_manual(values = c("Actual Data" = "blue", "Predicted Value" = "red")) +
-      theme_minimal()
-  })
-  
-  
   # Reactive expression for predicting the target variable
   output$formatted_predictedvalue <- renderUI({
     selected_data <- data.frame(
@@ -229,7 +198,7 @@ server <- function(input, output, session) {
   
   
   # Reactive expression for generating line plots comparing actual and predicted values
-  output$density_plot <- renderPlotly({
+  output$visuals <- renderPlotly({
     selected_data <- data.frame(
       bsldem30m = input$bsldem30m_input,
       lc01dev_lc11dev = input$lc01dev_lc11dev_input,
@@ -248,6 +217,7 @@ server <- function(input, output, session) {
       Predicted = predicted
     )
     
+    if (input$predictionselection == "Actual vs Predicted Values") { 
     p <- ggplot(comparison_data, aes(x = Actual)) +
       geom_density(aes(color = "Actual"), alpha = 0.5) +
       geom_density(aes(x = Predicted, color = "Predicted"), alpha = 0.5) +
@@ -263,28 +233,11 @@ server <- function(input, output, session) {
     
     # Convert the ggplot to a Plotly plot
     ggplotly(p)
-  })
+    
+  } else if (input$predictionselection == "Quantile Histogram of Log-transformed Plastic Concentration") {
   # Reactive expression for generating line plots comparing actual and predicted values
-  
-  output$histogram <- renderPlot({
-    selected_data <- data.frame(
-      bsldem30m = input$bsldem30m_input,
-      lc01dev_lc11dev = input$lc01dev_lc11dev_input,
-      x50_percent_aep_flood = input$x50_percent_aep_flood_input,
-      deployment_method = input$deployment_method_input,
-      sample_size = input$sample_size_input,
-      top_particle = input$top_particle_input,
-      filter_size = input$filter_size_input
-    )
     
     # Predict using the random forest model
-    predicted <- predict(rf_data, newdata = selected_data)
-    
-    comparison_data <- data.frame(
-      Actual = full_data$imputed_standardized_data,
-      Predicted = predicted
-    )
-    
     quantiles <- quantile(full_data$imputed_standardized_data, probs = c(0.1, 0.5, 0.9))
     
     h <- ggplot(full_data, aes(x = imputed_standardized_data)) +
@@ -297,7 +250,10 @@ server <- function(input, output, session) {
       theme_minimal() +
       scale_y_continuous(labels = scales::comma_format())
     
-    h
+    ggplotly(h)
+    
+  } else if (input$predictionselection == "Quantile Histogram of Log-transformed Micro vs Macro Concentration") {
+  }
   })
   
   # Reactive expression for generating the scatter plot
