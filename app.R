@@ -46,6 +46,11 @@ ui <- dashboardPage(
                  HTML("&nbsp;<br>"))
         ),
         fluidRow(
+          column(width = 12,
+                 h3("Quantile Histogram of Log-transformed Microplastic Concentration"),
+                 plotOutput("histogram"))
+        ),
+        fluidRow(
           column(width = 8,
                  h3(HTML("Predicted Microplastic Concentration (in ppm<sup>3</sup>):"))),
           column(width = 4,
@@ -214,7 +219,7 @@ server <- function(input, output, session) {
     formatted_output <- shiny::tags$div(
       shiny::tags$span(
         style = "font-size: 24px",
-        predicted
+        10^predicted
       )
     )
     
@@ -258,6 +263,41 @@ server <- function(input, output, session) {
     
     # Convert the ggplot to a Plotly plot
     ggplotly(p)
+  })
+  # Reactive expression for generating line plots comparing actual and predicted values
+  
+  output$histogram <- renderPlot({
+    selected_data <- data.frame(
+      bsldem30m = input$bsldem30m_input,
+      lc01dev_lc11dev = input$lc01dev_lc11dev_input,
+      x50_percent_aep_flood = input$x50_percent_aep_flood_input,
+      deployment_method = input$deployment_method_input,
+      sample_size = input$sample_size_input,
+      top_particle = input$top_particle_input,
+      filter_size = input$filter_size_input
+    )
+    
+    # Predict using the random forest model
+    predicted <- predict(rf_data, newdata = selected_data)
+    
+    comparison_data <- data.frame(
+      Actual = full_data$imputed_standardized_data,
+      Predicted = predicted
+    )
+    
+    quantiles <- quantile(full_data$imputed_standardized_data, probs = c(0.1, 0.5, 0.9))
+    
+    h <- ggplot(full_data, aes(x = imputed_standardized_data)) +
+      geom_histogram(binwidth = 0.1, fill = "#CCE5FF", alpha = 0.7) +
+      geom_vline(xintercept = quantiles, color = c("#CD5C5C", "#2E8B57", "#8a2be2"), linetype = "dashed") +
+      geom_vline(xintercept = predicted, color = "black", linetype = "solid") +
+      labs(
+           x = "Log-transformed Concentration Data",
+           y = "Frequency") +
+      theme_minimal() +
+      scale_y_continuous(labels = scales::comma_format())
+    
+    h
   })
   
   # Reactive expression for generating the scatter plot
