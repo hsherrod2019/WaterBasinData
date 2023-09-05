@@ -12,7 +12,7 @@ library(dplyr)
 # Parameters
 data_file <- "Copy of River_Plastics_Sample_Data - DATA.csv"
 target_variable <- "imputed_standardized_data"
-features <- c("bsldem30m", "lc01dev_lc11dev", "x50_percent_aep_flood", "deployment_method", "sample_size", "top_particle", "filter_size")
+features <- c("bsldem30m", "lc01dev_lc11dev", "x50_percent_aep_flood", "deployment_method", "sample_size", "top_particle", "filter_size", "macro_or_micro")
 
 # Load and preprocess data
 water_basin <- read.csv(data_file)
@@ -62,48 +62,68 @@ imputed_mp_data <- bind_rows(imputed_data_list)
 
 # Function to impute missing values using missForest
 extracted_column1 <- imputed_mp_data$deployment_method
+extracted_column2 <- imputed_mp_data$macro_or_micro
 imputed_mp_data <- imputed_mp_data %>%
-  select(-spatial_file_name, -censored, -deployment_method, -doi_part)
+  select(-spatial_file_name, -censored, -deployment_method, -doi_part, -macro_or_micro)
 imputed_data <- missForest(imputed_mp_data)
 imputed_matrix <- imputed_data$ximp
 imputed_dataframe <- as.data.frame(imputed_matrix)
 imputed_mp_data[is.na(imputed_mp_data)] <- imputed_dataframe[is.na(imputed_mp_data)]
 imputed_data <- imputed_mp_data %>%
-  mutate(deployment_method = extracted_column1)
+  mutate(deployment_method = extracted_column1, macro_or_micro = extracted_column2)
 
 # Function to split data into training and testing sets
-full_data <- imputed_data %>%
+imputed_data <- imputed_data %>%
   select(-precip, - drnarea, -standardized_data_in_ppm3) %>%
   mutate(imputed_standardized_data = log10(imputed_standardized_data))
 
+# Define the formula for your model
+formula <- imputed_standardized_data ~ .
 
-# Function to create and train random forest model
-rf_model <- randomForest(
-  formula = imputed_standardized_data ~ .,
-  data = full_data,
+# Create the Random Forest model with k-fold cross-validation (5 folds for example)
+set.seed(211)
+ctrl <- trainControl(
+  method = "cv",
+  number = 5,
+  verboseIter = TRUE
+)
+
+# Train the model
+rf_model <- train(
+  formula,
+  data = imputed_data,
+  method = "rf",
+  trControl = ctrl,
   ntree = 100
 )
 
-saveRDS(rf_model, file = "rf_model.rds")
+# View cross_validation results
+print(rf_model)
 
-saveRDS(full_data, file = "full_data.rds")
+# Calculate training metrics
+train_predictions <- predict(rf_model, newdata = imputed_data)
+train_rmse <- sqrt(mean((train_predictions - imputed_data$imputed_standardized_data)^2))
+train_rsq <- 1 - sum((train_predictions - imputed_data$imputed_standardized_data)^2) / sum((imputed_data$imputed_standardized_data - mean(imputed_data$imputed_standardized_data))^2)
+train_mae <- mean(abs(train_predictions - imputed_data$imputed_standardized_data))
 
-# Examine feature importance
-importance_scores <- rf_model$importance
+# Print the training metrics
+cat("Training RMSE:", train_rmse, "\n")
+cat("Training Rsquared:", train_rsq, "\n")
+cat("Training MAE:", train_mae, "\n")
 
 # Function to evaluate the model
-predictions <- predict(rf_model, full_data)
+predictions <- predict(rf_model, imputed_data)
 
-rmse <- sqrt(mean((predictions - full_data$imputed_standardized_data)^2))
+rmse <- sqrt(mean((predictions - imputed_data$imputed_standardized_data)^2))
 
 # Calculate baseline prediction (mean or median)
-baseline_prediction <- mean(full_data$imputed_standardized_data)
+baseline_prediction <- mean(imputed_data$imputed_standardized_data)
 
 # Create a vector of baseline predictions for the full dataset
-baseline_predictions <- rep(baseline_prediction, nrow(full_data))
+baseline_predictions <- rep(baseline_prediction, nrow(imputed_data))
 
 # Calculate baseline RMSE
-baseline_rmse <- sqrt(mean((baseline_predictions - full_data$imputed_standardized_data)^2))
+baseline_rmse <- sqrt(mean((baseline_predictions - imputed_data$imputed_standardized_data)^2))
 
 # Calculate your model's RMSE
 model_rmse <- rmse
@@ -112,8 +132,17 @@ list(baseline_rmse = baseline_rmse, model_rmse = rmse)
 # Accuracy 
 (baseline_rmse - model_rmse) / baseline_rmse * 100
 
+# Importance Scores
+importance_scores <- rf_model$finalModel$importance
+print(importance_scores)
+
 # Reverse log transform
-10^predictions
+imputed_data$imputed_standardized_data <- 10^imputed_data$imputed_standardized_data
+
+# Save model
+saveRDS(rf_model, file = "rf_model.rds")
+
+saveRDS(imputed_data, file = "imputed_data.rds")
 
 ################ Plots
 # Density plot of macro/micro vs imputed_standardized_data 

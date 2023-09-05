@@ -11,7 +11,7 @@ library(shiny)
 library(plotly)
 
 rf_data = readRDS("rf_model.rds")
-full_data = readRDS("full_data.rds")
+full_data = readRDS("imputed_data.rds")
 
 # Define UI for application
 ui <- dashboardPage(
@@ -44,22 +44,29 @@ ui <- dashboardPage(
           width = 12,
           h3("Other Visuals"),
           selectInput("predictionselection", "Select a plot to observe",
-                      choices = c("Actual vs Predicted Values",
+                      choices = c("Actual vs. Predicted Values",
+                                  "Log Transformed Actual vs. Predicted Values",
                                   "Quantile Histogram of Log-transformed Plastic Concentration",
-                                  "Quantile Histogram of Log-transformed Micro vs Macro Concentration"),
+                                  "Quantile Histogram of Log-transformed Macro vs Micro Concentration"),
                       selected = "Actual vs Predicted Values"))
         ),
         fluidRow(
           column(width = 12,
-                 plotlyOutput("visuals"),
+                 plotOutput("visuals"),
                  HTML("&nbsp;<br>"))
         ),
         fluidRow(
-          column(width = 8,
+          column(width = 9,
                  h3(HTML("Predicted Microplastic Concentration (in ppm<sup>3</sup>):"))),
-          column(width = 4,
-                 uiOutput("formatted_predictedvalue"),
-                 HTML("&nbsp;<br>"))
+          column(width = 3,
+                 uiOutput("formatted_predictedvalue"))
+        ),
+        fluidRow(
+          column(width = 9,
+                 h3(HTML("Log Transformed Microplastic Concentration: "))),
+          column(width = 3,
+                 uiOutput("formatted_logpredictedvalue"),
+                 html("&nbsp;<br>"))
         ),
         fluidRow(
           column(width = 4,
@@ -76,7 +83,7 @@ ui <- dashboardPage(
                  sliderInput("x50_percent_aep_flood_input", "50% AEP Flood",
                              min = min(full_data$x50_percent_aep_flood),
                              max = max(full_data$x50_percent_aep_flood),
-                             value = median(full_data$x50_percent_aep_flood)))
+                             value = median(full_data$x50_percent_aep_flood))),
         ),
         fluidRow(
           column(width = 4,
@@ -114,6 +121,12 @@ ui <- dashboardPage(
                  selectInput("deployment_method_input", "Deployment Method",
                              choices = c("grab", "net"),
                              selected = "grab"))
+        ),
+        fluidRow(
+          column(width = 4,
+                 selectInput("macro_or_micro", "Plastic Type",
+                             choices = c("Microplastics", "Macroplastics"),
+                             selected = "Microplastics"))
         )
       )
     )
@@ -121,7 +134,7 @@ ui <- dashboardPage(
 )
 
 server <- function(input, output, session) {
-  full_data <- readRDS("full_data.rds")
+  full_data <- readRDS("imputed_data.rds")
   rf_data <- readRDS("rf_model.rds")
   
   # Create a two-way binding function with validation
@@ -175,7 +188,8 @@ server <- function(input, output, session) {
       deployment_method = input$deployment_method_input,
       sample_size = input$sample_size_input,
       top_particle = input$top_particle_input,
-      filter_size = input$filter_size_input
+      filter_size = input$filter_size_input,
+      macro_or_micro = input$macro_or_micro
     )
     
     # Predict using the random forest model
@@ -193,9 +207,8 @@ server <- function(input, output, session) {
     formatted_output
   })
   
-  
-  # Reactive expression for generating line plots comparing actual and predicted values
-  output$visuals <- renderPlotly({
+  # Log transform predicted value
+  output$formatted_logpredictedvalue <- renderUI({
     selected_data <- data.frame(
       bsldem30m = input$bsldem30m_input,
       lc01dev_lc11dev = input$lc01dev_lc11dev_input,
@@ -203,16 +216,42 @@ server <- function(input, output, session) {
       deployment_method = input$deployment_method_input,
       sample_size = input$sample_size_input,
       top_particle = input$top_particle_input,
-      filter_size = input$filter_size_input
+      filter_size = input$filter_size_input,
+      macro_or_micro = input$macro_or_micro
+    )
+    
+    # Predict using the random forest model
+    predictedlog <- predict(rf_data, selected_data)
+    
+    # Create the formatted output with styling
+    formatted_output <- shiny::tags$div(
+      shiny::tags$span(
+        style = "font-size: 24px",
+        predictedlog
+      )
+    )
+    
+    # Return the formatted output
+    formatted_output2
+  })
+  
+  # Reactive expression for generating line plots comparing actual and predicted values
+  output$visuals <- renderPlot({
+    selected_data <- data.frame(
+      bsldem30m = input$bsldem30m_input,
+      lc01dev_lc11dev = input$lc01dev_lc11dev_input,
+      x50_percent_aep_flood = input$x50_percent_aep_flood_input,
+      deployment_method = input$deployment_method_input,
+      sample_size = input$sample_size_input,
+      top_particle = input$top_particle_input,
+      filter_size = input$filter_size_input,
+      macro_or_micro = input$macro_or_micro
     )
     
     # Predict using the random forest model
     predicted <- predict(rf_data, newdata = selected_data)
     
-    comparison_data <- data.frame(
-      Actual = full_data$imputed_standardized_data,
-      Predicted = predicted
-    )
+    actual <- full_data$imputed_standardized_data
     
     if (input$predictionselection == "Actual vs Predicted Values") { 
     p <- ggplot(comparison_data, aes(x = Actual)) +
@@ -232,8 +271,7 @@ server <- function(input, output, session) {
     ggplotly(p)
     
   } else if (input$predictionselection == "Quantile Histogram of Log-transformed Plastic Concentration") {
-  # Reactive expression for generating line plots comparing actual and predicted values
-    
+    # Reactive expression for generating histograms comparing actual and predicted values
     # Predict using the random forest model
     quantiles <- quantile(full_data$imputed_standardized_data, probs = c(0.1, 0.5, 0.9))
     
@@ -247,9 +285,26 @@ server <- function(input, output, session) {
       theme_minimal() +
       scale_y_continuous(labels = scales::comma_format())
     
-    ggplotly(h)
+    h
     
-  } else if (input$predictionselection == "Quantile Histogram of Log-transformed Micro vs Macro Concentration") {
+  } else if (input$predictionselection == "Quantile Histogram of Log-transformed Macro vs Micro Concentration") {
+    # Reactive expression for generating histograms comparing actual and predicted values
+    # Predict using the random forest model
+    quantiles <- quantile(full_data$imputed_standardized_data, probs = c(0.1, 0.5, 0.9))
+    
+    h <- ggplot(full_data, aes(x = imputed_standardized_data, fill = macro_or_micro)) +
+      geom_histogram(data = subset(full_data, macro_or_micro == "Macroplastics"), binwidth = 0.1, alpha = 0.7, position = "identity") +
+      geom_histogram(data = subset(full_data, macro_or_micro == "Microplastics"), binwidth = 0.1, alpha = 0.7, position = "identity") +
+      geom_vline(xintercept = quantiles, color = c("#CD5C5C", "#2E8B57", "#8a2be2"), linetype = "dashed") +
+      geom_vline(xintercept = predicted, color = "black", linetype = "solid") +
+      labs(
+        x = "Log-transformed Concentration Data",
+        y = "Frequency",
+        fill = "Macro or Micro"
+      ) +
+      theme_minimal() +
+      scale_y_continuous(labels = scales::comma_format()) +
+      scale_fill_manual(values = c("Macroplastics" = "#FFA500", "Microplastics" = "#CCE5FF"))
   }
   })
   
