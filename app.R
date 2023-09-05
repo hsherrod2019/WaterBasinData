@@ -254,7 +254,7 @@ server <- function(input, output, session) {
     actual <- full_data$imputed_standardized_data
     
     if (input$predictionselection == "Actual vs. Predicted Values") { 
-      p <- ggplot(full_data, aes(x = actual)) +
+      p <- ggplot(full_data, aes(x = imputed_standardized_data)) +
         geom_density(aes(color = "Actual"), alpha = 0.5, show.legend = FALSE) +
         geom_vline(aes(xintercept = 10^predicted, color = "Predicted")) +
         labs(x = paste("Predicted =", round(10^predicted, 2), "ppm³"),
@@ -282,9 +282,9 @@ server <- function(input, output, session) {
   } else if (input$predictionselection == "Quantile Histogram of Log-transformed Plastic Concentration") {
     # Reactive expression for generating histograms comparing actual and predicted values
     # Predict using the random forest model
-    quantiles <- quantile(full_data$imputed_standardized_data, probs = c(0.1, 0.5, 0.9))
+    quantiles <- quantile(log10(full_data$imputed_standardized_data), probs = c(0.1, 0.5, 0.9))
     
-    h <- ggplot(full_data, aes(x = imputed_standardized_data)) +
+    h <- ggplot(full_data, aes(x = log10(imputed_standardized_data))) +
       geom_histogram(binwidth = 0.1, fill = "#CCE5FF", alpha = 0.7) +
       geom_vline(xintercept = quantiles, color = c("#CD5C5C", "#2E8B57", "#8a2be2"), linetype = "dashed") +
       geom_vline(xintercept = predicted, color = "black", linetype = "solid") +
@@ -299,9 +299,9 @@ server <- function(input, output, session) {
   } else if (input$predictionselection == "Quantile Histogram of Log-transformed Macro vs Micro Concentration") {
     # Reactive expression for generating histograms comparing actual and predicted values
     # Predict using the random forest model
-    quantiles <- quantile(full_data$imputed_standardized_data, probs = c(0.1, 0.5, 0.9))
+    quantiles <- quantile(log10(full_data$imputed_standardized_data), probs = c(0.1, 0.5, 0.9))
     
-    h <- ggplot(full_data, aes(x = imputed_standardized_data, fill = macro_or_micro)) +
+    m <- ggplot(full_data, aes(x = log10(imputed_standardized_data), fill = macro_or_micro)) +
       geom_histogram(data = subset(full_data, macro_or_micro == "Macroplastics"), binwidth = 0.1, alpha = 0.7, position = "identity") +
       geom_histogram(data = subset(full_data, macro_or_micro == "Microplastics"), binwidth = 0.1, alpha = 0.7, position = "identity") +
       geom_vline(xintercept = quantiles, color = c("#CD5C5C", "#2E8B57", "#8a2be2"), linetype = "dashed") +
@@ -315,7 +315,7 @@ server <- function(input, output, session) {
       scale_y_continuous(labels = scales::comma_format()) +
       scale_fill_manual(values = c("Macroplastics" = "#FFA500", "Microplastics" = "#CCE5FF"))
     
-    h
+    m
   }
   })
   
