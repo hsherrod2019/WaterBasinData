@@ -253,22 +253,31 @@ server <- function(input, output, session) {
     
     actual <- full_data$imputed_standardized_data
     
-    if (input$predictionselection == "Actual vs Predicted Values") { 
-    p <- ggplot(comparison_data, aes(x = Actual)) +
-      geom_density(aes(color = "Actual"), alpha = 0.5) +
-      geom_density(aes(x = Predicted, color = "Predicted"), alpha = 0.5) +
-      geom_vline(xintercept = predicted, linetype = "dashed", color = "black") + # Add vertical black line
-      geom_point(data = data.frame(x = c(predicted, predicted), y = c(0, max(density(comparison_data$Predicted)$y))),
-                 aes(x = x, y = y), color = "red", size = 3) + # Add points at intersections
-      labs(title = "Density Plot of Actual vs Predicted",
-           x = "Value",
-           y = "Density") +
-      scale_color_manual(values = c("Actual" = "blue", "Predicted" = "red")) +
-      scale_x_log10() +
-      theme_minimal()
-    
-    # Convert the ggplot to a Plotly plot
-    p
+    if (input$predictionselection == "Actual vs. Predicted Values") { 
+      p <- ggplot(full_data, aes(x = actual)) +
+        geom_density(aes(color = "Actual"), alpha = 0.5, show.legend = FALSE) +
+        geom_vline(aes(xintercept = 10^predicted, color = "Predicted")) +
+        labs(x = paste("Predicted =", round(10^predicted, 2), "ppm³"),
+             y = "Density") +
+        scale_x_log10() +
+        scale_color_manual(values = c("Actual" = "red", "Predicted" = "blue")) +
+        theme_minimal() +
+        theme(axis.title.x = element_text(size = 14))  # Adjust the size as needed
+      
+      p
+      
+    } else if (input$predictionselection == "Log Transformed Actual vs Predicted Values") { 
+      lp <- ggplot(full_data, aes(x = log10(imputed_standardized_data))) +
+        geom_density(aes(color = "Actual"), alpha = 0.5, show.legend = FALSE) +
+        geom_vline(aes(xintercept = predicted, color = "Predicted")) + 
+        labs(x = paste("Predicted =", round(predicted, 2), "ppm³"),
+             y = "Density") +
+        scale_x_log10() +
+        scale_color_manual(values = c("Actual" = "red", "Predicted" = "blue")) +  # Set custom colors
+        theme_minimal() + 
+        theme(axis.title.x = element_text(size = 14))  # Adjust the size as needed
+      
+      lp
     
   } else if (input$predictionselection == "Quantile Histogram of Log-transformed Plastic Concentration") {
     # Reactive expression for generating histograms comparing actual and predicted values
