@@ -266,7 +266,7 @@ server <- function(input, output, session) {
       
       p
       
-    } else if (input$predictionselection == "Log Transformed Actual vs Predicted Values") { 
+    } else if (input$predictionselection == "Log Transformed Actual vs. Predicted Values") { 
       lp <- ggplot(full_data, aes(x = log10(imputed_standardized_data))) +
         geom_density(aes(color = "Actual"), alpha = 0.5, show.legend = FALSE) +
         geom_vline(aes(xintercept = predicted, color = "Predicted")) + 
