@@ -11,8 +11,19 @@ library(shiny)
 library(plotly)
 
 rf_data = readRDS("rf_model.rds")
-full_data = readRDS("imputed_data.rds")
-
+full_data = readRDS("imputed_data.rds") %>%
+  select(-study_media, -standardized_concentration_units)
+full_data <- dataframeclean %>%
+  select(bsldem30m, lc01dev_lc11dev, x50_percent_aep_flood, sample_size, top_particle, filter_size, corrected_concentration, deployment_method, macro_or_micro) 
+full_data$bsldem30m <- as.numeric(full_data2$bsldem30m)
+full_data$lc01dev_lc11dev <- as.numeric(full_data2$lc01dev_lc11dev)
+full_data$x50_percent_aep_flood <- as.numeric(full_data2$x50_percent_aep_flood)
+full_data$sample_size <- as.numeric(full_data2$sample_size)
+full_data$top_particle <- as.numeric(full_data2$top_particle)
+full_data$filter_size <- as.numeric(full_data2$filter_size)
+full_data$corrected_concentration <- as.numeric(full_data2$corrected_concentration)
+full_data$macro_or_micro <- sub("microplastics", "Microplastics", full_data2$macro_or_micro)
+full_data$macro_or_micro <- sub("macroplastics", "Macroplastics", full_data2$macro_or_micro)
 # Define UI for application
 ui <- dashboardPage(
   dashboardHeader(title = "Water Basin Data"),
@@ -251,10 +262,10 @@ server <- function(input, output, session) {
     # Predict using the random forest model
     predicted <- predict(rf_data, newdata = selected_data)
     
-    actual <- full_data$imputed_standardized_data
+    actual <- full_data$corrected_concentration
     
     if (input$predictionselection == "Actual vs. Predicted Values") { 
-      p <- ggplot(full_data, aes(x = imputed_standardized_data)) +
+      p <- ggplot(full_data, aes(x = corrected_concentration)) +
         geom_density(aes(color = "Actual"), alpha = 0.5, show.legend = FALSE) +
         geom_vline(aes(xintercept = 10^predicted, color = "Predicted")) +
         labs(x = paste("Predicted =", round(10^predicted, 2), "ppm³"),
@@ -267,7 +278,7 @@ server <- function(input, output, session) {
       p
       
     } else if (input$predictionselection == "Log Transformed Actual vs. Predicted Values") { 
-      lp <- ggplot(full_data, aes(x = log10(imputed_standardized_data))) +
+      lp <- ggplot(full_data, aes(x = log10(corrected_concentration))) +
         geom_density(aes(color = "Actual"), alpha = 0.5, show.legend = FALSE) +
         geom_vline(aes(xintercept = predicted, color = "Predicted")) + 
         labs(x = paste("Predicted =", round(predicted, 2), "ppm³"),
@@ -282,9 +293,9 @@ server <- function(input, output, session) {
   } else if (input$predictionselection == "Quantile Histogram of Log-transformed Plastic Concentration") {
     # Reactive expression for generating histograms comparing actual and predicted values
     # Predict using the random forest model
-    quantiles <- quantile(log10(full_data$imputed_standardized_data), probs = c(0.1, 0.5, 0.9))
+    quantiles <- quantile(log10(full_data$corrected_concentration), probs = c(0.1, 0.5, 0.9))
     
-    h <- ggplot(full_data, aes(x = log10(imputed_standardized_data))) +
+    h <- ggplot(full_data, aes(x = log10(corrected_concentration))) +
       geom_histogram(binwidth = 0.1, fill = "#CCE5FF", alpha = 0.7) +
       geom_vline(xintercept = quantiles, color = c("#CD5C5C", "#2E8B57", "#8a2be2"), linetype = "dashed") +
       geom_vline(xintercept = predicted, color = "black", linetype = "solid") +
@@ -299,9 +310,9 @@ server <- function(input, output, session) {
   } else if (input$predictionselection == "Quantile Histogram of Log-transformed Macro vs Micro Concentration") {
     # Reactive expression for generating histograms comparing actual and predicted values
     # Predict using the random forest model
-    quantiles <- quantile(log10(full_data$imputed_standardized_data), probs = c(0.1, 0.5, 0.9))
+    quantiles <- quantile(log10(full_data$corrected_concentration), probs = c(0.1, 0.5, 0.9))
     
-    m <- ggplot(full_data, aes(x = log10(imputed_standardized_data), fill = macro_or_micro)) +
+    m <- ggplot(full_data, aes(x = log10(corrected_concentration), fill = macro_or_micro)) +
       geom_histogram(data = subset(full_data, macro_or_micro == "Macroplastics"), binwidth = 0.1, alpha = 0.7, position = "identity") +
       geom_histogram(data = subset(full_data, macro_or_micro == "Microplastics"), binwidth = 0.1, alpha = 0.7, position = "identity") +
       geom_vline(xintercept = quantiles, color = c("#CD5C5C", "#2E8B57", "#8a2be2"), linetype = "dashed") +
@@ -321,7 +332,7 @@ server <- function(input, output, session) {
   
   # Reactive expression for generating the scatter plot
   output$scatterplot <- renderPlot({
-    ggplot(full_data, aes(x = filter_size, y = imputed_standardized_data)) +
+    ggplot(full_data, aes(x = filter_size, y = corrected_concentration)) +
       geom_point(alpha = 0.5) +
       geom_smooth(method = "lm", se = FALSE) +
       labs(title = "Smoothed Scatter Plot: Imputed Standardized Data vs. Filter Size",
@@ -334,7 +345,7 @@ server <- function(input, output, session) {
   
   # Reactive expression for generating the density plot
   output$densityplot <- renderPlot({
-    ggplot(full_data, aes(x = imputed_standardized_data, fill = deployment_method)) +
+    ggplot(full_data, aes(x = corrected_concentration, fill = deployment_method)) +
       geom_density(alpha = 0.5) +
       labs(title = "Density Plot of Imputed Standardized Data by Deployment Method",
            x = "Imputed Standardized Data",
