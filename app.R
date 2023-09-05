@@ -66,7 +66,7 @@ ui <- dashboardPage(
                  h3(HTML("Log Transformed Microplastic Concentration: "))),
           column(width = 3,
                  uiOutput("formatted_logpredictedvalue"),
-                 html("&nbsp;<br>"))
+                 HTML("&nbsp;<br>"))
         ),
         fluidRow(
           column(width = 4,
@@ -224,7 +224,7 @@ server <- function(input, output, session) {
     predictedlog <- predict(rf_data, selected_data)
     
     # Create the formatted output with styling
-    formatted_output <- shiny::tags$div(
+    formatted_output2 <- shiny::tags$div(
       shiny::tags$span(
         style = "font-size: 24px",
         predictedlog
@@ -268,7 +268,7 @@ server <- function(input, output, session) {
       theme_minimal()
     
     # Convert the ggplot to a Plotly plot
-    ggplotly(p)
+    p
     
   } else if (input$predictionselection == "Quantile Histogram of Log-transformed Plastic Concentration") {
     # Reactive expression for generating histograms comparing actual and predicted values
@@ -305,6 +305,8 @@ server <- function(input, output, session) {
       theme_minimal() +
       scale_y_continuous(labels = scales::comma_format()) +
       scale_fill_manual(values = c("Macroplastics" = "#FFA500", "Microplastics" = "#CCE5FF"))
+    
+    h
   }
   })
   
