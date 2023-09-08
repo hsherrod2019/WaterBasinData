@@ -12,7 +12,7 @@ library(plotly)
 library(dplyr)
 
 rf_data = readRDS("rf_model.rds")
-dataframeclean = readRDS("imputed_data.rds")
+full_data = readRDS("imputed_data.rds")
 
 # Define UI for application
 ui <- dashboardPage(
@@ -98,19 +98,19 @@ ui <- dashboardPage(
         fluidRow(
           column(width = 4,
                  sliderInput("bsldem30m_input", "Drainage Mean Slope",
-                             min = min(dataframeclean$bsldem30m),
-                             max = max(dataframeclean$bsldem30m),
-                             value = median(dataframeclean$bsldem30m))),
+                             min = min(full_data$bsldem30m),
+                             max = max(full_data$bsldem30m),
+                             value = median(full_data$bsldem30m))),
           column(width = 4,
                  sliderInput("lc01dev_lc11dev_input", "Percentage of land-use",
-                             min = min(dataframeclean$lc01dev_lc11dev),
-                             max = max(dataframeclean$lc01dev_lc11dev),
-                             value = median(dataframeclean$lc01dev_lc11dev))),
+                             min = min(full_data$lc01dev_lc11dev),
+                             max = max(full_data$lc01dev_lc11dev),
+                             value = median(full_data$lc01dev_lc11dev))),
           column(width = 4,
                  sliderInput("x50_percent_aep_flood_input", "50% AEP Flood",
-                             min = min(dataframeclean$x50_percent_aep_flood),
-                             max = max(dataframeclean$x50_percent_aep_flood),
-                             value = median(dataframeclean$x50_percent_aep_flood))),
+                             min = min(full_data$x50_percent_aep_flood),
+                             max = max(full_data$x50_percent_aep_flood),
+                             value = median(full_data$x50_percent_aep_flood))),
         ),
         fluidRow(
           column(width = 4,
@@ -122,19 +122,19 @@ ui <- dashboardPage(
         fluidRow(
           column(width = 4,
                  sliderInput("sample_size_input", "Sample Size (in L)",
-                             min = min(dataframeclean$sample_size),
-                             max = max(dataframeclean$sample_size),
-                             value = median(dataframeclean$sample_size))),
+                             min = min(full_data$sample_size),
+                             max = max(full_data$sample_size),
+                             value = median(full_data$sample_size))),
           column(width = 4,
                  sliderInput("top_particle_input", HTML("Largest Particle Size (in &mu;m)"),
-                             min = min(dataframeclean$top_particle),
-                             max = max(dataframeclean$top_particle),
-                             value = median(dataframeclean$top_particle))),
+                             min = min(full_data$top_particle),
+                             max = max(full_data$top_particle),
+                             value = median(full_data$top_particle))),
           column(width = 4,
                  sliderInput("filter_size_input", HTML("Smallest Particle Size Based on Filter (in &mu;m)"),
-                             min = min(dataframeclean$filter_size),
-                             max = max(dataframeclean$filter_size),
-                             value = median(dataframeclean$filter_size)))
+                             min = min(full_data$filter_size),
+                             max = max(full_data$filter_size),
+                             value = median(full_data$filter_size)))
         ),
         fluidRow(
           column(width = 4,
@@ -161,7 +161,7 @@ ui <- dashboardPage(
 )
 
 server <- function(input, output, session) {
-  dataframeclean = readRDS("dataframeclean.rds")
+  full_data = readRDS("imputed_data.rds")
   rf_data <- readRDS("rf_model.rds")
   
   # Create a two-way binding function with validation
@@ -189,22 +189,22 @@ server <- function(input, output, session) {
   
   # Set up two-way binding for each variable
   two_way_binding("bsldem30m_input", "bsldem30m_text",
-                  min = min(dataframeclean$bsldem30m),
-                  max = max(dataframeclean$bsldem30m))
-  two_way_binding("lc01dev_lc11dev_input", "lc01dev_lc11dev_text",min = min(dataframeclean$lc01dev_lc11dev),
-                  max = max(dataframeclean$lc01dev_lc11dev))
+                  min = min(full_data$bsldem30m),
+                  max = max(full_data$bsldem30m))
+  two_way_binding("lc01dev_lc11dev_input", "lc01dev_lc11dev_text",min = min(full_data$lc01dev_lc11dev),
+                  max = max(full_data$lc01dev_lc11dev))
   two_way_binding("x50_percent_aep_flood_input", "x50_percent_aep_flood_text",
-                  min = min(dataframeclean$x50_percent_aep_flood),
-                  max = max(dataframeclean$x50_percent_aep_flood))
+                  min = min(full_data$x50_percent_aep_flood),
+                  max = max(full_data$x50_percent_aep_flood))
   two_way_binding("sample_size_input", "sample_size_text",
-                  min = min(dataframeclean$sample_size),
-                  max = max(dataframeclean$sample_size))
+                  min = min(full_data$sample_size),
+                  max = max(full_data$sample_size))
   two_way_binding("top_particle_input", "top_particle_text",
-                  min = min(dataframeclean$top_particle),
-                  max = max(dataframeclean$top_particle))
+                  min = min(full_data$top_particle),
+                  max = max(full_data$top_particle))
   two_way_binding("filter_size_input", "filter_size_text",
-                  min = min(dataframeclean$filter_size),
-                  max = max(dataframeclean$filter_size))
+                  min = min(full_data$filter_size),
+                  max = max(full_data$filter_size))
   
   # Reactive expression for predicting the target variable
   output$formatted_predictedvalue <- renderUI({
@@ -226,7 +226,7 @@ server <- function(input, output, session) {
     formatted_output <- shiny::tags$div(
       shiny::tags$span(
         style = "font-size: 24px",
-        10^predicted
+        predicted
       )
     )
     
@@ -254,7 +254,7 @@ server <- function(input, output, session) {
     formatted_output2 <- shiny::tags$div(
       shiny::tags$span(
         style = "font-size: 24px",
-        predictedlog
+        log10(predictedlog)
       )
     )
     
@@ -279,12 +279,12 @@ server <- function(input, output, session) {
     # Predict using the random forest model
     predicted <- predict(rf_data, newdata = selected_data)
     
-    actual <- dataframeclean$corrected_concentration
+    actual <- full_data$corrected_concentration
     
     if (input$predictionselection == "Actual vs. Predicted Values") { 
-      p <- ggplot(dataframeclean, aes(x = corrected_concentration)) +
+      p <- ggplot(full_data, aes(x = corrected_concentration)) +
         geom_density(aes(color = "Actual"), alpha = 0.5, show.legend = FALSE) +
-        geom_vline(aes(xintercept = 10^predicted, color = "Predicted")) +
+        geom_vline(aes(xintercept = predicted, color = "Predicted")) +
         labs(x = paste("Predicted =", round(10^predicted, 2), "ppm³"),
              y = "Density") +
         scale_x_log10() +
@@ -295,7 +295,7 @@ server <- function(input, output, session) {
       p
       
     } else if (input$predictionselection == "Log Transformed Actual vs. Predicted Values") { 
-      lp <- ggplot(dataframeclean, aes(x = log10(corrected_concentration))) +
+      lp <- ggplot(full_data, aes(x = corrected_concentration)) +
         geom_density(aes(color = "Actual"), alpha = 0.5, show.legend = FALSE) +
         geom_vline(aes(xintercept = predicted, color = "Predicted")) + 
         labs(x = paste("Predicted =", round(predicted, 2), "ppm³"),
@@ -310,9 +310,9 @@ server <- function(input, output, session) {
   } else if (input$predictionselection == "Quantile Histogram of Log-transformed Plastic Concentration") {
     # Reactive expression for generating histograms comparing actual and predicted values
     # Predict using the random forest model
-    quantiles <- quantile(log10(dataframeclean$corrected_concentration), probs = c(0.1, 0.5, 0.9))
+    quantiles <- quantile(log10(full_data$corrected_concentration), probs = c(0.1, 0.5, 0.9))
     
-    h <- ggplot(dataframeclean, aes(x = log10(corrected_concentration))) +
+    h <- ggplot(full_data, aes(x = log10(corrected_concentration))) +
       geom_histogram(binwidth = 0.1, fill = "#CCE5FF", alpha = 0.7) +
       geom_vline(xintercept = quantiles, color = c("#CD5C5C", "#2E8B57", "#8a2be2"), linetype = "dashed") +
       geom_vline(xintercept = predicted, color = "black", linetype = "solid") +
@@ -327,11 +327,11 @@ server <- function(input, output, session) {
   } else if (input$predictionselection == "Quantile Histogram of Log-transformed Macro vs Micro Concentration") {
     # Reactive expression for generating histograms comparing actual and predicted values
     # Predict using the random forest model
-    quantiles <- quantile(log10(dataframeclean$corrected_concentration), probs = c(0.1, 0.5, 0.9))
+    quantiles <- quantile(log10(full_data$corrected_concentration), probs = c(0.1, 0.5, 0.9))
     
-    m <- ggplot(dataframeclean, aes(x = log10(corrected_concentration), fill = macro_or_micro)) +
-      geom_histogram(data = subset(dataframeclean, macro_or_micro == "Macroplastics"), binwidth = 0.1, alpha = 0.7, position = "identity") +
-      geom_histogram(data = subset(dataframeclean, macro_or_micro == "Microplastics"), binwidth = 0.1, alpha = 0.7, position = "identity") +
+    m <- ggplot(full_data, aes(x = log10(corrected_concentration), fill = macro_or_micro)) +
+      geom_histogram(data = subset(full_data, macro_or_micro == "Macroplastics"), binwidth = 0.1, alpha = 0.7, position = "identity") +
+      geom_histogram(data = subset(full_data, macro_or_micro == "Microplastics"), binwidth = 0.1, alpha = 0.7, position = "identity") +
       geom_vline(xintercept = quantiles, color = c("#CD5C5C", "#2E8B57", "#8a2be2"), linetype = "dashed") +
       geom_vline(xintercept = predicted, color = "black", linetype = "solid") +
       labs(
@@ -349,7 +349,7 @@ server <- function(input, output, session) {
   
   # Reactive expression for generating the scatter plot
   output$scatterplot <- renderPlot({
-    ggplot(dataframeclean, aes(x = filter_size, y = corrected_concentration)) +
+    ggplot(full_data, aes(x = filter_size, y = corrected_concentration)) +
       geom_point(alpha = 0.5) +
       geom_smooth(method = "lm", se = FALSE) +
       labs(title = "Smoothed Scatter Plot: Corrected Concentration Data vs. Filter Size",
@@ -362,7 +362,7 @@ server <- function(input, output, session) {
   
   # Reactive expression for generating the density plot
   output$densityplot <- renderPlot({
-    ggplot(dataframeclean, aes(x = corrected_concentration, fill = deployment_method)) +
+    ggplot(full_data, aes(x = corrected_concentration, fill = deployment_method)) +
       geom_density(alpha = 0.5) +
       labs(title = "Density Plot of Corrected Concentration Data by Deployment Method",
            x = "Corrected Concentration",

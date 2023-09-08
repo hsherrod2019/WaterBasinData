@@ -13,7 +13,7 @@ library(dplyr)
 # Parameters
 data_file <- "Copy of River_Plastics_Sample_Data - DATA.csv"
 target_variable <- "corrected_concentration"
-features <- c("bsldem30m", "lc01dev_lc11dev", "x50_percent_aep_flood", "deployment_method", "sample_size", "top_particle", "filter_size", "macro_or_micro", "imputed_standardized_data")
+features <- c("bsldem30m", "lc01dev_lc11dev", "x50_percent_aep_flood", "deployment_method", "sample_size", "top_particle", "filter_size", "macro_or_micro")
 
 # Load and preprocess data
 water_basin <- read.csv(data_file)
@@ -165,21 +165,6 @@ for(x in 1:nrow(imputed_data)) {
   print(paste("Corrected Concentration:", imputed_data$corrected_concentration[[x]]))
 }
 
-######### Where to get rid of imputed_standardized_data, correction_factor, alpha, and study media?
-#imputed_data <- imputed_data %>%
-  #select(bsldem30m, lc01dev_lc11dev, x50_percent_aep_flood, sample_size, top_particle, filter_size, corrected_concentration, deployment_method, macro_or_micro)
-
-######### Already made numeric right???
-#imputed_data$bsldem30m <- as.numeric(imputed_data$bsldem30m)
-#imputed_data$lc01dev_lc11dev <- as.numeric(imputed_data$lc01dev_lc11dev)
-#imputed_data$x50_percent_aep_flood <- as.numeric(imputed_data$x50_percent_aep_flood)
-#imputed_data$sample_size <- as.numeric(imputed_data$sample_size)
-#imputed_data$top_particle <- as.numeric(imputed_data$top_particle)
-#imputed_data$filter_size <- as.numeric(imputed_data$filter_size)
-#imputed_data$corrected_concentration <- as.numeric(imputed_data$corrected_concentration)
-#imputed_data$macro_or_micro <- factor(imputed_data$macro_or_micro, levels = c("Macroplastics", "Microplastics"))
-
-
 # Define the formula for your model
 formula <- corrected_concentration ~ .
 
@@ -195,7 +180,7 @@ ctrl <- trainControl(
 rf_model <- train(
   formula,
   data = imputed_data %>%
-    select(-standardized_concentration_units, -study_media),
+    select(-imputed_standardized_data, -alpha, -correction_factor, -study_media, -standardized_concentration_units),
   method = "rf",
   trControl = ctrl,
   ntree = 100
