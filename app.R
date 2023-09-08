@@ -336,13 +336,15 @@ server <- function(input, output, session) {
   } else if (input$predictionselection == "Quantile Histogram of Log-transformed Macro vs Micro Concentration") {
     # Reactive expression for generating histograms comparing actual and predicted values
     # Predict using the random forest model
-    quantiles <- quantile(log10(full_data$corrected_concentration), probs = c(0.1, 0.5, 0.9))
+    positive_concentration <- full_data$corrected_concentration[full_data$corrected_concentration > 0]
+    log_concentration <- log10(positive_concentration)
+    quantiles <- quantile(log_concentration, probs = c(0.1, 0.5, 0.9))
     
     m <- ggplot(full_data, aes(x = log10(corrected_concentration), fill = macro_or_micro)) +
       geom_histogram(data = subset(full_data, macro_or_micro == "Macroplastics"), binwidth = 0.1, alpha = 0.7, position = "identity") +
       geom_histogram(data = subset(full_data, macro_or_micro == "Microplastics"), binwidth = 0.1, alpha = 0.7, position = "identity") +
       geom_vline(xintercept = quantiles, color = c("#CD5C5C", "#2E8B57", "#8a2be2"), linetype = "dashed") +
-      geom_vline(xintercept = predicted, color = "black", linetype = "solid") +
+      geom_vline(xintercept = log10(predicted), color = "black", linetype = "solid") +
       labs(
         x = "Log-transformed Concentration Data",
         y = "Frequency",
