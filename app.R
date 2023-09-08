@@ -305,7 +305,7 @@ server <- function(input, output, session) {
       lp <- ggplot(full_data, aes(x = corrected_concentration)) +
         geom_density(aes(color = "Actual"), alpha = 0.5, show.legend = FALSE) +
         geom_vline(aes(xintercept = predicted, color = "Predicted")) + 
-        labs(x = paste("Predicted =", round(predicted, 2), "ppm³"),
+        labs(x = paste("Predicted =", round(log10(predicted), 2), "ppm³"),
              y = "Density") +
         scale_x_log10() +
         scale_color_manual(values = c("Actual" = "red", "Predicted" = "blue")) +  # Set custom colors
@@ -315,14 +315,16 @@ server <- function(input, output, session) {
       lp
     
   } else if (input$predictionselection == "Quantile Histogram of Log-transformed Plastic Concentration") {
-    # Reactive expression for generating histograms comparing actual and predicted values
-    # Predict using the random forest model
-    quantiles <- quantile(log10(full_data$corrected_concentration), probs = c(0.1, 0.5, 0.9))
     
+    ### Filter out negative values from the concentration data to calculate quantiles; modify code once we get entire data
+    positive_concentration <- full_data$corrected_concentration[full_data$corrected_concentration > 0]
+    log_concentration <- log10(positive_concentration)
+    quantiles <- quantile(log_concentration, probs = c(0.1, 0.5, 0.9))
+  
     h <- ggplot(full_data, aes(x = log10(corrected_concentration))) +
       geom_histogram(binwidth = 0.1, fill = "#CCE5FF", alpha = 0.7) +
       geom_vline(xintercept = quantiles, color = c("#CD5C5C", "#2E8B57", "#8a2be2"), linetype = "dashed") +
-      geom_vline(xintercept = predicted, color = "black", linetype = "solid") +
+      geom_vline(xintercept = log10(predicted), color = "black", linetype = "solid") +
       labs(
            x = "Log-transformed Concentration Data",
            y = "Frequency") +
@@ -330,7 +332,7 @@ server <- function(input, output, session) {
       scale_y_continuous(labels = scales::comma_format())
     
     h
-    
+
   } else if (input$predictionselection == "Quantile Histogram of Log-transformed Macro vs Micro Concentration") {
     # Reactive expression for generating histograms comparing actual and predicted values
     # Predict using the random forest model
