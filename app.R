@@ -219,8 +219,16 @@ server <- function(input, output, session) {
       macro_or_micro = input$macro_or_micro
     )
     
+    # Print statements to debug
+    print("Selected Data:")
+    print(head(selected_data))
+    
     # Predict using the random forest model
     predicted <- predict(rf_data, selected_data)
+    
+    # Print the predicted values
+    print("Predicted Values:")
+    print(head(predicted))
     
     # Create the formatted output with styling
     formatted_output <- shiny::tags$div(
@@ -272,8 +280,7 @@ server <- function(input, output, session) {
       sample_size = input$sample_size_input,
       top_particle = input$top_particle_input,
       filter_size = input$filter_size_input,
-      macro_or_micro = input$macro_or_micro,
-      corrected_concentration = input$corrected_concentration
+      macro_or_micro = input$macro_or_micro
     )
     
     # Predict using the random forest model
@@ -285,7 +292,7 @@ server <- function(input, output, session) {
       p <- ggplot(full_data, aes(x = corrected_concentration)) +
         geom_density(aes(color = "Actual"), alpha = 0.5, show.legend = FALSE) +
         geom_vline(aes(xintercept = predicted, color = "Predicted")) +
-        labs(x = paste("Predicted =", round(10^predicted, 2), "ppm³"),
+        labs(x = paste("Predicted =", round(predicted, 2), "ppm³"),
              y = "Density") +
         scale_x_log10() +
         scale_color_manual(values = c("Actual" = "red", "Predicted" = "blue")) +
