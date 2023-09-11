@@ -410,16 +410,21 @@ server <- function(input, output, session) {
     ### Filter out negative values from the concentration data to calculate quantiles; modify code once we get entire data
     positive_concentration <- full_data$corrected_concentration[full_data$corrected_concentration > 0]
     log_concentration <- log10(positive_concentration)
-    quantiles <- quantile(log_concentration, probs = c(0.1, 0.5, 0.9))
+    quantile_data <- data.frame(
+      quantiles <- quantile(log_concentration, probs = c(0.1, 0.5, 0.9)),
+      Quantile <- c("10% Quantile", "50% Quantile", "90% Quantile")
+    )
+    
   
     h <- ggplot(full_data, aes(x = log10(corrected_concentration))) +
       geom_histogram(binwidth = 0.1, fill = "#CCE5FF", alpha = 0.7) +
-      geom_vline(xintercept = quantiles, color = c("#CD5C5C", "#2E8B57", "#8a2be2"), linetype = "dashed") +
+      geom_vline(data = quantile_data, aes(xintercept = quantiles, color = Quantile), linetype = "dashed") +
       geom_vline(xintercept = log10(predicted), color = "black", linetype = "solid") +
       labs(
            x = "Log-transformed Concentration Data",
            y = "Frequency") +
       theme_minimal() +
+      scale_color_manual(values = c("10% Quantile" = "#CD5C5C", "50% Quantile" = "#2E8B57", "90% Quantile" = "#8A2bE2")) +
       scale_y_continuous(labels = scales::comma_format())
     
     h
@@ -429,12 +434,15 @@ server <- function(input, output, session) {
     # Predict using the random forest model
     positive_concentration <- full_data$corrected_concentration[full_data$corrected_concentration > 0]
     log_concentration <- log10(positive_concentration)
-    quantiles <- quantile(log_concentration, probs = c(0.1, 0.5, 0.9))
+    quantile_data <- data.frame(
+      quantiles <- quantile(log_concentration, probs = c(0.1, 0.5, 0.9)),
+      Quantile <- c("10% Quantile", "50% Quantile", "90% Quantile")
+    )
     
     m <- ggplot(full_data, aes(x = log10(corrected_concentration), fill = macro_or_micro)) +
       geom_histogram(data = subset(full_data, macro_or_micro == "Macroplastics"), binwidth = 0.1, alpha = 0.7, position = "identity") +
       geom_histogram(data = subset(full_data, macro_or_micro == "Microplastics"), binwidth = 0.1, alpha = 0.7, position = "identity") +
-      geom_vline(xintercept = quantiles, color = c("#CD5C5C", "#2E8B57", "#8a2be2"), linetype = "dashed") +
+      geom_vline(data = quantile_data, aes(xintercept = quantiles, color = Quantile), linetype = "dashed") +
       geom_vline(xintercept = log10(predicted), color = "black", linetype = "solid") +
       labs(
         x = "Log-transformed Concentration Data",
@@ -443,6 +451,7 @@ server <- function(input, output, session) {
       ) +
       theme_minimal() +
       scale_y_continuous(labels = scales::comma_format()) +
+      scale_color_manual(values = c("10% Quantile" = "#CD5C5C", "50% Quantile" = "#2E8B57", "90% Quantile" = "#8A2bE2")) +
       scale_fill_manual(values = c("Macroplastics" = "#FFA500", "Microplastics" = "#CCE5FF"))
     
     m
