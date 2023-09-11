@@ -159,7 +159,7 @@ ui <- dashboardPage(
           column(width = 4,
                  div(
                    style = "margin-top: 30px;", 
-                   actionButton(inputId = "clear_filters", label = "Clear All")
+                   actionButton(inputId = "clear_filters", label = "Reset All")
                  )),
           fluidRow(
             column(
@@ -189,9 +189,13 @@ ui <- dashboardPage(
         leafletOutput("map", width = "100%", height = "500px"),
         fluidRow(
           column(
-            width = 12,
-            selectInput("river_name", "River Name", choices = river_name, multiple = TRUE)
-        ),
+            width = 6,
+            selectInput("river_name", "River Name", choices = river_name, multiple = TRUE)),
+          column(width = 6,
+               div(
+                 style = "margin-top: 30px;", 
+                 actionButton(inputId = "clear_all", label = "Clear All")
+               )),
           )
         )
       )
@@ -480,8 +484,11 @@ server <- function(input, output, session) {
     }
   })
   
+  observeEvent(input$clear_all, {
+    updateSelectInput(session, "river_name", selected = character(0))
+  })
   
-  YlOrRd <- colorFactor("YlOrRd", domain = data$corrected_concentration)
+  YlOrRd <- colorFactor("YlOrRd", domain = map_data$corrected_concentration)
   
   # Create the map
   output$map <- renderLeaflet({
