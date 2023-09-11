@@ -146,7 +146,7 @@ ui <- dashboardPage(
         fluidRow(
           column(width = 4,
                  selectInput("deployment_method_input", "Deployment Method",
-                             choices = c("grab", "net"),
+                             choices = c("Grab" = "grab", "Net" = "net"),
                              selected = "grab")),
           column(width = 4,
                  selectInput("macro_or_micro", "Plastic Type",
