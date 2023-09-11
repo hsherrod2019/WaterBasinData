@@ -102,7 +102,7 @@ ui <- dashboardPage(
                              max = max(full_data$bsldem30m),
                              value = median(full_data$bsldem30m))),
           column(width = 4,
-                 sliderInput("lc01dev_lc11dev_input", "Percentage of land-use",
+                 sliderInput("lc01dev_lc11dev_input", "Percentage of urban land-use",
                              min = min(full_data$lc01dev_lc11dev),
                              max = max(full_data$lc01dev_lc11dev),
                              value = median(full_data$lc01dev_lc11dev))),
@@ -126,12 +126,12 @@ ui <- dashboardPage(
                              max = max(full_data$sample_size),
                              value = median(full_data$sample_size))),
           column(width = 4,
-                 sliderInput("top_particle_input", HTML("Largest Particle Size (in &mu;m)"),
+                 sliderInput("top_particle_input", HTML("Top Particle Size (in &mu;m)"),
                              min = min(full_data$top_particle),
                              max = max(full_data$top_particle),
                              value = median(full_data$top_particle))),
           column(width = 4,
-                 sliderInput("filter_size_input", HTML("Smallest Particle Size Based on Filter (in &mu;m)"),
+                 sliderInput("filter_size_input", HTML("Smallest Particle Size (in &mu;m)"),
                              min = min(full_data$filter_size),
                              max = max(full_data$filter_size),
                              value = median(full_data$filter_size)))
@@ -147,13 +147,13 @@ ui <- dashboardPage(
           column(width = 4,
                  selectInput("deployment_method_input", "Deployment Method",
                              choices = c("grab", "net"),
-                             selected = "grab"))
-        ),
+                             selected = "grab")),
         fluidRow(
-          column(width = 4,
+          column(width = 8,
                  selectInput("macro_or_micro", "Plastic Type",
                              choices = c("Microplastics", "Macroplastics"),
                              selected = "Microplastics"))
+          )
         )
       )
     )
@@ -302,9 +302,9 @@ server <- function(input, output, session) {
       p
       
     } else if (input$predictionselection == "Log Transformed Actual vs. Predicted Values") { 
-      lp <- ggplot(full_data, aes(x = corrected_concentration)) +
+      lp <- ggplot(full_data, aes(x = log10(corrected_concentration))) +
         geom_density(aes(color = "Actual"), alpha = 0.5, show.legend = FALSE) +
-        geom_vline(aes(xintercept = predicted, color = "Predicted")) + 
+        geom_vline(aes(xintercept = log10(predicted), color = "Predicted")) + 
         labs(x = paste("Predicted =", round(log10(predicted), 2), "ppm³"),
              y = "Density") +
         scale_x_log10() +
@@ -363,7 +363,7 @@ server <- function(input, output, session) {
     ggplot(full_data, aes(x = filter_size, y = corrected_concentration)) +
       geom_point(alpha = 0.5) +
       geom_smooth(method = "lm", se = FALSE) +
-      labs(title = "Smoothed Scatter Plot: Corrected Concentration Data vs. Filter Size",
+      labs(title = "Corrected Concentration Data vs. Filter Size",
            x = "Filter Size",
            y = "Corrected Concentration") +
       scale_x_log10() +
@@ -375,7 +375,7 @@ server <- function(input, output, session) {
   output$densityplot <- renderPlot({
     ggplot(full_data, aes(x = corrected_concentration, fill = deployment_method)) +
       geom_density(alpha = 0.5) +
-      labs(title = "Density Plot of Corrected Concentration Data by Deployment Method",
+      labs(title = "Corrected Concentration Data by Deployment Method",
            x = "Corrected Concentration",
            y = "Density",
            fill = "Deployment Method") +
