@@ -471,11 +471,21 @@ server <- function(input, output, session) {
   })
   
   ### Map Tab
+  filtered_data <- reactive({
+    selected_rivers <- input$river_name
+    if (is.null(selected_rivers) || length(selected_rivers) == 0) {
+      return(map_data)  # If no rivers are selected, show all points
+    } else {
+      return(filter(map_data, river_name %in% selected_rivers))
+    }
+  })
+  
+  
   YlOrRd <- colorFactor("YlOrRd", domain = data$corrected_concentration)
   
   # Create the map
   output$map <- renderLeaflet({
-    leaflet(map_data) %>%
+    leaflet(filtered_data()) %>%
       addTiles() %>%
       addCircleMarkers(
         ~longitude, ~latitude,
