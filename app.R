@@ -381,12 +381,12 @@ server <- function(input, output, session) {
     
     if (input$predictionselection == "Actual vs. Predicted Values") { 
       p <- ggplot(full_data, aes(x = corrected_concentration)) +
-        geom_density(aes(color = "Actual"), alpha = 0.5, show.legend = FALSE) +
-        geom_vline(aes(xintercept = predicted, color = "Predicted")) +
+        geom_density(aes(color = "Actual"), alpha = 0.5, show.legend = FALSE, size = 1.5) +
+        geom_vline(aes(xintercept = predicted, color = "Predicted"), linetype = "dashed") +
         labs(x = paste("Predicted =", round(predicted, 2), "ppm³"),
              y = "Density") +
         scale_x_log10() +
-        scale_color_manual(values = c("Actual" = "red", "Predicted" = "blue")) +
+        scale_color_manual(values = c("Actual" = "#CD5C5C", "Predicted" = "#5c80cd")) +
         theme_minimal() +
         theme(axis.title.x = element_text(size = 14))  # Adjust the size as needed
       
@@ -394,12 +394,12 @@ server <- function(input, output, session) {
       
     } else if (input$predictionselection == "Log Transformed Actual vs. Predicted Values") { 
       lp <- ggplot(full_data, aes(x = log10(corrected_concentration))) +
-        geom_density(aes(color = "Actual"), alpha = 0.5, show.legend = FALSE) +
-        geom_vline(aes(xintercept = log10(predicted), color = "Predicted")) + 
+        geom_density(aes(color = "Actual"), alpha = 0.5, show.legend = FALSE, size = 1.5) +
+        geom_vline(aes(xintercept = log10(predicted), color = "Predicted"), linetype = "dashed") + 
         labs(x = paste("Predicted =", round(log10(predicted), 2), "ppm³"),
              y = "Density") +
         scale_x_log10() +
-        scale_color_manual(values = c("Actual" = "red", "Predicted" = "blue")) +  # Set custom colors
+        scale_color_manual(values = c("Actual" = "#CD5C5C", "Predicted" = "#5c80cd")) +  # Set custom colors
         theme_minimal() + 
         theme(axis.title.x = element_text(size = 14))  # Adjust the size as needed
       
