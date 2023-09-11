@@ -13,8 +13,9 @@ library(dplyr)
 
 rf_data = readRDS("rf_model.rds")
 full_data = readRDS("imputed_data.rds")
+map_data = readRDS("map_data.rds")
 
-river_name <- unique(full_data$river_name)
+river_name <- unique(map_data$river_name)
 
 # Define UI for application
 ui <- dashboardPage(
@@ -185,18 +186,13 @@ ui <- dashboardPage(
       tabItem(
         tabName = "maps",
         h3("Map of the United States- Plastics Concentration"),
+        leafletOutput("map", width = "100%", height = "500px"),
         fluidRow(
           column(
             width = 12,
             selectInput("river_name", "River Name", choices = river_name, multiple = TRUE)
         ),
-        fluidRow(
-          column(
-            width = 12,
-            leafletOutput("map")
-            )
           )
-        )
         )
       )
     )
@@ -242,6 +238,7 @@ server <- function(input, output, session) {
   
   full_data = readRDS("imputed_data.rds")
   rf_data <- readRDS("rf_model.rds")
+  map_data = readRDS("map_data.rds")
   
   # Create a two-way binding function with validation
   two_way_binding <- function(slider_input, textbox_input, min_value, max_value) {
@@ -473,11 +470,24 @@ server <- function(input, output, session) {
       scale_fill_manual(values = c("#1f7872", "#f1948a"))
   })
   
-  # Map tab
+  ### Map Tab
+  YlOrRd <- colorFactor("YlOrRd", domain = data$corrected_concentration)
+  
+  # Create the map
   output$map <- renderLeaflet({
-    leaflet() %>%
-      addTiles() %>%  # Add default OpenStreetMap tiles as the base map
-      setView(lng = -95.7129, lat = 37.0902, zoom = 4)  # Set initial map view
+    leaflet(map_data) %>%
+      addTiles() %>%
+      addCircleMarkers(
+        ~longitude, ~latitude,
+        color = ~YlOrRd(corrected_concentration),
+        fillOpacity = 0.5,
+        radius = 6,
+        popup = ~paste("<b>River Name:</b> ", river_name, 
+                       "<br><b>Microplastic Concentration (in ppm³):</b> ", corrected_concentration,
+                       "<br><b>Coordinates:</b> ", paste(latitude, longitude, sep = ", ")
+        ),
+        label = ~river_name
+      )
   })
 }
 
