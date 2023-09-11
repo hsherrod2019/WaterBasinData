@@ -22,9 +22,8 @@ ui <- dashboardPage(
   dashboardHeader(title = "Water Basin Data"),
   dashboardSidebar(
     sidebarMenu(
-      menuItem("Introduction", tabName = "introduction", icon = icon("home")),
-      menuItem("Predictions", tabName = "prediction", icon = icon("sliders-h")),
-      menuItem("Plastics Map", tabName = "maps", icon = icon("map"))
+      menuItem("Plastics Map", tabName = "maps", icon = icon("map")),
+      menuItem("Predictions", tabName = "prediction", icon = icon("sliders-h"))
     )
   ),
   dashboardBody(
@@ -56,134 +55,6 @@ ui <- dashboardPage(
     ),
     tabItems(
       tabItem(
-        tabName = "introduction",
-        h2("Welcome to our app!"),
-        p("This app uses data from the USGS Streamstats website."),
-        fluidRow(
-          column(width = 6,
-                 h3("Scatter Plot"),
-                 plotOutput("scatterplot")),
-          column(width = 6,
-                 h3("Density Plot"),
-                 plotOutput("densityplot"))
-        )
-      ),
-      tabItem(
-        tabName = "prediction",
-        fluidRow(
-          column(
-          width = 12,
-          h3("Other Visuals"),
-          selectInput("predictionselection", "Select a plot to observe",
-                      choices = c("Actual vs. Predicted Values",
-                                  "Log Transformed Actual vs. Predicted Values",
-                                  "Quantile Histogram of Log-transformed Plastic Concentration",
-                                  "Quantile Histogram of Log-transformed Macro vs Micro Concentration"),
-                      selected = "Actual vs Predicted Values"))
-        ),
-        fluidRow(
-          column(width = 12,
-                 plotOutput("visuals"),
-                 HTML("&nbsp;<br>"))
-        ),
-        fluidRow(
-          column(width = 9,
-                 h3(HTML("Predicted Microplastic Concentration (in ppm<sup>3</sup>):"))),
-          column(width = 3,
-                 uiOutput("formatted_predictedvalue"))
-        ),
-        fluidRow(
-          column(width = 9,
-                 h3(HTML("Log Transformed Microplastic Concentration: "))),
-          column(width = 3,
-                 uiOutput("formatted_logpredictedvalue"),
-                 HTML("&nbsp;<br>"))
-        ),
-        fluidRow(
-          column(width = 4,
-                 sliderInput("bsldem30m_input", "Drainage Mean Slope",
-                             min = min(full_data$bsldem30m),
-                             max = max(full_data$bsldem30m),
-                             value = median(full_data$bsldem30m))),
-          column(width = 4,
-                 sliderInput("lc01dev_lc11dev_input", "Percentage of urban land-use",
-                             min = min(full_data$lc01dev_lc11dev),
-                             max = max(full_data$lc01dev_lc11dev),
-                             value = median(full_data$lc01dev_lc11dev))),
-          column(width = 4,
-                 sliderInput("x50_percent_aep_flood_input", "50% AEP Flood",
-                             min = min(full_data$x50_percent_aep_flood),
-                             max = max(full_data$x50_percent_aep_flood),
-                             value = median(full_data$x50_percent_aep_flood))),
-        ),
-        fluidRow(
-          column(width = 4,
-                 textInput("bsldem30m_text", label = NULL, value = "")),
-          column(width = 4,
-                 textInput("lc01dev_lc11dev_text", label = NULL, value = "")),
-          column(width = 4,
-                 textInput("x50_percent_aep_flood_text", label = NULL, value = ""))),
-        fluidRow(
-          column(width = 4,
-                 sliderInput("sample_size_input", "Sample Size (in L)",
-                             min = min(full_data$sample_size),
-                             max = max(full_data$sample_size),
-                             value = median(full_data$sample_size))),
-          column(width = 4,
-                 sliderInput("top_particle_input", HTML("Top Particle Size (in &mu;m)"),
-                             min = min(full_data$top_particle),
-                             max = max(full_data$top_particle),
-                             value = median(full_data$top_particle))),
-          column(width = 4,
-                 sliderInput("filter_size_input", HTML("Smallest Particle Size (in &mu;m)"),
-                             min = min(full_data$filter_size),
-                             max = max(full_data$filter_size),
-                             value = median(full_data$filter_size)))
-        ),
-        fluidRow(
-          column(width = 4,
-                 textInput("sample_size_text", label = NULL, value = "")),
-          column(width = 4,
-                 textInput("top_particle_text", label = NULL, value = "")),
-          column(width = 4,
-                 textInput("filter_size_text", label = NULL, value = ""))),
-        fluidRow(
-          column(width = 4,
-                 selectInput("deployment_method_input", "Deployment Method",
-                             choices = c("Grab" = "grab", "Net" = "net"),
-                             selected = "grab")),
-          column(width = 4,
-                 selectInput("macro_or_micro", "Plastic Type",
-                             choices = c("Microplastics", "Macroplastics"),
-                             selected = "Microplastics")),
-          column(width = 4,
-                 div(
-                   style = "margin-top: 30px;", 
-                   actionButton(inputId = "clear_filters", label = "Reset All")
-                 )),
-          fluidRow(
-            column(
-              width = 12,
-              tags$div(
-                tags$style(HTML("
-                      .navbar {
-                      background-color: #6D929B;
-                      }
-                      .breadcrumb {
-                      font-size: 14px;
-                      font-family: Arial, sans-serif;
-                      }"))
-              ),
-              tags$div(
-                id = "breadcrumb",
-                style = "max-width: 800px; white-space: normal;",
-                verbatimTextOutput("breadcrumb_output")
-                )
-              )
-            )
-          )
-        ),
-      tabItem(
         tabName = "maps",
         h3("Map of the United States- Plastics Concentration"),
         leafletOutput("map", width = "100%", height = "500px"),
@@ -192,15 +63,131 @@ ui <- dashboardPage(
             width = 6,
             selectInput("river_name", "River Name", choices = river_name, multiple = TRUE)),
           column(width = 6,
-               div(
-                 style = "margin-top: 30px;", 
-                 actionButton(inputId = "clear_all", label = "Clear All")
-               )),
+                 div(
+                   style = "margin-top: 30px;", 
+                   actionButton(inputId = "clear_all", label = "Clear All")
+                 ))
+        )
+      ),
+          tabItem(
+            tabName = "prediction",
+            fluidRow(
+              column(
+                width = 12,
+                h3("Other Visuals"),
+                selectInput("predictionselection", "Select a plot to observe",
+                            choices = c("Actual vs. Predicted Values",
+                                        "Log Transformed Actual vs. Predicted Values",
+                                        "Quantile Histogram of Log-transformed Plastic Concentration",
+                                        "Quantile Histogram of Log-transformed Macro vs Micro Concentration"),
+                            selected = "Actual vs Predicted Values"))
+            ),
+            fluidRow(
+              column(width = 12,
+                     plotOutput("visuals"),
+                     HTML("&nbsp;<br>"))
+            ),
+            fluidRow(
+              column(width = 9,
+                     h3(HTML("Predicted Microplastic Concentration (in ppm<sup>3</sup>):"))),
+              column(width = 3,
+                     uiOutput("formatted_predictedvalue"))
+            ),
+            fluidRow(
+              column(width = 9,
+                     h3(HTML("Log Transformed Microplastic Concentration: "))),
+              column(width = 3,
+                     uiOutput("formatted_logpredictedvalue"),
+                     HTML("&nbsp;<br>"))
+            ),
+            fluidRow(
+              column(width = 4,
+                     sliderInput("bsldem30m_input", "Drainage Mean Slope",
+                                 min = min(full_data$bsldem30m),
+                                 max = max(full_data$bsldem30m),
+                                 value = median(full_data$bsldem30m))),
+              column(width = 4,
+                     sliderInput("lc01dev_lc11dev_input", "Percentage of urban land-use",
+                                 min = min(full_data$lc01dev_lc11dev),
+                                 max = max(full_data$lc01dev_lc11dev),
+                                 value = median(full_data$lc01dev_lc11dev))),
+              column(width = 4,
+                     sliderInput("x50_percent_aep_flood_input", "50% AEP Flood",
+                                 min = min(full_data$x50_percent_aep_flood),
+                                 max = max(full_data$x50_percent_aep_flood),
+                                 value = median(full_data$x50_percent_aep_flood)))
+            ),
+            fluidRow(
+              column(width = 4,
+                     textInput("bsldem30m_text", label = NULL, value = "")),
+              column(width = 4,
+                     textInput("lc01dev_lc11dev_text", label = NULL, value = "")),
+              column(width = 4,
+                     textInput("x50_percent_aep_flood_text", label = NULL, value = ""))),
+            fluidRow(
+              column(width = 4,
+                     sliderInput("sample_size_input", "Sample Size (in L)",
+                                 min = min(full_data$sample_size),
+                                 max = max(full_data$sample_size),
+                                 value = median(full_data$sample_size))),
+              column(width = 4,
+                     sliderInput("top_particle_input", HTML("Top Particle Size (in &mu;m)"),
+                                 min = min(full_data$top_particle),
+                                 max = max(full_data$top_particle),
+                                 value = median(full_data$top_particle))),
+              column(width = 4,
+                     sliderInput("filter_size_input", HTML("Smallest Particle Size (in &mu;m)"),
+                                 min = min(full_data$filter_size),
+                                 max = max(full_data$filter_size),
+                                 value = median(full_data$filter_size)))
+            ),
+            fluidRow(
+              column(width = 4,
+                     textInput("sample_size_text", label = NULL, value = "")),
+              column(width = 4,
+                     textInput("top_particle_text", label = NULL, value = "")),
+              column(width = 4,
+                     textInput("filter_size_text", label = NULL, value = ""))),
+            fluidRow(
+              column(width = 4,
+                     selectInput("deployment_method_input", "Deployment Method",
+                                 choices = c("Grab" = "grab", "Net" = "net"),
+                                 selected = "grab")),
+              column(width = 4,
+                     selectInput("macro_or_micro", "Plastic Type",
+                                 choices = c("Microplastics", "Macroplastics"),
+                                 selected = "Microplastics")),
+              column(width = 4,
+                     div(
+                       style = "margin-top: 30px;", 
+                       actionButton(inputId = "clear_filters", label = "Reset All")
+                     )),
+              fluidRow(
+                column(
+                  width = 12,
+                  tags$div(
+                    tags$style(HTML("
+                      .navbar {
+                      background-color: #6D929B;
+                      }
+                      .breadcrumb {
+                      font-size: 14px;
+                      font-family: Arial, sans-serif;
+                      }"))
+                  ),
+                  tags$div(
+                    id = "breadcrumb",
+                    style = "max-width: 800px; white-space: normal;",
+                    verbatimTextOutput("breadcrumb_output")
+                  )
+                )
+              )
+            )
           )
         )
       )
     )
-  )
+
 
 server <- function(input, output, session) {
   filtered_breadcrumb <- reactive({
@@ -456,31 +443,6 @@ server <- function(input, output, session) {
     
     m
   }
-  })
-  
-  # Reactive expression for generating the scatter plot
-  output$scatterplot <- renderPlot({
-    ggplot(full_data, aes(x = filter_size, y = corrected_concentration)) +
-      geom_point(alpha = 0.5) +
-      geom_smooth(method = "lm", se = FALSE) +
-      labs(title = "Corrected Concentration Data vs. Filter Size",
-           x = "Filter Size",
-           y = "Corrected Concentration") +
-      scale_x_log10() +
-      scale_y_log10() +
-      theme_minimal()
-  })
-  
-  # Reactive expression for generating the density plot
-  output$densityplot <- renderPlot({
-    ggplot(full_data, aes(x = corrected_concentration, fill = deployment_method)) +
-      geom_density(alpha = 0.5) +
-      labs(title = "Corrected Concentration Data by Deployment Method",
-           x = "Corrected Concentration",
-           y = "Density",
-           fill = "Deployment Method") +
-      scale_x_log10() +  # Add logarithmic scale to the x-axis
-      scale_fill_manual(values = c("#1f7872", "#f1948a"))
   })
   
   ### Map Tab
