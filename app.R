@@ -148,19 +148,79 @@ ui <- dashboardPage(
                  selectInput("deployment_method_input", "Deployment Method",
                              choices = c("grab", "net"),
                              selected = "grab")),
-        fluidRow(
-          column(width = 8,
+          column(width = 4,
                  selectInput("macro_or_micro", "Plastic Type",
                              choices = c("Microplastics", "Macroplastics"),
-                             selected = "Microplastics"))
+                             selected = "Microplastics")),
+          column(width = 4,
+                 div(
+                   style = "margin-top: 30px;", 
+                   actionButton(inputId = "clear_filters", label = "Clear All")
+                 )),
+          fluidRow(
+            column(
+              width = 12,
+              tags$div(
+                tags$style(HTML("
+                      .navbar {
+                      background-color: #6D929B;
+                      }
+                      .breadcrumb {
+                      font-size: 14px;
+                      font-family: Arial, sans-serif;
+                      }"))
+              ),
+              tags$div(
+                id = "breadcrumb",
+                style = "max-width: 800px; white-space: normal;",
+                verbatimTextOutput("breadcrumb_output")
+                )
+              )
+            ),
           )
         )
       )
     )
   )
-)
 
 server <- function(input, output, session) {
+  filtered_breadcrumb <- reactive({
+    bsldem30m <- input$bsldem30m_input
+    lc01dev_lc11dev <- input$lc01dev_lc11dev_input
+    x50_percent_aep_flood <- input$x50_percent_aep_flood_input
+    sample_size <- input$sample_size_input
+    top_particle <- input$top_particle_input
+    filter_size <- input$filter_size_input
+    deployment_method <- input$deployment_method_input
+    macro_or_micro <- input$macro_or_micro
+    
+    # Create a list of variable names and values
+    filters <- list(
+      "Drainage Mean Slope" = bsldem30m,
+      "Percentage of urban land-use" = lc01dev_lc11dev,
+      "50% AEP Flood" = x50_percent_aep_flood,
+      "Sample Size" = sample_size,
+      "Top Particle Size" = top_particle,
+      "Smallest Particle Size" = filter_size,
+      "Deployment Method" = deployment_method,
+      "Plastic Type" = macro_or_micro
+    )
+    
+    # Filter out empty values and create a formatted breadcrumb text
+    breadcrumb_text <- paste("Filters >", 
+                             paste(names(filters)[!sapply(filters, is.null)],
+                                   unlist(filters)[!sapply(filters, is.null)],
+                                   sep = ": ", collapse = " > "),
+                             sep = " ")
+    
+    breadcrumb_text
+  })
+  
+  output$breadcrumb_output <- renderText({
+    breadcrumb_text <- filtered_breadcrumb()
+    breadcrumb_text
+  })
+  
   full_data = readRDS("imputed_data.rds")
   rf_data <- readRDS("rf_model.rds")
   
@@ -205,6 +265,17 @@ server <- function(input, output, session) {
   two_way_binding("filter_size_input", "filter_size_text",
                   min = min(full_data$filter_size),
                   max = max(full_data$filter_size))
+  
+  # Add an observer to clear filters
+  observeEvent(input$clear_filters, {
+    # Update all filter inputs to their default values or suitable values
+    updateSliderInput(session, "bsldem30m_input", value = median(full_data$bsldem30m))
+    updateSliderInput(session, "lc01dev_lc11dev_input", value = median(full_data$lc01dev_lc11dev))
+    updateSliderInput(session, "x50_percent_aep_flood_input", value = median(full_data$x50_percent_aep_flood))
+    updateSliderInput(session, "sample_size_input", value = median(full_data$sample_size))
+    updateSliderInput(session, "top_particle_input", value = median(full_data$top_particle))
+    updateSliderInput(session, "filter_size_input", value = median(full_data$filter_size))
+  })
   
   # Reactive expression for predicting the target variable
   output$formatted_predictedvalue <- renderUI({
