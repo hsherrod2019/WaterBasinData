@@ -19,7 +19,7 @@ features <- c("bsldem30m", "lc01dev_lc11dev", "x50_percent_aep_flood", "deployme
 water_basin <- read.csv(data_file)
 water_basin <- clean_names(water_basin)
 cleaned_data <- water_basin %>%
-  select(spatial_file_name, standardized_data_in_ppm3, all_of(features), precip, drnarea, standardized_concentration_units, study_media)
+  select(spatial_file_name, standardized_data_in_ppm3, all_of(features), precip, drnarea, standardized_concentration_units, study_media, longitude, latitude, river_name)
 columns_to_check <- c("bsldem30m", "lc01dev_lc11dev", "x50_percent_aep_flood", "precip", "drnarea")
 cleaned_data <- cleaned_data %>%
   filter(!rowSums(is.na(.[, columns_to_check])) == length(columns_to_check))
@@ -66,8 +66,11 @@ extracted_column1 <- imputed_mp_data$deployment_method
 extracted_column2 <- imputed_mp_data$macro_or_micro
 extracted_column3 <- imputed_mp_data$standardized_concentration_units
 extracted_column4 <- imputed_mp_data$study_media
+extracted_column5 <- imputed_mp_data$longitude
+extracted_column6 <- imputed_mp_data$latitude
+extracted_column7 <- imputed_mp_data$river_name
 imputed_mp_data <- imputed_mp_data %>%
-  select(-spatial_file_name, -censored, -deployment_method, -doi_part, -macro_or_micro, -standardized_concentration_units, -study_media)
+  select(-spatial_file_name, -censored, -deployment_method, -doi_part, -macro_or_micro, -standardized_concentration_units, -study_media, -longitude, -latitude, -river_name)
 imputed_data <- missForest(imputed_mp_data)
 imputed_matrix <- imputed_data$ximp
 imputed_dataframe <- as.data.frame(imputed_matrix)
@@ -76,7 +79,11 @@ imputed_data <- imputed_mp_data %>%
   mutate(deployment_method = extracted_column1, 
          macro_or_micro = extracted_column2,
          standardized_concentration_units = extracted_column3,
-         study_media = extracted_column4)
+         study_media = extracted_column4,
+         longitude = extracted_column5,
+         latitude = extracted_column6,
+         river_name = extracted_column7
+)
 
 # Function to split data into training and testing sets
 imputed_data <- imputed_data %>%
@@ -180,7 +187,7 @@ ctrl <- trainControl(
 rf_model <- train(
   formula,
   data = imputed_data %>%
-    select(-imputed_standardized_data, -alpha, -correction_factor, -study_media, -standardized_concentration_units),
+    select(-imputed_standardized_data, -alpha, -correction_factor, -study_media, -standardized_concentration_units, -longitude, -latitude, -river_name),
   method = "rf",
   trControl = ctrl,
   ntree = 100
@@ -228,5 +235,9 @@ print(importance_scores)
 # Save model
 saveRDS(rf_model, file = "rf_model.rds")
 
-saveRDS(imputed_data, file = "imputed_data.rds")
+saveRDS(imputed_data %>%
+          select(-latitude, -longitude, -river_name), file = "imputed_data.rds")
+
+saveRDS(imputed_data %>%
+          select(longitude, latitude, river_name, corrected_concentration), file = "map_data.rds")
 
