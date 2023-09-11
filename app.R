@@ -14,13 +14,16 @@ library(dplyr)
 rf_data = readRDS("rf_model.rds")
 full_data = readRDS("imputed_data.rds")
 
+river_name <- unique(full_data$river_name)
+
 # Define UI for application
 ui <- dashboardPage(
   dashboardHeader(title = "Water Basin Data"),
   dashboardSidebar(
     sidebarMenu(
       menuItem("Introduction", tabName = "introduction", icon = icon("home")),
-      menuItem("Predictions", tabName = "prediction", icon = icon("sliders-h"))
+      menuItem("Predictions", tabName = "prediction", icon = icon("sliders-h")),
+      menuItem("Plastics Map", tabName = "maps", icon = icon("map"))
     )
   ),
   dashboardBody(
@@ -176,8 +179,24 @@ ui <- dashboardPage(
                 verbatimTextOutput("breadcrumb_output")
                 )
               )
-            ),
+            )
           )
+        ),
+      tabItem(
+        tabName = "maps",
+        h3("Map of the United States- Plastics Concentration"),
+        fluidRow(
+          column(
+            width = 12,
+            selectInput("river_name", "River Name", choices = river_name, multiple = TRUE)
+        ),
+        fluidRow(
+          column(
+            width = 12,
+            leafletOutput("map")
+            )
+          )
+        )
         )
       )
     )
@@ -452,6 +471,13 @@ server <- function(input, output, session) {
            fill = "Deployment Method") +
       scale_x_log10() +  # Add logarithmic scale to the x-axis
       scale_fill_manual(values = c("#1f7872", "#f1948a"))
+  })
+  
+  # Map tab
+  output$map <- renderLeaflet({
+    leaflet() %>%
+      addTiles() %>%  # Add default OpenStreetMap tiles as the base map
+      setView(lng = -95.7129, lat = 37.0902, zoom = 4)  # Set initial map view
   })
 }
 
