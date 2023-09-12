@@ -205,7 +205,7 @@ ctrl <- trainControl(
 rf_model <- train(
   formula,
   data = imputed_data %>%
-    select(-imputed_standardized_data, -alpha, -correction_factor, -study_media, -standardized_concentration_units, -longitude, -latitude, -river_name),
+    select(-imputed_standardized_data, -alpha, -correction_factor, -study_media, -standardized_concentration_units, -longitude, -latitude, -river_name, -filter_size, -top_particle),
   method = "rf",
   trControl = ctrl,
   ntree = 100

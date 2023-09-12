@@ -12,7 +12,6 @@ library(plotly)
 library(dplyr)
 
 # Read data files
-rf_data = readRDS("rf_model.rds")
 full_data = readRDS("imputed_data.rds")
 map_data = readRDS("map_data.rds")
 
@@ -71,104 +70,106 @@ ui <- dashboardPage(
                  ))
         )
       ),
-          tabItem(
-            tabName = "prediction",
-            fluidRow(
-              column(
-                width = 12,
-                h3("Other Visuals"),
-                selectInput("predictionselection", "Select a plot to observe",
-                            choices = c("Actual vs. Predicted Values",
-                                        "Log Transformed Actual vs. Predicted Values",
-                                        "Quantile Histogram of Log-transformed Plastic Concentration",
-                                        "Quantile Histogram of Log-transformed Macro vs Micro Concentration"),
-                            selected = "Actual vs Predicted Values"))
-            ),
-            fluidRow(
-              column(width = 12,
-                     plotOutput("visuals"),
-                     HTML("&nbsp;<br>"))
-            ),
-            fluidRow(
-              column(width = 9,
-                     h3(HTML("Predicted Microplastic Concentration (in ppm<sup>3</sup>):"))),
-              column(width = 3,
-                     uiOutput("formatted_predictedvalue"))
-            ),
-            fluidRow(
-              column(width = 9,
-                     h3(HTML("Log Transformed Microplastic Concentration: "))),
-              column(width = 3,
-                     uiOutput("formatted_logpredictedvalue"),
-                     HTML("&nbsp;<br>"))
-            ),
-            fluidRow(
-              column(width = 4,
-                     sliderInput("bsldem30m_input", "Drainage Mean Slope",
-                                 min = min(full_data$bsldem30m),
-                                 max = max(full_data$bsldem30m),
-                                 value = median(full_data$bsldem30m))),
-              column(width = 4,
-                     sliderInput("lc01dev_lc11dev_input", "Percentage of urban land-use",
-                                 min = min(full_data$lc01dev_lc11dev),
-                                 max = max(full_data$lc01dev_lc11dev),
-                                 value = median(full_data$lc01dev_lc11dev))),
-              column(width = 4,
-                     sliderInput("x50_percent_aep_flood_input", "50% AEP Flood",
-                                 min = min(full_data$x50_percent_aep_flood),
-                                 max = max(full_data$x50_percent_aep_flood),
-                                 value = median(full_data$x50_percent_aep_flood)))
-            ),
-            fluidRow(
-              column(width = 4,
-                     textInput("bsldem30m_text", label = NULL, value = "")),
-              column(width = 4,
-                     textInput("lc01dev_lc11dev_text", label = NULL, value = "")),
-              column(width = 4,
-                     textInput("x50_percent_aep_flood_text", label = NULL, value = ""))),
-            fluidRow(
-              column(width = 4,
-                     sliderInput("sample_size_input", "Sample Size (in L)",
-                                 min = min(full_data$sample_size),
-                                 max = max(full_data$sample_size),
-                                 value = median(full_data$sample_size))),
-              column(width = 4,
-                     sliderInput("top_particle_input", HTML("Top Particle Size (in &mu;m)"),
-                                 min = min(full_data$top_particle),
-                                 max = max(full_data$top_particle),
-                                 value = median(full_data$top_particle))),
-              column(width = 4,
-                     sliderInput("filter_size_input", HTML("Smallest Particle Size (in &mu;m)"),
-                                 min = min(full_data$filter_size),
-                                 max = max(full_data$filter_size),
-                                 value = median(full_data$filter_size)))
-            ),
-            fluidRow(
-              column(width = 4,
-                     textInput("sample_size_text", label = NULL, value = "")),
-              column(width = 4,
-                     textInput("top_particle_text", label = NULL, value = "")),
-              column(width = 4,
-                     textInput("filter_size_text", label = NULL, value = ""))),
-            fluidRow(
-              column(width = 4,
-                     selectInput("deployment_method_input", "Deployment Method",
-                                 choices = c("Grab" = "grab", "Net" = "net"),
-                                 selected = "grab")),
-              column(width = 4,
-                     selectInput("macro_or_micro", "Plastic Type",
-                                 choices = c("Microplastics", "Macroplastics"),
-                                 selected = "Microplastics")),
-              column(width = 4,
-                     div(
-                       style = "margin-top: 30px;", 
-                       actionButton(inputId = "clear_filters", label = "Reset All")
-                     )),
-              fluidRow(
-                column(
-                  width = 12,
-                  tags$div(
-                    tags$style(HTML("
+      tabItem(
+        tabName = "prediction",
+        fluidRow(
+          column(
+            width = 12,
+            h3("Other Visuals"),
+            selectInput("predictionselection", "Select a plot to observe",
+                        choices = c("Actual vs. Predicted Values",
+                                    "Log Transformed Actual vs. Predicted Values",
+                                    "Quantile Histogram of Log-transformed Plastic Concentration",
+                                    "Quantile Histogram of Log-transformed Macro vs Micro Concentration"),
+                        selected = "Actual vs Predicted Values"))
+        ),
+        fluidRow(
+          column(width = 12,
+                 plotOutput("visuals"),
+                 HTML("&nbsp;<br>"))
+        ),
+        fluidRow(
+          column(width = 9,
+                 h3(HTML("Predicted Microplastic Concentration (in ppm<sup>3</sup>):"))),
+          column(width = 3,
+                 uiOutput("formatted_predictedvalue"))
+        ),
+        fluidRow(
+          column(width = 9,
+                 h3(HTML("Log Transformed Microplastic Concentration: "))),
+          column(width = 3,
+                 uiOutput("formatted_logpredictedvalue"),
+                 HTML("&nbsp;<br>"))
+        ),
+        fluidRow(
+          column(width = 4,
+                 sliderInput("bsldem30m_input", "Drainage Mean Slope",
+                             min = min(full_data$bsldem30m),
+                             max = max(full_data$bsldem30m),
+                             value = median(full_data$bsldem30m))),
+          column(width = 4,
+                 sliderInput("lc01dev_lc11dev_input", "Percentage of urban land-use",
+                             min = min(full_data$lc01dev_lc11dev),
+                             max = max(full_data$lc01dev_lc11dev),
+                             value = median(full_data$lc01dev_lc11dev))),
+          column(width = 4,
+                 sliderInput("x50_percent_aep_flood_input", "50% AEP Flood",
+                             min = min(full_data$x50_percent_aep_flood),
+                             max = max(full_data$x50_percent_aep_flood),
+                             value = median(full_data$x50_percent_aep_flood)))
+        ),
+        fluidRow(
+          column(width = 4,
+                 textInput("bsldem30m_text", label = NULL, value = "")),
+          column(width = 4,
+                 textInput("lc01dev_lc11dev_text", label = NULL, value = "")),
+          column(width = 4,
+                 textInput("x50_percent_aep_flood_text", label = NULL, value = ""))),
+        fluidRow(
+          column(width = 4,
+                 sliderInput("sample_size_input", "Sample Size (in L)",
+                             min = min(full_data$sample_size),
+                             max = max(full_data$sample_size),
+                             value = median(full_data$sample_size))),
+          column(width = 4,
+                 sliderInput("filter_size_input", HTML("Smallest Particle Size (in &mu;m)"),
+                             min = 1,
+                             max = 100000,
+                             value = 5000)),
+          column(width = 4,
+                 sliderInput("top_particle_input", HTML("Top Particle Size (in &mu;m)"),
+                             min = 1,
+                             max = 100000,
+                             value = 50000))
+        ),
+        fluidRow(
+          column(width = 4,
+                 textInput("sample_size_text", label = NULL, value = "")),
+          column(width = 4,
+                 textInput("filter_size_text", label = NULL, value = "")),
+          column(width = 4,
+                 textInput("top_particle_text", label = NULL, value = ""))
+        ),
+        fluidRow(
+          column(width = 4,
+                 selectInput("deployment_method_input", "Deployment Method",
+                             choices = c("Grab" = "grab", "Net" = "net"),
+                             selected = "grab")),
+          column(width = 4,
+                 selectInput("macro_or_micro", "Plastic Type",
+                             choices = c("Microplastics", "Macroplastics"),
+                             selected = "Microplastics")),
+          column(width = 4,
+                 div(
+                   style = "margin-top: 30px;", 
+                   actionButton(inputId = "clear_filters", label = "Reset All")
+                 ))
+        ),
+        fluidRow(
+          column(
+            width = 12,
+            tags$div(
+              tags$style(HTML("
                       .navbar {
                       background-color: #6D929B;
                       }
@@ -176,22 +177,103 @@ ui <- dashboardPage(
                       font-size: 14px;
                       font-family: Arial, sans-serif;
                       }"))
-                  ),
-                  tags$div(
-                    id = "breadcrumb",
-                    style = "max-width: 800px; white-space: normal;",
-                    verbatimTextOutput("breadcrumb_output")
-                  )
-                )
-              )
+            ),
+            tags$div(
+              id = "breadcrumb",
+              style = "max-width: 800px; white-space: normal;",
+              verbatimTextOutput("breadcrumb_output")
             )
           )
         )
       )
     )
+  )
+)
+
 
 
 server <- function(input, output, session) {
+  # Initialize full_data and assign imputed_mp_data
+  full_data = readRDS("imputed_data.rds")
+  
+  # Create reactive values to store x1D, x2D, and correction factor
+  reactive_values <- reactiveValues(
+    x1D = 1,
+    x2D = 100000,
+    correction_factor = NULL
+  )
+  
+  # Update x1D and x2D based on slider input
+  observe({
+    reactive_values$x1D <- input$filter_size_input
+    reactive_values$x2D <- input$top_particle_input
+  })
+  
+  # Calculate correction factor using the provided code
+  observe({
+    x1D_set <- reactive_values$x1D
+    x2D_set <- reactive_values$x2D
+    
+    alpha <- 2.65 
+    
+    CFfnx = function(a, x2D, x1D, x2M, x1M){
+      CF = (x2D^(1-a)-x1D^(1-a))/(x2M^(1-a)-x1M^(1-a)) 
+      return(CF)
+    }
+    
+    CF <- CFfnx(
+      x1M = 1,
+      x2M = 100000,
+      x1D = x1D_set,
+      x2D = x2D_set,
+      a = alpha
+    )
+    
+    reactive_values$correction_factor <- CF
+  
+    
+    
+    })
+  
+  # Calculate imputed_standardized_data based on correction_factor
+  full_data1 <- reactiveValues(
+    bsldem30m = full_data$bsldem30m,
+    lc01dev_lc11dev = full_data$lc01dev_lc11dev,
+    x50_percent_aep_flood = full_data$x50_percent_aep_flood,
+    sample_size = full_data$sample_size,
+    top_particle = full_data$top_particle,
+    filter_size = full_data$filter_size,
+    deployment_method = full_data$deployment_method,
+    macro_or_micro = full_data$macro_or_micro,
+    imputed_standardized_data = numeric(nrow(full_data)),
+    corrected_concentration = full_data$corrected_concentration
+  )
+     observe({
+    full_data$imputed_standardized_data <- as.numeric(reactive_values$correction_factor) * as.numeric(full_data$corrected_concentration)
+    full_data1 <- reactiveToDataFrame(full_data1())
+  })
+  
+  # Define the formula for your model
+  formula <- imputed_standardized_data ~ .
+  
+  # Create the Random Forest model with k-fold cross-validation (5 folds for example)
+  set.seed(211)
+  ctrl <- trainControl(
+    method = "cv",
+    number = 5,
+    verboseIter = TRUE
+  )
+  
+  # Train the model
+  rf_data <- train(
+    formula,
+    data = full_data1,
+    method = "rf",
+    trControl = ctrl,
+    ntree = 100
+  )
+  
+  
   filtered_breadcrumb <- reactive({
     bsldem30m <- input$bsldem30m_input
     lc01dev_lc11dev <- input$lc01dev_lc11dev_input
@@ -229,10 +311,6 @@ server <- function(input, output, session) {
     breadcrumb_text
   })
   
-  full_data = readRDS("imputed_data.rds")
-  rf_data <- readRDS("rf_model.rds")
-  map_data = readRDS("map_data.rds")
-  
   # Create a two-way binding function with validation
   two_way_binding <- function(slider_input, textbox_input, min_value, max_value) {
     observe({
@@ -260,7 +338,8 @@ server <- function(input, output, session) {
   two_way_binding("bsldem30m_input", "bsldem30m_text",
                   min = min(full_data$bsldem30m),
                   max = max(full_data$bsldem30m))
-  two_way_binding("lc01dev_lc11dev_input", "lc01dev_lc11dev_text",min = min(full_data$lc01dev_lc11dev),
+  two_way_binding("lc01dev_lc11dev_input", "lc01dev_lc11dev_text",
+                  min = min(full_data$lc01dev_lc11dev),
                   max = max(full_data$lc01dev_lc11dev))
   two_way_binding("x50_percent_aep_flood_input", "x50_percent_aep_flood_text",
                   min = min(full_data$x50_percent_aep_flood),
@@ -269,11 +348,11 @@ server <- function(input, output, session) {
                   min = min(full_data$sample_size),
                   max = max(full_data$sample_size))
   two_way_binding("top_particle_input", "top_particle_text",
-                  min = min(full_data$top_particle),
-                  max = max(full_data$top_particle))
+                  min = 1,
+                  max = 100000)
   two_way_binding("filter_size_input", "filter_size_text",
-                  min = min(full_data$filter_size),
-                  max = max(full_data$filter_size))
+                  min = 1,
+                  max = 100000)
   
   # Add an observer to clear filters
   observeEvent(input$clear_filters, {
@@ -282,8 +361,8 @@ server <- function(input, output, session) {
     updateSliderInput(session, "lc01dev_lc11dev_input", value = median(full_data$lc01dev_lc11dev))
     updateSliderInput(session, "x50_percent_aep_flood_input", value = median(full_data$x50_percent_aep_flood))
     updateSliderInput(session, "sample_size_input", value = median(full_data$sample_size))
-    updateSliderInput(session, "top_particle_input", value = median(full_data$top_particle))
-    updateSliderInput(session, "filter_size_input", value = median(full_data$filter_size))
+    updateSliderInput(session, "top_particle_input", value = 50000)
+    updateSliderInput(session, "filter_size_input", value = 5000)
   })
   
   # Reactive expression for predicting the target variable
@@ -294,14 +373,17 @@ server <- function(input, output, session) {
       x50_percent_aep_flood = input$x50_percent_aep_flood_input,
       deployment_method = input$deployment_method_input,
       sample_size = input$sample_size_input,
-      top_particle = input$top_particle_input,
-      filter_size = input$filter_size_input,
       macro_or_micro = input$macro_or_micro
     )
     
     # Print statements to debug
     print("Selected Data:")
     print(head(selected_data))
+    print(full_data$corrected_concentration)
+    print(full_data$imputed_standardized_data)
+    print(reactive_values$correction_factor)
+    print(input$filter_size_input)
+    
     
     # Predict using the random forest model
     predicted <- predict(rf_data, selected_data)
@@ -330,8 +412,6 @@ server <- function(input, output, session) {
       x50_percent_aep_flood = input$x50_percent_aep_flood_input,
       deployment_method = input$deployment_method_input,
       sample_size = input$sample_size_input,
-      top_particle = input$top_particle_input,
-      filter_size = input$filter_size_input,
       macro_or_micro = input$macro_or_micro
     )
     
@@ -358,8 +438,6 @@ server <- function(input, output, session) {
       x50_percent_aep_flood = input$x50_percent_aep_flood_input,
       deployment_method = input$deployment_method_input,
       sample_size = input$sample_size_input,
-      top_particle = input$top_particle_input,
-      filter_size = input$filter_size_input,
       macro_or_micro = input$macro_or_micro
     )
     
@@ -393,58 +471,58 @@ server <- function(input, output, session) {
         theme(axis.title.x = element_text(size = 14))  # Adjust the size as needed
       
       lp
-    
-  } else if (input$predictionselection == "Quantile Histogram of Log-transformed Plastic Concentration") {
-    
-    ### Filter out negative values from the concentration data to calculate quantiles; modify code once we get entire data
-    positive_concentration <- full_data$corrected_concentration[full_data$corrected_concentration > 0]
-    log_concentration <- log10(positive_concentration)
-    quantile_data <- data.frame(
-      quantiles <- quantile(log_concentration, probs = c(0.1, 0.5, 0.9)),
-      Quantile <- c("10% Quantile", "50% Quantile", "90% Quantile")
-    )
-    
-  
-    h <- ggplot(full_data, aes(x = log10(corrected_concentration))) +
-      geom_histogram(binwidth = 0.1, fill = "#CCE5FF", alpha = 0.7) +
-      geom_vline(data = quantile_data, aes(xintercept = quantiles, color = Quantile), linetype = "dashed") +
-      geom_vline(xintercept = log10(predicted), color = "black", linetype = "solid") +
-      labs(
-           x = "Log-transformed Concentration Data",
-           y = "Frequency") +
-      theme_minimal() +
-      scale_color_manual(values = c("10% Quantile" = "#CD5C5C", "50% Quantile" = "#2E8B57", "90% Quantile" = "#8A2bE2")) +
-      scale_y_continuous(labels = scales::comma_format())
-    
-    h
-
-  } else if (input$predictionselection == "Quantile Histogram of Log-transformed Macro vs Micro Concentration") {
-    # Reactive expression for generating histograms comparing actual and predicted values
-    # Predict using the random forest model
-    positive_concentration <- full_data$corrected_concentration[full_data$corrected_concentration > 0]
-    log_concentration <- log10(positive_concentration)
-    quantile_data <- data.frame(
-      quantiles <- quantile(log_concentration, probs = c(0.1, 0.5, 0.9)),
-      Quantile <- c("10% Quantile", "50% Quantile", "90% Quantile")
-    )
-    
-    m <- ggplot(full_data, aes(x = log10(corrected_concentration), fill = macro_or_micro)) +
-      geom_histogram(data = subset(full_data, macro_or_micro == "Macroplastics"), binwidth = 0.1, alpha = 0.7, position = "identity") +
-      geom_histogram(data = subset(full_data, macro_or_micro == "Microplastics"), binwidth = 0.1, alpha = 0.7, position = "identity") +
-      geom_vline(data = quantile_data, aes(xintercept = quantiles, color = Quantile), linetype = "dashed") +
-      geom_vline(xintercept = log10(predicted), color = "black", linetype = "solid") +
-      labs(
-        x = "Log-transformed Concentration Data",
-        y = "Frequency",
-        fill = "Macro or Micro"
-      ) +
-      theme_minimal() +
-      scale_y_continuous(labels = scales::comma_format()) +
-      scale_color_manual(values = c("10% Quantile" = "#CD5C5C", "50% Quantile" = "#2E8B57", "90% Quantile" = "#8A2bE2")) +
-      scale_fill_manual(values = c("Macroplastics" = "#FFA500", "Microplastics" = "#CCE5FF"))
-    
-    m
-  }
+      
+    } else if (input$predictionselection == "Quantile Histogram of Log-transformed Plastic Concentration") {
+      
+      ### Filter out negative values from the concentration data to calculate quantiles; modify code once we get entire data
+      positive_concentration <- full_data$corrected_concentration[full_data$corrected_concentration > 0]
+      log_concentration <- log10(positive_concentration)
+      quantile_data <- data.frame(
+        quantiles <- quantile(log_concentration, probs = c(0.1, 0.5, 0.9)),
+        Quantile <- c("10% Quantile", "50% Quantile", "90% Quantile")
+      )
+      
+      
+      h <- ggplot(full_data, aes(x = log10(corrected_concentration))) +
+        geom_histogram(binwidth = 0.1, fill = "#CCE5FF", alpha = 0.7) +
+        geom_vline(data = quantile_data, aes(xintercept = quantiles, color = Quantile), linetype = "dashed") +
+        geom_vline(xintercept = log10(predicted), color = "black", linetype = "solid") +
+        labs(
+          x = "Log-transformed Concentration Data",
+          y = "Frequency") +
+        theme_minimal() +
+        scale_color_manual(values = c("10% Quantile" = "#CD5C5C", "50% Quantile" = "#2E8B57", "90% Quantile" = "#8A2bE2")) +
+        scale_y_continuous(labels = scales::comma_format())
+      
+      h
+      
+    } else if (input$predictionselection == "Quantile Histogram of Log-transformed Macro vs Micro Concentration") {
+      # Reactive expression for generating histograms comparing actual and predicted values
+      # Predict using the random forest model
+      positive_concentration <- full_data$corrected_concentration[full_data$corrected_concentration > 0]
+      log_concentration <- log10(positive_concentration)
+      quantile_data <- data.frame(
+        quantiles <- quantile(log_concentration, probs = c(0.1, 0.5, 0.9)),
+        Quantile <- c("10% Quantile", "50% Quantile", "90% Quantile")
+      )
+      
+      m <- ggplot(full_data, aes(x = log10(corrected_concentration), fill = macro_or_micro)) +
+        geom_histogram(data = subset(full_data, macro_or_micro == "Macroplastics"), binwidth = 0.1, alpha = 0.7, position = "identity") +
+        geom_histogram(data = subset(full_data, macro_or_micro == "Microplastics"), binwidth = 0.1, alpha = 0.7, position = "identity") +
+        geom_vline(data = quantile_data, aes(xintercept = quantiles, color = Quantile), linetype = "dashed") +
+        geom_vline(xintercept = log10(predicted), color = "black", linetype = "solid") +
+        labs(
+          x = "Log-transformed Concentration Data",
+          y = "Frequency",
+          fill = "Macro or Micro"
+        ) +
+        theme_minimal() +
+        scale_y_continuous(labels = scales::comma_format()) +
+        scale_color_manual(values = c("10% Quantile" = "#CD5C5C", "50% Quantile" = "#2E8B57", "90% Quantile" = "#8A2bE2")) +
+        scale_fill_manual(values = c("Macroplastics" = "#FFA500", "Microplastics" = "#CCE5FF"))
+      
+      m
+    }
   })
   
   ### Map Tab
