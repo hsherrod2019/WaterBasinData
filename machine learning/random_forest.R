@@ -46,7 +46,8 @@ for (doi_part_value in unique_doi_parts) {
     
     # Create a new data frame with imputed values
     imputed_subset_data <- subset_data %>%
-      mutate(imputed_standardized_data = ifelse(censored, fittedvalues, standardized_data_in_ppm3))
+      mutate(imputed_standardized_data = ifelse(censored, fittedvalues, standardized_data_in_ppm3),
+             imputed_standardized_data = log10(imputed_standardized_data))
     
     # Append the imputed data to the list
     imputed_data_list[[doi_part_value]] <- imputed_subset_data
@@ -162,6 +163,10 @@ x2D_set = as.numeric(df$corrected_max) # Upper limit default extrapolated range 
 imputed_data$correction_factor <- numeric(nrow(imputed_data))  # Initialize with zeros
 imputed_data$corrected_concentration <- numeric(nrow(imputed_data))  # Initialize with zeros
 
+# Unlog imputed_standardized_data for correction factor and corrected concentration calculations
+imputed_data <- imputed_data %>%
+  mutate(imputed_standardized_data = 10^(imputed_standardized_data))
+
 # Loop through each row to calculate correction factor and corrected concentration
 for(x in 1:nrow(imputed_data)) {
   x1M_set = as.numeric(imputed_data$filter_size[[x]])
@@ -180,6 +185,10 @@ for(x in 1:nrow(imputed_data)) {
   imputed_data$correction_factor[x] <- CF
   imputed_data$corrected_concentration[[x]] <- as.numeric(imputed_data$correction_factor[[x]]) * as.numeric(imputed_data$imputed_standardized_data[[x]])
 }
+
+# Relog the column for running through the model
+imputed_data <- imputed_data %>%
+  mutate(corrected_concentration = log10(corrected_concentration))
 
 # Define the formula for your model
 formula <- corrected_concentration ~ .
@@ -224,6 +233,9 @@ prediction_intervals <- quantile(predictions, c(0.05, 0.95))
 lower_bounds <- prediction_intervals[1]
 upper_bounds <- prediction_intervals[2]
 
+print(lower_bounds)
+print(upper_bounds)
+
 # Calculate the minimum and maximum values of the actual target variable
 min_actual_value <- min(imputed_data$corrected_concentration)
 max_actual_value <- max(imputed_data$corrected_concentration)
@@ -249,10 +261,15 @@ model_rmse <- rmse
 
 # Calculate the accuracy improvement in percentage
 accuracy_improvement_percent <- (baseline_rmse - model_rmse) / baseline_rmse * 100
+print(accuracy_improvement_percent)
 
 # Importance Scores
 importance_scores <- rf_model$finalModel$importance
 print(importance_scores)
+
+# revert back to unlog
+imputed_data <- imputed_data %>%
+  mutate(corrected_concentration = 10^(corrected_concentration))
 
 # Save model
 # Save the trained Random Forest model to a file for future use
