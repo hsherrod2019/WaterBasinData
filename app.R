@@ -230,8 +230,6 @@ server <- function(input, output, session) {
     )
     
     reactive_values$correction_factor <- CF
-  
-    
     
     })
   
@@ -245,12 +243,15 @@ server <- function(input, output, session) {
     filter_size = full_data$filter_size,
     deployment_method = full_data$deployment_method,
     macro_or_micro = full_data$macro_or_micro,
+    correction_factor = numeric(nrow(full_data)),
     imputed_standardized_data = numeric(nrow(full_data)),
-    corrected_concentration = full_data$corrected_concentration
+    corrected_concentration = full_data$corrected_concentration, 
   )
-     observe({
-    full_data$imputed_standardized_data <- as.numeric(reactive_values$correction_factor) * as.numeric(full_data$corrected_concentration)
-    full_data1 <- reactiveToDataFrame(full_data1())
+  
+  observe ({
+    full_data1$correction_factor <- reactive_values$correction_factor
+    full_data1$imputed_standardized_data <- as.numeric(full_data1$correction_factor) * as.numeric(full_data1$corrected_concentration)
+
   })
   
   # Define the formula for your model
@@ -267,7 +268,8 @@ server <- function(input, output, session) {
   # Train the model
   rf_data <- train(
     formula,
-    data = full_data1,
+    data = full_data %>%
+      select(-corrected_concentration, -alpha, -correction_factor, -study_media, -standardized_concentration_units, -filter_size, -top_particle), 
     method = "rf",
     trControl = ctrl,
     ntree = 100
@@ -380,8 +382,9 @@ server <- function(input, output, session) {
     print("Selected Data:")
     print(head(selected_data))
     print(full_data$corrected_concentration)
-    print(full_data$imputed_standardized_data)
+    print(full_data1$imputed_standardized_data)
     print(reactive_values$correction_factor)
+    print(full_data1$correction_factor)
     print(input$filter_size_input)
     
     
