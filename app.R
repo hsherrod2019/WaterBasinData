@@ -11,10 +11,12 @@ library(shiny)
 library(plotly)
 library(dplyr)
 
+# Read data files
 rf_data = readRDS("rf_model.rds")
 full_data = readRDS("imputed_data.rds")
 map_data = readRDS("map_data.rds")
 
+# Extract unique river names from map data
 river_name <- unique(map_data$river_name)
 
 # Define UI for application

@@ -102,7 +102,7 @@ df <- data.frame(
   concentration_data = imputed_data,
   concentration_type = "length (um)",
   corrected_min = 1,
-  corrected_max = 5000
+  corrected_max = 100000
 )
 
 
@@ -210,6 +210,20 @@ cat("Training MAE:", train_mae, "\n")
 # Function to evaluate the model
 predictions <- predict(rf_model, imputed_data)
 
+# Calculate prediction intervals (lower and upper bounds)
+prediction_intervals <- quantile(predictions, c(0.05, 0.95))
+lower_bounds <- prediction_intervals[1]
+upper_bounds <- prediction_intervals[2]
+
+# Calculate the minimum and maximum values of the actual target variable
+min_actual_value <- min(imputed_data$corrected_concentration)
+max_actual_value <- max(imputed_data$corrected_concentration)
+
+# Print the minimum and maximum actual values
+cat("Minimum Actual Value:", min_actual_value, "\n")
+cat("Maximum Actual Value:", max_actual_value, "\n")
+
+# Calculate RMSE
 rmse <- sqrt(mean((predictions - imputed_data$corrected_concentration)^2))
 
 # Calculate baseline prediction (mean or median)
