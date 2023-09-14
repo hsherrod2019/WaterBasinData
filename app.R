@@ -21,11 +21,12 @@ river_name <- unique(map_data$river_name)
 
 # Define UI for application
 ui <- dashboardPage(
-  dashboardHeader(title = "Plastics Predictions"),
+  dashboardHeader(title = "Plastic Predictions"),
   dashboardSidebar(
     sidebarMenu(
       menuItem("Map of the US", tabName = "maps", icon = icon("map")),
-      menuItem("Predictions", tabName = "prediction", icon = icon("sliders-h"))
+      menuItem("Predictions", tabName = "prediction", icon = icon("sliders-h")),
+      menuItem("About", tabName = "about", icon = icon("question"))
     )
   ),
   dashboardBody(
@@ -58,56 +59,31 @@ ui <- dashboardPage(
     tabItems(
       tabItem(
         tabName = "maps",
-        h3("Map of the United States- Plastics Concentration"),
-        tags$h4("Water Basin data from the USGS Streamstats website", style = "font-size: 18px;"),
-        tags$br(),
-        tags$h4("Concentration of plastics on the popup markers were calculated through the random forest model.", style = "font-size: 14px;"),
-        tags$h4("Darker popup markers represent higher concentrations, while lighter popup markers represent lower concentrations.", style = "font-size: 14px;"),
-        tags$br(),
-        leafletOutput("map", width = "100%", height = "500px"),
+        h2("Map of the United States- Plastics Concentration"),
+        tags$p("Samples used to create the random forest model in the Predictions tab and concentration of plastics predicted by the model. Darker popup markers represent higher concentrations, while lighter popup markers represent lower concentrations. Locations can be selected on the map or queried using the Select a River Query. Predictions are made for the full particle size range of plastics studied (1 um - 100k um)"),
         tags$br(),
         fluidRow(
           column(
             width = 6,
-            selectInput("river_name", "Select a river to observe", choices = river_name, multiple = TRUE)),
+            selectInput("river_name", "Select a river", choices = river_name, multiple = TRUE)),
           column(width = 6,
                  div(
                    style = "margin-top: 30px;", 
                    actionButton(inputId = "clear_all", label = "Clear All")
                  ))
-        )
+        ),
+        leafletOutput("map", width = "100%", height = "500px")
       ),
       tabItem(
         tabName = "prediction",
-        fluidRow(
-          column(
-            width = 12,
-            h3("Other Visuals"),
-            selectInput("predictionselection", "Select a plot to observe",
-                        choices = c("Actual vs. Predicted Values",
-                                    "Log Transformed Actual vs. Predicted Values",
-                                    "Quantile Histogram of Log-transformed Plastic Concentration",
-                                    "Quantile Histogram of Log-transformed Macro vs Micro Concentration"),
-                        selected = "Actual vs Predicted Values"))
-        ),
-        fluidRow(
-          column(width = 12,
-                 plotOutput("visuals"),
-                 HTML("&nbsp;<br>"))
-        ),
-        fluidRow(
-          column(width = 9,
-                 h3(HTML("Predicted Microplastic Concentration (in ppm<sup>3</sup>):"))),
-          column(width = 3,
-                 uiOutput("formatted_predictedvalue"))
-        ),
-        fluidRow(
-          column(width = 9,
-                 h3(HTML("Log Transformed Microplastic Concentration: "))),
-          column(width = 3,
-                 uiOutput("formatted_logpredictedvalue"),
-                 HTML("&nbsp;<br>"))
-        ),
+        h2("Predict how much plastic you will find in your river"), 
+        tags$p("Change the sliders and dropdown tuning parameter options below using your sampling parameters to query the random forest model to determine how many plastic particle you may find in your sample."),
+        br(),
+        h2("Prediction"),
+        h4(HTML("Predicted Plastic Concentration (in ppm<sup>3</sup>):")),
+        uiOutput("formatted_predictedvalue"),
+        br(),
+        h2("Tuning Parameters"),
         fluidRow(
           column(
             width = 12,
@@ -130,17 +106,17 @@ ui <- dashboardPage(
         ),
         fluidRow(
           column(width = 4,
-                 sliderInput("bsldem30m_input", "Drainage Mean Slope",
+                 sliderInput("bsldem30m_input", "Drainage Mean Slope (%)",
                              min = min(full_data$bsldem30m),
                              max = max(full_data$bsldem30m),
                              value = median(full_data$bsldem30m))),
           column(width = 4,
-                 sliderInput("lc01dev_lc11dev_input", "Percentage of urban land-use",
+                 sliderInput("lc01dev_lc11dev_input", "Urban land-use (%)",
                              min = min(full_data$lc01dev_lc11dev),
                              max = max(full_data$lc01dev_lc11dev),
                              value = median(full_data$lc01dev_lc11dev))),
           column(width = 4,
-                 sliderInput("x50_percent_aep_flood_input", "50% AEP Flood",
+                 sliderInput("x50_percent_aep_flood_input", "50% AEP Flood (m^3/s)",
                              min = min(full_data$x50_percent_aep_flood),
                              max = max(full_data$x50_percent_aep_flood),
                              value = median(full_data$x50_percent_aep_flood)))
@@ -164,7 +140,7 @@ ui <- dashboardPage(
                              max = 100000,
                              value = 5000)),
           column(width = 4,
-                 sliderInput("top_particle_input", HTML("Top Particle Size (in &mu;m)"),
+                 sliderInput("top_particle_input", HTML("Largest Particle Size (in &mu;m)"),
                              min = 1,
                              max = 100000,
                              value = 50000))
@@ -178,11 +154,11 @@ ui <- dashboardPage(
                  textInput("top_particle_text", label = NULL, value = ""))),
         fluidRow(
           column(width = 4,
-                 selectInput("deployment_method_input", "Deployment Method",
+                 selectInput("deployment_method_input", "Sample Collection Method",
                              choices = c("Grab" = "grab", "Net" = "net"),
                              selected = "grab")),
           column(width = 4,
-                 selectInput("macro_or_micro", "Plastic Type",
+                 selectInput("macro_or_micro", "Particle Size Focus",
                              choices = c("Microplastics", "Macroplastics"),
                              selected = "Microplastics")),
           column(width = 4,
@@ -190,7 +166,41 @@ ui <- dashboardPage(
                    style = "margin-top: 30px;", 
                    actionButton(inputId = "clear_filters", label = "Reset All")
                  ))
+        ),
+        fluidRow(
+          column(
+            width = 12,
+            h2("Other Visuals"),
+            selectInput("predictionselection", "Select a plot to observe",
+                        choices = c("Actual vs. Predicted Values",
+                                    "Log Transformed Actual vs. Predicted Values",
+                                    "Quantile Histogram of Log-transformed Plastic Concentration",
+                                    "Quantile Histogram of Log-transformed Macro vs Micro Concentration"),
+                        selected = "Actual vs Predicted Values"))
+        ),
+        fluidRow(
+          column(width = 12,
+                 plotOutput("visuals"),
+                 HTML("&nbsp;<br>"))
         )
+      ),
+      tabItem(
+        tabName = "about",
+        h1("Welcome to Plastic Predictions"),
+        tags$h2("About using the tool"),
+        tags$p("This site can be used to predict plastic concentrations is rivers based on watershed and sampling parameters.",
+               "At the core we use a random forest model on river plastic data from peer reviewed studies conducted across the United States along with watershed data from the USGS.",
+               "The Map of the US shows where sampling locations that are being fed to the model are. Predictions is the tunable model output."),
+        tags$h2("About us"),
+        tags$p("We are a group of researchers at the Moore Institute for Plastic Pollution Research (www.mooreplasticresearch.org)",
+               "This app and model was developed by Hannah Sherrod and Nicholas Leong.",
+               "The dataset was created by Hannah Hapich, Haig Minasian, Anja Oca, and Holden Ford.",
+               "The team was led by Dr. Win Cowger and Shelly Moore."
+               ), 
+        tags$h2("Acknowledgements"),
+        tags$p("We recieved funding from the Water PACT project of the National Renewable Energy Laboratory and the Possibility Lab from UC Berkeley"),
+        tags$h2("Contact Us"),
+        tags$p("Please reach out to Win at wincowger@gmail.com")
       )
     )
   )
@@ -353,7 +363,7 @@ server <- function(input, output, session) {
     predicted <- 10^predict(rf_data, selected_data) * as.numeric(reactive_values$correction_factor)
     
     # Round predicted values to four significant figures
-    predicted <- round(predicted, digits = 4)
+    predicted <- signif(predicted, 4)
     
     # Print the predicted values
     print("Predicted Values:")
@@ -362,7 +372,7 @@ server <- function(input, output, session) {
     # Create the formatted output with styling
     formatted_output <- shiny::tags$div(
       shiny::tags$span(
-        style = "font-size: 24px",
+        style = "font-size: 40px; color: red;",
         predicted
       )
     )
