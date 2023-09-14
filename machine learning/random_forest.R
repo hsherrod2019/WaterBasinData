@@ -271,6 +271,9 @@ print(importance_scores)
 imputed_data <- imputed_data %>%
   mutate(corrected_concentration = 10^(corrected_concentration))
 
+# Unlog corrected_concentration in the rf_model
+rf_model$finalModel$y <- 10^(rf_model$finalModel$y)
+
 # Save model
 # Save the trained Random Forest model to a file for future use
 saveRDS(rf_model, file = "rf_model.rds")

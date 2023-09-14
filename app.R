@@ -12,6 +12,7 @@ library(plotly)
 library(dplyr)
 
 # Read data files
+rf_data = readRDS("rf_model.rds")
 full_data = readRDS("imputed_data.rds")
 map_data = readRDS("map_data.rds")
 
@@ -20,10 +21,10 @@ river_name <- unique(map_data$river_name)
 
 # Define UI for application
 ui <- dashboardPage(
-  dashboardHeader(title = "Water Basin Data"),
+  dashboardHeader(title = "Plastics Predictions"),
   dashboardSidebar(
     sidebarMenu(
-      menuItem("Plastics Map", tabName = "maps", icon = icon("map")),
+      menuItem("Map of the US", tabName = "maps", icon = icon("map")),
       menuItem("Predictions", tabName = "prediction", icon = icon("sliders-h"))
     )
   ),
@@ -58,11 +59,17 @@ ui <- dashboardPage(
       tabItem(
         tabName = "maps",
         h3("Map of the United States- Plastics Concentration"),
+        tags$h4("Water Basin data from the USGS Streamstats website", style = "font-size: 18px;"),
+        tags$br(),
+        tags$h4("Concentration of plastics on the popup markers were calculated through the random forest model.", style = "font-size: 14px;"),
+        tags$h4("Darker popup markers represent higher concentrations, while lighter popup markers represent lower concentrations.", style = "font-size: 14px;"),
+        tags$br(),
         leafletOutput("map", width = "100%", height = "500px"),
+        tags$br(),
         fluidRow(
           column(
             width = 6,
-            selectInput("river_name", "River Name", choices = river_name, multiple = TRUE)),
+            selectInput("river_name", "Select a river to observe", choices = river_name, multiple = TRUE)),
           column(width = 6,
                  div(
                    style = "margin-top: 30px;", 
@@ -102,6 +109,26 @@ ui <- dashboardPage(
                  HTML("&nbsp;<br>"))
         ),
         fluidRow(
+          column(
+            width = 12,
+            tags$div(
+              tags$style(HTML("
+                      .navbar {
+                      background-color: #6D929B;
+                      }
+                      .breadcrumb {
+                      font-size: 14px;
+                      font-family: Arial, sans-serif;
+                      }"))
+            ),
+            tags$div(
+              id = "breadcrumb",
+              style = "max-width: 800px; white-space: normal;",
+              verbatimTextOutput("breadcrumb_output")
+            )
+          )
+        ),
+        fluidRow(
           column(width = 4,
                  sliderInput("bsldem30m_input", "Drainage Mean Slope",
                              min = min(full_data$bsldem30m),
@@ -120,11 +147,11 @@ ui <- dashboardPage(
         ),
         fluidRow(
           column(width = 4,
-                 textInput("bsldem30m_text", label = NULL, value = "")),
+                 textInput("bsldem30m_text", label = NULL, value = round(median(full_data$bsldem30m)))),
           column(width = 4,
-                 textInput("lc01dev_lc11dev_text", label = NULL, value = "")),
+                 textInput("lc01dev_lc11dev_text", label = NULL, value = 5)),
           column(width = 4,
-                 textInput("x50_percent_aep_flood_text", label = NULL, value = ""))),
+                 textInput("x50_percent_aep_flood_text", label = NULL, value = round(median(full_data$x50_percent_aep_flood))))),
         fluidRow(
           column(width = 4,
                  sliderInput("sample_size_input", "Sample Size (in L)",
@@ -148,8 +175,7 @@ ui <- dashboardPage(
           column(width = 4,
                  textInput("filter_size_text", label = NULL, value = "")),
           column(width = 4,
-                 textInput("top_particle_text", label = NULL, value = ""))
-        ),
+                 textInput("top_particle_text", label = NULL, value = ""))),
         fluidRow(
           column(width = 4,
                  selectInput("deployment_method_input", "Deployment Method",
@@ -164,26 +190,6 @@ ui <- dashboardPage(
                    style = "margin-top: 30px;", 
                    actionButton(inputId = "clear_filters", label = "Reset All")
                  ))
-        ),
-        fluidRow(
-          column(
-            width = 12,
-            tags$div(
-              tags$style(HTML("
-                      .navbar {
-                      background-color: #6D929B;
-                      }
-                      .breadcrumb {
-                      font-size: 14px;
-                      font-family: Arial, sans-serif;
-                      }"))
-            ),
-            tags$div(
-              id = "breadcrumb",
-              style = "max-width: 800px; white-space: normal;",
-              verbatimTextOutput("breadcrumb_output")
-            )
-          )
         )
       )
     )
@@ -191,16 +197,16 @@ ui <- dashboardPage(
 )
 
 
-
 server <- function(input, output, session) {
-  # Initialize full_data and assign imputed_mp_data
   full_data = readRDS("imputed_data.rds")
+  rf_data = readRDS("rf_model.rds")
   
   # Create reactive values to store x1D, x2D, and correction factor
   reactive_values <- reactiveValues(
     x1D = 1,
     x2D = 100000,
-    correction_factor = NULL
+    correction_factor = NULL,
+    predictions = NULL
   )
   
   # Update x1D and x2D based on slider input
@@ -209,7 +215,7 @@ server <- function(input, output, session) {
     reactive_values$x2D <- input$top_particle_input
   })
   
-  # Calculate correction factor using the provided code
+  # Calculate correction factor
   observe({
     x1D_set <- reactive_values$x1D
     x2D_set <- reactive_values$x2D
@@ -228,53 +234,9 @@ server <- function(input, output, session) {
       x2D = x2D_set,
       a = alpha
     )
-    
     reactive_values$correction_factor <- CF
     
-    })
-  
-  # Calculate imputed_standardized_data based on correction_factor
-  full_data1 <- reactiveValues(
-    bsldem30m = full_data$bsldem30m,
-    lc01dev_lc11dev = full_data$lc01dev_lc11dev,
-    x50_percent_aep_flood = full_data$x50_percent_aep_flood,
-    sample_size = full_data$sample_size,
-    top_particle = full_data$top_particle,
-    filter_size = full_data$filter_size,
-    deployment_method = full_data$deployment_method,
-    macro_or_micro = full_data$macro_or_micro,
-    correction_factor = numeric(nrow(full_data)),
-    imputed_standardized_data = numeric(nrow(full_data)),
-    corrected_concentration = full_data$corrected_concentration, 
-  )
-  
-  observe ({
-    full_data1$correction_factor <- reactive_values$correction_factor
-    full_data1$imputed_standardized_data <- as.numeric(full_data1$correction_factor) * as.numeric(full_data1$corrected_concentration)
-
   })
-  
-  # Define the formula for your model
-  formula <- imputed_standardized_data ~ .
-  
-  # Create the Random Forest model with k-fold cross-validation (5 folds for example)
-  set.seed(211)
-  ctrl <- trainControl(
-    method = "cv",
-    number = 5,
-    verboseIter = TRUE
-  )
-  
-  # Train the model
-  rf_data <- train(
-    formula,
-    data = full_data %>%
-      select(-corrected_concentration, -alpha, -correction_factor, -study_media, -standardized_concentration_units, -filter_size, -top_particle), 
-    method = "rf",
-    trControl = ctrl,
-    ntree = 100
-  )
-  
   
   filtered_breadcrumb <- reactive({
     bsldem30m <- input$bsldem30m_input
@@ -313,6 +275,10 @@ server <- function(input, output, session) {
     breadcrumb_text
   })
   
+  full_data = readRDS("imputed_data.rds")
+  rf_data <- readRDS("rf_model.rds")
+  map_data = readRDS("map_data.rds")
+  
   # Create a two-way binding function with validation
   two_way_binding <- function(slider_input, textbox_input, min_value, max_value) {
     observe({
@@ -340,8 +306,7 @@ server <- function(input, output, session) {
   two_way_binding("bsldem30m_input", "bsldem30m_text",
                   min = min(full_data$bsldem30m),
                   max = max(full_data$bsldem30m))
-  two_way_binding("lc01dev_lc11dev_input", "lc01dev_lc11dev_text",
-                  min = min(full_data$lc01dev_lc11dev),
+  two_way_binding("lc01dev_lc11dev_input", "lc01dev_lc11dev_text",min = min(full_data$lc01dev_lc11dev),
                   max = max(full_data$lc01dev_lc11dev))
   two_way_binding("x50_percent_aep_flood_input", "x50_percent_aep_flood_text",
                   min = min(full_data$x50_percent_aep_flood),
@@ -375,21 +340,20 @@ server <- function(input, output, session) {
       x50_percent_aep_flood = input$x50_percent_aep_flood_input,
       deployment_method = input$deployment_method_input,
       sample_size = input$sample_size_input,
+      top_particle = input$top_particle_input,
+      filter_size = input$filter_size_input,
       macro_or_micro = input$macro_or_micro
     )
     
     # Print statements to debug
     print("Selected Data:")
     print(head(selected_data))
-    print(full_data$corrected_concentration)
-    print(full_data1$imputed_standardized_data)
-    print(reactive_values$correction_factor)
-    print(full_data1$correction_factor)
-    print(input$filter_size_input)
-    
     
     # Predict using the random forest model
-    predicted <- predict(rf_data, selected_data)
+    predicted <- 10^predict(rf_data, selected_data) * as.numeric(reactive_values$correction_factor)
+    
+    # Round predicted values to four significant figures
+    predicted <- round(predicted, digits = 4)
     
     # Print the predicted values
     print("Predicted Values:")
@@ -415,17 +379,24 @@ server <- function(input, output, session) {
       x50_percent_aep_flood = input$x50_percent_aep_flood_input,
       deployment_method = input$deployment_method_input,
       sample_size = input$sample_size_input,
+      top_particle = input$top_particle_input,
+      filter_size = input$filter_size_input,
       macro_or_micro = input$macro_or_micro
     )
     
     # Predict using the random forest model
-    predictedlog <- predict(rf_data, selected_data)
+    predictedlog <- 10^predict(rf_data, selected_data) * as.numeric(reactive_values$correction_factor)
+    
+    # Calculate the log value after rounding
+    predictedlog <- log10(predictedlog)
+    
+    predictedlog <- round(predictedlog, digits = 4)
     
     # Create the formatted output with styling
     formatted_output2 <- shiny::tags$div(
       shiny::tags$span(
         style = "font-size: 24px",
-        log10(predictedlog)
+        predictedlog
       )
     )
     
@@ -441,11 +412,13 @@ server <- function(input, output, session) {
       x50_percent_aep_flood = input$x50_percent_aep_flood_input,
       deployment_method = input$deployment_method_input,
       sample_size = input$sample_size_input,
+      top_particle = input$top_particle_input,
+      filter_size = input$filter_size_input,
       macro_or_micro = input$macro_or_micro
     )
     
     # Predict using the random forest model
-    predicted <- predict(rf_data, newdata = selected_data)
+    predicted <- 10^predict(rf_data, selected_data) * as.numeric(reactive_values$correction_factor)
     
     actual <- full_data$corrected_concentration
     
@@ -554,7 +527,7 @@ server <- function(input, output, session) {
         fillOpacity = 0.5,
         radius = 6,
         popup = ~paste("<b>River Name:</b> ", river_name, 
-                       "<br><b>Microplastic Concentration (in ppm³):</b> ", corrected_concentration,
+                       "<br><b>Plastic Concentration (in ppm³):</b> ", corrected_concentration,
                        "<br><b>Coordinates:</b> ", paste(latitude, longitude, sep = ", ")
         ),
         label = ~river_name
